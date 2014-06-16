@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
     <ListView
-        android:id="@+id/ListView"
+        android:id="@+id/activity_main_listview"
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"/>
     <ImageView
         android:id="@+id/ImageView"
-        android:layout_toLeftOf="@id/ListView"
+        android:layout_toLeftOf="@id/activity_main_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>
