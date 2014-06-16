@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends Activity {
-
+    //Todo: Maken InstaSwaggerfy
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
