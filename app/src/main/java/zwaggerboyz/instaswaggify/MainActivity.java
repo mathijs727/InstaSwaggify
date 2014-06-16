@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -21,11 +20,16 @@ public class MainActivity extends Activity {
             items[i] = new ListItemFilter();
         }
 
-        FilterArrayAdapter adapter = new FilterArrayAdapter(this, items);
+        final FilterArrayAdapter adapter = new FilterArrayAdapter(this, items);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
-        //mListView.setXBounds(0, 55);
+        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView.setAdapter(adapter);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mListView.setRemoveListener(new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
 
