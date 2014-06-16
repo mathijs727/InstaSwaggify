@@ -6,9 +6,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.mobeta.android.dslv.DragSortListView;
 
 public class MainActivity extends Activity {
-    ListView mListView;
+    DragSortListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,8 +22,10 @@ public class MainActivity extends Activity {
         }
 
         FilterArrayAdapter adapter = new FilterArrayAdapter(this, items);
-        mListView = (ListView)findViewById(R.id.activity_main_listview);
+        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
+        //mListView.setXBounds(0, 55);
         mListView.setAdapter(adapter);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
 
