@@ -1,7 +1,6 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -81,6 +80,7 @@ public class FilterListAdapter extends BaseAdapter {
         return true;
     }
 
+    /* Removes item at index from filter list */
     public void remove(int index) {
         mItems.remove(mItems.get(index));
     }
