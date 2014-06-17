@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.ScriptGroup;
+import android.renderscript.Allocation;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptGroup;
+import android.util.Log;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -21,10 +23,10 @@ public class RSFilterHelper {
     private Allocation mInAllocation;
     private Allocation[] mOutAllocations;
 
-    private Canvas mCanvasView;
+    private ImageView mCanvasView;
     private RenderScript mRS;
     private ScriptGroup mScriptGroup;
-    private AsyncTask mRenderTask;
+    private RenderScriptTask mRenderTask;
 
     public void createRS(Context context) {
         mRS = RenderScript.create(context);
@@ -32,6 +34,11 @@ public class RSFilterHelper {
 
     public void setBitmap(Bitmap origBitmap) {
         mBitmapIn = origBitmap;
+        mBitmapsOut = new Bitmap[NUM_BITMAPS];
+        for (int i = 0; i < NUM_BITMAPS; ++i) {
+            mBitmapsOut[i] = Bitmap.createBitmap(mBitmapIn.getWidth(),
+                    mBitmapIn.getHeight(), mBitmapIn.getConfig());
+        }
 
         //Allocate buffers
         mInAllocation = Allocation.createFromBitmap(mRS, mBitmapIn);
@@ -41,7 +48,7 @@ public class RSFilterHelper {
         }
     }
 
-    public void setCanvasView(Canvas canvasView) {
+    public void setCanvasView(ImageView canvasView) {
         mCanvasView = canvasView;
     }
 
@@ -49,6 +56,7 @@ public class RSFilterHelper {
         ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
         if (filters.size() > 0) {
             for (IFilter filter : filters) {
+                filter.setRS(mRS);
                 builder.addKernel(filter.getKernelId());
             }
 
@@ -70,8 +78,11 @@ public class RSFilterHelper {
         if (mRenderTask != null)
             mRenderTask.cancel(false);
 
+        IFilter[] filtersArray = new IFilter[filters.size()];
+        filters.toArray(filtersArray);
+        Log.v("RSFilterHelper", "number of filters: " + filtersArray.length);
         mRenderTask = new RenderScriptTask();
-        mRenderTask.execute(filters);
+        mRenderTask.execute(filtersArray);
     }
 
     /*
@@ -109,6 +120,7 @@ public class RSFilterHelper {
             if (result != -1) {
                 // Request UI update
                 //mCanvasView.setImage(mBitmapsOut[index]);
+                mCanvasView.setImageBitmap(mBitmapsOut[result]);
             }
         }
 
