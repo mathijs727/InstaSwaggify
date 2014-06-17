@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="500dp"
-    android:layout_height="60dp"
+    android:layout_width="800dp"
+    android:layout_height="80dp"
     android:orientation="horizontal"
     android:background="@color/background">
 
@@ -10,13 +10,13 @@
         android:id="@+id/list_item_filter_drag_handle"
         android:background="@drawable/drag"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:orientation="vertical"
-        android:layout_height="60dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/list_item_filter_title"
@@ -32,7 +32,7 @@
             <TextView
                 android:id="@+id/list_item_filter_label1"
                 android:layout_width="100dp"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_below="@+id/list_item_filter_title"
                 android:layout_toRightOf="@+id/list_item_filter_drag_handle"
@@ -41,7 +41,7 @@
             <SeekBar
                 android:id="@+id/list_item_filter_seekbar1"
                 android:layout_width="fill_parent"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_below="@+id/list_item_filter_title"
                 android:layout_alignParentEnd="true"
                 android:layout_toRightOf="@+id/list_item_filter_label1"
@@ -57,7 +57,7 @@
             <TextView
                 android:id="@+id/list_item_filter_label2"
                 android:layout_width="100dp"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_below="@+id/list_item_filter_title"
                 android:layout_toRightOf="@+id/list_item_filter_drag_handle"
@@ -66,7 +66,7 @@
             <SeekBar
                 android:id="@+id/list_item_filter_seekbar2"
                 android:layout_width="fill_parent"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_below="@+id/list_item_filter_title"
                 android:layout_alignParentEnd="true"
                 android:layout_toRightOf="@+id/list_item_filter_label1"
