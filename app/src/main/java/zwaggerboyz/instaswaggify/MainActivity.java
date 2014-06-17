@@ -7,6 +7,8 @@ import android.view.MenuItem;
 
 import com.mobeta.android.dslv.DragSortListView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends Activity {
     DragSortListView mListView;
 
@@ -15,12 +17,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListItemFilter[] items = new ListItemFilter[20];
+        ArrayList<ListItemFilter> items = new ArrayList<ListItemFilter>();
         for (int i = 0; i < 20; i++) {
-            items[i] = new ListItemFilter();
+            items.add(new ListItemFilter());
         }
 
-        final FilterArrayAdapter adapter = new FilterArrayAdapter(this, items);
+        final FilterListAdapter adapter = new FilterListAdapter(this, items);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView.setAdapter(adapter);
