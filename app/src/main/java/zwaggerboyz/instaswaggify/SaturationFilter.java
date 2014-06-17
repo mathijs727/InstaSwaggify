@@ -51,29 +51,19 @@ public class SaturationFilter implements IFilter {
         }
     }
 
-    @Override
-    public void setRS(android.support.v8.renderscript.RenderScript rs) {
-
-    }
-
     public void setRS(RenderScript rs) {
         script = rs;
         return;
     }
 
     public int getNumValues() {
-
+        /* TODO: this is supposed to do at least something */
         return 0;
     }
 
     @Override
-    public void addKernel(android.support.v8.renderscript.ScriptGroup.Builder scriptBuilder) {
-
-    }
-
-    @Override
     public void setInput(Allocation input) {
-
+        /* TODO: do we need this function? */
     }
 
     public void addKernel(ScriptGroup.Builder scriptBuilder) {
