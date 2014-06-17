@@ -32,7 +32,7 @@ void calculateMatrix() {
 }
 
 /*
-RenderScript kernel that performs saturation manipulation.
+RenderScript kernel that performs rotation.
 */
 uchar4 __attribute__((kernel)) rotation(uint32_t x, uint32_t y)
 {

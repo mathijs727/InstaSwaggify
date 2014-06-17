@@ -24,7 +24,6 @@ public class FilterListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
-        public Switch enabledSwitch;
         public SeekBar slider1Seekbar, slider2Seekbar;
     }
 
@@ -66,13 +65,11 @@ public class FilterListAdapter extends BaseAdapter {
         }
 
         IFilter item = getItem(position);
-//          DISABLED WHILE REWORKING INTERFACE
-//        viewHolder.titleTextView.setText(item.title);
-//        viewHolder.label1TextView.setText(item.label1);
-//        viewHolder.label2TextView.setText(item.label2);
-//        viewHolder.enabledSwitch.setChecked(item.isEnabled);
-//        viewHolder.slider1Seekbar.setProgress(item.slider1);
-//        viewHolder.slider2Seekbar.setProgress(item.slider2);
+        viewHolder.titleTextView.setText(item.getName());
+        viewHolder.label1TextView.setText(item.getLabel(1));
+        viewHolder.label2TextView.setText(item.getLabel(2));
+        viewHolder.slider1Seekbar.setProgress(item.getValue(1));
+        viewHolder.slider2Seekbar.setProgress(item.getValue(2));
         return convertView;
     }
 

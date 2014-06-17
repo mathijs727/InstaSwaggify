@@ -1,86 +1,54 @@
 package zwaggerboyz.instaswaggify;
 
+import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 import android.renderscript.ScriptGroup;
+import android.util.Log;
 
-/**
- * Created by Mathijs on 16/06/14.
- */
+public class SaturationFilter extends AbstractFilterClass {
+    ScriptC_saturation mScript;
 
-public class SaturationFilter implements IFilter {
-    private String title = "Saturation", label1 = "value";
-    private int slider1 = 50;
-    private int nSilders = 1;
-    private RenderScript script;
+    public SaturationFilter() {
+        mName = "Saturation";
+        mNumValues = 1;
 
-    public String getName() {
-        return title;
-    }
+        mValues = new int[] {
+                50
+        };
+        mMinValues = new float[] {
+            0.f
+        };
+        mMaxValues = new float[] {
+            2.f
+        };
+        mNormalizedValues = new float[] {
+            1.f
+        };
+        mLabels = new String[] {
+                "label 1"
+        };
 
-    public String getLabel(int i) {
-        switch (i) {
-            case 1: return label1;
-            default: return "";
-        }
-    }
-
-    public void setLabel(int i, String newLabel) {
-        switch (i) {
-            case 1:
-                label1 = newLabel;
-                return;
-            default: return;
-        }
-    }
-
-    public int getValue(int i) {
-        switch (i) {
-            case 1: return slider1;
-            default: return 0;
-        }
-    }
-
-    public void setValue(int i, int newValue) {
-        switch (i) {
-            case 1:
-                slider1 = newValue;
-                return;
-            default: return;
-        }
     }
 
     @Override
-    public void setRS(android.support.v8.renderscript.RenderScript rs) {
-
-    }
-
     public void setRS(RenderScript rs) {
-        script = rs;
-        return;
-    }
-
-    public int getNumValues() {
-
-        return 0;
+        if (mRS == null) {
+            mRS = rs;
+            mScript = new ScriptC_saturation(mRS);
+        }
     }
 
     @Override
-    public void addKernel(android.support.v8.renderscript.ScriptGroup.Builder scriptBuilder) {
+    public void setInput(Allocation allocation) { }
 
-    }
-
-    public void addKernel(ScriptGroup.Builder scriptBuilder) {
-        // builder dingen doen yolololo
-    }
-
+    @Override
     public Script.KernelID getKernelId() {
-        // rs stuff
-        return null;
+        return mScript.getKernelID_saturation();
     }
 
+    @Override
     public Script.FieldID getFieldId() {
-        // nog meer rs dingen
         return null;
     }
 }
