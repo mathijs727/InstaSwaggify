@@ -12,9 +12,6 @@ import android.renderscript.Script;
 public abstract class AbstractFilterClass implements IFilter {
     protected String mName;
     protected int mValues[];
-    protected float mMinValues[];
-    protected float mMaxValues[];
-    protected float mNormalizedValues[];
     protected String mLabels[];
     protected int mNumValues;
 
@@ -25,7 +22,7 @@ public abstract class AbstractFilterClass implements IFilter {
     }
 
     public String getLabel(int i) {
-        if (i < mNumValues && i > 0) {
+        if (i < mNumValues) {
             return mLabels[i];
         } else {
             return "";
@@ -33,7 +30,7 @@ public abstract class AbstractFilterClass implements IFilter {
     }
 
     public int getValue(int i) {
-        if (i < mNumValues && i > 0) {
+        if (i < mNumValues) {
             return mValues[i];
         } else {
             return 0;
@@ -41,10 +38,13 @@ public abstract class AbstractFilterClass implements IFilter {
     }
 
     public void setValue(int i, int value) {
-        if (i < mNumValues && i > 0) {
-            mNormalizedValues[i] = (float) ((mMaxValues[i] - mMinValues[i]) * (mValues[i] / 100.0) + mMinValues[i]);
+        if (i < mNumValues) {
             mValues[i] = value;
         }
+    }
+
+    public float normalizeValue(int value, float min, float max) {
+        return (float) ((max - min) * (value / 100.0) + min);
     }
 
     public int getNumValues() {
@@ -53,6 +53,7 @@ public abstract class AbstractFilterClass implements IFilter {
 
     public abstract void setRS(RenderScript rs);
     public abstract void setInput(Allocation allocation);
+    public abstract void updateInternalValues();
     public abstract Script.KernelID getKernelId();
     public abstract Script.FieldID getFieldId();
 }

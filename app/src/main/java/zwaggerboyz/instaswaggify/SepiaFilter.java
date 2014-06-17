@@ -3,23 +3,24 @@ package zwaggerboyz.instaswaggify;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
-import android.util.Log;
 
 /**
- * Created by Mathijs on 17/06/14.
+ * Created by Matthijs on 17-6-2014.
  */
-public class SaturationFilter extends AbstractFilterClass {
-    ScriptC_saturation mScript;
+public class SepiaFilter extends AbstractFilterClass {
+    ScriptC_sepia mScript;
 
-    public SaturationFilter() {
-        mName = "Saturation";
-        mNumValues = 1;
+    public SepiaFilter() {
+        mName = "Intensity";
+        mNumValues = 2;
 
         mLabels = new String[] {
-                "label 1"
+                "Intensity",
+                "Depth"
         };
         mValues = new int[] {
-            50
+                50,
+                50
         };
     }
 
@@ -32,7 +33,7 @@ public class SaturationFilter extends AbstractFilterClass {
     public void setRS(RenderScript rs) {
         if (mRS == null) {
             mRS = rs;
-            mScript = new ScriptC_saturation(mRS);
+            mScript = new ScriptC_sepia(mRS);
         }
     }
 
@@ -41,12 +42,13 @@ public class SaturationFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_saturationValue(normalizeValue(mValues[0], 0.f, 1.f));
+        mScript.set_intensity(normalizeValue(mValues[0], 0.f, 1.f));
+        mScript.set_depth(normalizeValue(mValues[1], 0.f, 1.f));
     }
 
     @Override
     public Script.KernelID getKernelId() {
-        return mScript.getKernelID_saturation();
+        return mScript.getKernelID_sepia();
     }
 
     @Override

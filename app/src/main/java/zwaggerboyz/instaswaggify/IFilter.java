@@ -5,38 +5,32 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
-/*
-* IFilter.java
-*
-* This file contains the interface for the different filter-classes.
-*
-*/
-
+/**
+ * Created by Mathijs on 17/06/14.
+ */
 public interface IFilter {
-    /* Returns the name of the filter. */
+    /* Returns the filter name. */
     public String getName();
 
-    /* Returns the i-th label of the filter. */
+    /* Returns label i. */
     public String getLabel(int i);
 
-    /* Returns the value of the i-th slider of the filter. */
+    /* */
     public int getValue(int i);
 
-    /* Sets the value of the i-th slider of the filter. */
+    /* */
     public void setValue(int i, int value);
 
-    /* Sets the render-script of the filter. */
+    /* */
     public void setRS(RenderScript rs);
 
-    /* TODO: wtf does this function do */
+    /* */
     public int getNumValues();
 
-    /* TODO: wtf does this function do */
+    public void updateInternalValues();
+
+    /* */
     public void setInput(Allocation input);
-
-    /* TODO: wtf does this function do */
     public Script.KernelID getKernelId();
-
-    /* TODO: wtf does this function do */
     public Script.FieldID getFieldId();
 }
