@@ -11,23 +11,30 @@ public class SaturationFilter extends AbstractFilterClass {
 
     public SaturationFilter() {
         mName = "Saturation";
+        mNumValues = 1;
+
         mValues = new int[] {
                 50
+        };
+        mMinValues = new float[] {
+            0.f
+        };
+        mMaxValues = new float[] {
+            2.f
+        };
+        mNormalizedValues = new float[] {
+            1.f
         };
         mLabels = new String[] {
                 "label 1"
         };
-        mNumValues = 1;
-    }
 
+    }
 
     @Override
     public void setRS(RenderScript rs) {
         if (mRS == null) {
             mRS = rs;
-            if (mRS == null) {
-                Log.v("SaturationFilter", "RS is null");
-            }
             mScript = new ScriptC_saturation(mRS);
         }
     }

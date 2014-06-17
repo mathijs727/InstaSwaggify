@@ -12,6 +12,9 @@ import android.renderscript.Script;
 public abstract class AbstractFilterClass implements IFilter {
     protected String mName;
     protected int mValues[];
+    protected float mMinValues[];
+    protected float mMaxValues[];
+    protected float mNormalizedValues[];
     protected String mLabels[];
     protected int mNumValues;
 
@@ -39,6 +42,7 @@ public abstract class AbstractFilterClass implements IFilter {
 
     public void setValue(int i, int value) {
         if (i < mNumValues && i > 0) {
+            mNormalizedValues[i] = (float) ((mMaxValues[i] - mMinValues[i]) * (mValues[i] / 100.0) + mMinValues[i]);
             mValues[i] = value;
         }
     }
