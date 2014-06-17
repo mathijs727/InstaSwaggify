@@ -3,6 +3,7 @@ package zwaggerboyz.instaswaggify;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 import android.renderscript.ScriptGroup;
+import android.support.v8.renderscript.Allocation;
 
 /**
  * Created by Mathijs on 16/06/14.
@@ -70,17 +71,22 @@ public class SaturationFilter implements IFilter {
 
     }
 
-    public void addKernel(ScriptGroup.Builder scriptBuilder) {
-        // builder dingen doen yolololo
+    @Override
+    public void setInput(Allocation input) {
+
     }
 
-    public Script.KernelID getKernelId() {
-        // rs stuff
+    public void addKernel(ScriptGroup.Builder scriptBuilder) {
+        //TODO: builder dingen doen yolololo
+    }
+
+    public android.support.v8.renderscript.Script.KernelID getKernelId() {
+        //TODO: rs stuff
         return null;
     }
 
-    public Script.FieldID getFieldId() {
-        // nog meer rs dingen
+    public android.support.v8.renderscript.Script.FieldID getFieldId() {
+        //TODO: nog meer rs dingen
         return null;
     }
 }
