@@ -75,11 +75,17 @@ public class FilterListAdapter extends BaseAdapter {
         return convertView;
     }
 
+    @Override
+    public boolean hasStableIds(){
+        return true;
+    }
+
     public void remove(int index) {
         mItems.remove(mItems.get(index));
     }
 
     public void swap(int from, int to) {
         Collections.swap(mItems, from, to);
+        notifyDataSetChanged();
     }
 }
