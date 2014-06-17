@@ -91,4 +91,10 @@ public class FilterListAdapter extends BaseAdapter {
         mItems.add(to, element);
         notifyDataSetChanged();
     }
+
+    /* Adds a new item to the filter list */
+    public void add() {
+        mItems.add(new ListItemFilter());
+        notifyDataSetChanged();
+    }
 }
