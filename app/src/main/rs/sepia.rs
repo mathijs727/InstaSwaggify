@@ -30,17 +30,10 @@ uchar4 __attribute__((kernel)) saturation(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
 
-    f4.r = f4.r + (depth*2);		// sepia calculations
+    /* sepia calculations */
+    f4.r = f4.r + (depth*2);
     f4.g = f4.g + depth;
     f4.b = f4.b - intensity;
 
-    if(f4.r > 1.0) f4.r = 1.0f;			// clipping check
-    if(f4.g > 1.0) f4.g = 1.0f;
-    if(f4.b > 1.0) f4.b = 1.0f;
-    if(f4.b < 0.0) f4.b = 0.0f;
-
-    float3 result = dot(f4.rgb, gMonoMult);
-    result = mix( result, f4.rgb, 1.0 );
-
-    return rsPackColorTo8888(result);
+    return rsPackColorTo8888(f4);
 }
