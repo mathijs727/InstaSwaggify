@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
             public void drop(int from, int to) {
 
                 Log.v("Main", "DROPPED FROM: " + from + ". TO: " + to);
-                adapter.swap(from, to);
+                adapter.reorder(from, to);
             }
         });
     }
