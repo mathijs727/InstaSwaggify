@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
         final ArrayList<ListItemFilter> items = new ArrayList<ListItemFilter>();
         for (int i = 0; i < 20; i++) {
             items.add(new ListItemFilter());
+            items.get(i).title = "filter " + (i + 1);
 
             // PLACEHOLDER TITLE USED FOR DEBUGGING
             items.get(items.size() - 1).title = "Element " + i;
@@ -28,7 +29,7 @@ public class MainActivity extends Activity {
 
         final FilterListAdapter adapter = new FilterListAdapter(this, items);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
-        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
+    //    mListView = (DragSortListView)findViewById(R.id.activity_main_listview);  is deze regel nodig?
         mListView.setAdapter(adapter);
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
