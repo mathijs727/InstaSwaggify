@@ -4,27 +4,32 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
-import java.util.ArrayList;
-
+import com.mobeta.android.dslv.DragSortListView;
 
 public class MainActivity extends Activity {
-    ListView mListView;
+    DragSortListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<ListItemFilter> items = new ArrayList<ListItemFilter>();
+        ListItemFilter[] items = new ListItemFilter[20];
         for (int i = 0; i < 20; i++) {
-            items.add(new ListItemFilter());
+            items[i] = new ListItemFilter();
         }
 
-        FilterListAdapter adapter = new FilterListAdapter(this, items);
-        mListView = (ListView)findViewById(R.id.activity_main_listview);
+        final FilterArrayAdapter adapter = new FilterArrayAdapter(this, items);
+        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
+        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView.setAdapter(adapter);
+        mListView.setRemoveListener(new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
 
