@@ -7,6 +7,9 @@ android {
         applicationId 'zwaggerboyz.instaswaggify'
         minSdkVersion 15
         targetSdkVersion 19
+        minSdkVersion 19
+        renderscriptTargetApi 19
+        renderscriptSupportMode true
         versionCode 1
         versionName '1.0'
     }
