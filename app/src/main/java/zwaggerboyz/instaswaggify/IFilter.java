@@ -9,16 +9,15 @@ import android.renderscript.Script;
 * IFilter.java
 *
 * This file contains the interface for the different filter-classes.
+*
 */
+
 public interface IFilter {
     /* Returns the name of the filter. */
     public String getName();
 
     /* Returns the i-th label of the filter. */
     public String getLabel(int i);
-
-    /* Sets the i-th label of the filter. */
-    public void setLabel(int i, String label);
 
     /* Returns the value of the i-th slider of the filter. */
     public int getValue(int i);
@@ -31,9 +30,6 @@ public interface IFilter {
 
     /* TODO: wtf does this function do */
     public int getNumValues();
-
-    /* TODO: wtf does this function do */
-    public void addKernel(ScriptGroup.Builder scriptBuilder);
 
     /* TODO: wtf does this function do */
     public void setInput(Allocation input);

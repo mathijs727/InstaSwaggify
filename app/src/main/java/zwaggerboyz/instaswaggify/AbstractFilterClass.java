@@ -22,7 +22,7 @@ public abstract class AbstractFilterClass implements IFilter {
     }
 
     public String getLabel(int i) {
-        if (i < mNumValues) {
+        if (i < mNumValues && i > 0) {
             return mLabels[i];
         } else {
             return "";
@@ -30,7 +30,7 @@ public abstract class AbstractFilterClass implements IFilter {
     }
 
     public int getValue(int i) {
-        if (i < mNumValues) {
+        if (i < mNumValues && i > 0) {
             return mValues[i];
         } else {
             return 0;
@@ -38,7 +38,7 @@ public abstract class AbstractFilterClass implements IFilter {
     }
 
     public void setValue(int i, int value) {
-        if (i < mNumValues) {
+        if (i < mNumValues && i > 0) {
             mValues[i] = value;
         }
     }

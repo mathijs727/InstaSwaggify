@@ -3,11 +3,9 @@ package zwaggerboyz.instaswaggify;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 
-/**
- * Created by Mathijs on 17/06/14.
- */
 public class SaturationFilter extends AbstractFilterClass {
     ScriptC_saturation mScript;
 
