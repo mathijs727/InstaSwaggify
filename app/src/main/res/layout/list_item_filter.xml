@@ -9,23 +9,23 @@
     <ImageView
         android:id="@+id/list_item_filter_drag_handle"
         android:background="@drawable/drag"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="340dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/list_item_filter_title"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:text="Saturation Filter (placeholder)"/>
+            android:text="Saturation Filter (placeholder-title)"/>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
 
@@ -44,7 +44,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal">
 
