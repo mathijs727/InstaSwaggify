@@ -24,10 +24,18 @@ public class MainActivity extends Activity {
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView.setAdapter(adapter);
+
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
-            public void remove(int which) {
+            public void remove(int item) {
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+        mListView.setDropListener(new DragSortListView.DropListener() {
+            @Override
+            public void drop(int from, int to) {
+
             }
         });
     }
