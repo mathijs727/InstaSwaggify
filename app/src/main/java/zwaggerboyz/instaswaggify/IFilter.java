@@ -27,6 +27,8 @@ public interface IFilter {
     /* */
     public int getNumValues();
 
+    public void updateInternalValues();
+
     /* */
     public void setInput(Allocation input);
     public Script.KernelID getKernelId();

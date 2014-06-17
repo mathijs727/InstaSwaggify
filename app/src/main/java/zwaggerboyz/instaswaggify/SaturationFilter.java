@@ -15,22 +15,17 @@ public class SaturationFilter extends AbstractFilterClass {
         mName = "Saturation";
         mNumValues = 1;
 
+        mLabels = new String[] {
+                "label 1"
+        };
         mValues = new int[] {
             50
         };
-        mMinValues = new float[] {
-            0.f
-        };
-        mMaxValues = new float[] {
-            2.f
-        };
-        mNormalizedValues = new float[] {
-            1.f
-        };
-        mLabels = new String[] {
-            "label 1"
-        };
+    }
 
+    @Override
+    public void setValue(int i, int value) {
+        super.setValue(i, value);
     }
 
     @Override
@@ -43,6 +38,11 @@ public class SaturationFilter extends AbstractFilterClass {
 
     @Override
     public void setInput(Allocation allocation) { }
+
+    @Override
+    public void updateInternalValues() {
+        mScript.set_saturationValue(normalizeValue(mValues[0], 0.f, 1.f));
+    }
 
     @Override
     public Script.KernelID getKernelId() {
