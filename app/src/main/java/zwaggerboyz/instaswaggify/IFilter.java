@@ -11,7 +11,7 @@ import android.support.v8.renderscript.ScriptGroup;
 public interface IFilter {
     public String getName();
     public String getLabel(int i);
-    public String setLabel(int i);
+    public void setLabel(int i, String label);
     public int getValue(int i);
     public void setValue(int i, int value);
     public void setRS(RenderScript rs);
