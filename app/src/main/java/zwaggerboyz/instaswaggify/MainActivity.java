@@ -12,10 +12,10 @@ import com.mobeta.android.dslv.DragSortListView;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
-    DragSortListView mListView;
-    ImageView mImageView;
-    RSFilterHelper mRSFilterHelper;
-    FilterListAdapter mAdapter;
+    private DragSortListView mListView;
+    private ImageView mImageView;
+    private RSFilterHelper mRSFilterHelper;
+    private FilterListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
