@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Created by Mathijs on 16/06/14.
  */
+
 public class FilterListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private List<ListItemFilter> mItems;
@@ -27,7 +28,7 @@ public class FilterListAdapter extends BaseAdapter {
         public SeekBar slider1Seekbar, slider2Seekbar;
     }
 
-    public FilterListAdapter(Activity context, List<ListItemFilter> items) {
+    public FilterListAdapter(Activity context, List<IFilter> items) {
         mInflater = context.getLayoutInflater();
         mItems = items;
     }
