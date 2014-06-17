@@ -20,7 +20,7 @@
 
 const static float3 gMonoMult = {0.299f, 0.587f, 0.114f};
 
-float factor = 0.f;
+float contrastValue = 0.f;
 
 /*
 RenderScript kernel that performs saturation manipulation.
@@ -28,13 +28,11 @@ RenderScript kernel that performs saturation manipulation.
 uchar4 __attribute__((kernel)) contrast(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
-    //float val = 0.2989f * f4.r + 0.5870f * f4.g + 0.1140f * f4.b;
-    //f4.r = f4.g = f4.b = val;
 
-    /* sepia calculations */
-    f4.r = ((f4.r - 0.5f) * factor) + 0.5f;
-    f4.g = ((f4.g - 0.5f) * factor) + 0.5f;
-    f4.b = ((f4.b - 0.5f) * factor) + 0.5f;
+    /* contrast calculations */
+    f4.r = ((f4.r - 0.5f) * contrastValue) + 0.5f;
+    f4.g = ((f4.g - 0.5f) * contrastValue) + 0.5f;
+    f4.b = ((f4.b - 0.5f) * contrastValue) + 0.5f;
 
     /* clipping check */
     if(f4.r > 1.0) f4.r = 1.0f;

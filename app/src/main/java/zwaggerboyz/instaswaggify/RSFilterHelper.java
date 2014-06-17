@@ -57,6 +57,7 @@ public class RSFilterHelper {
         if (filters.size() > 0) {
             for (IFilter filter : filters) {
                 filter.setRS(mRS);
+                filter.updateInternalValues();
                 builder.addKernel(filter.getKernelId());
             }
 

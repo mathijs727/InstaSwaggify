@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -12,7 +13,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
     DragSortListView mListView;
-    FilterListAdapter adapter;
+    ImageView mImageView;
+    RSFilterHelper mRSFilterHelper;
+    FilterListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +27,25 @@ public class MainActivity extends Activity {
             items.add(new SaturationFilter());
         }
 
-        adapter = new FilterListAdapter(this, items);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
-        mListView.setAdapter(adapter);
+        mImageView = (ImageView) findViewById(R.id.activity_main_imageview);
+
+        mAdapter = new FilterListAdapter(this, items);
+        mListView.setAdapter(mAdapter);
+
+        /*mRSFilterHelper = new RSFilterHelper();
+         mRSFilterHelper.createRS(this);
+         mRSFilterHelper.setCanvasView(mImageView);
+         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
+         List<IFilter> filters = new ArrayList<IFilter>();
+         filters.add(new SaturationFilter());
+         mRSFilterHelper.generateBitmap(filters);*/
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
             public void remove(int item) {
-                adapter.remove(item);
-                adapter.notifyDataSetChanged();
+                mAdapter.remove(item);
+                mAdapter.notifyDataSetChanged();
             }
         });
 
@@ -41,7 +54,7 @@ public class MainActivity extends Activity {
             public void drop(int from, int to) {
 
                 Log.v("Main", "DROPPED FROM: " + from + ". TO: " + to);
-                adapter.reorder(from, to);
+                mAdapter.reorder(from, to);
             }
         });
     }
@@ -62,7 +75,7 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.add_filter) {
-            adapter.add();
+            mAdapter.add();
             return true;
         }
         return super.onOptionsItemSelected(item);
