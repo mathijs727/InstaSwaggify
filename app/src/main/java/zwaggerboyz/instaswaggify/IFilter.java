@@ -17,6 +17,6 @@ public interface IFilter {
     public void setRS(RenderScript rs);
     public int getNumValues();
     public void addKernel(ScriptGroup.Builder scriptBuilder);
-    public Script.KernelID getKernelId();
-    public Script.FieldID getFieldId();
+    public android.renderscript.Script.KernelID getKernelId();
+    public android.renderscript.Script.FieldID getFieldId();
 }
