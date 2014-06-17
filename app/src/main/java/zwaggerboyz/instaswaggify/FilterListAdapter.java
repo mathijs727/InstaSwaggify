@@ -2,6 +2,7 @@ package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -73,5 +75,11 @@ public class FilterListAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void remove(int index) {
+        mItems.remove(mItems.get(index));
+    }
 
+    public void swap(int from, int to) {
+        Collections.swap(mItems, from, to);
+    }
 }
