@@ -14,10 +14,10 @@ public class SaturationFilter extends AbstractFilterClass {
     public SaturationFilter() {
         mName = "Saturation";
         mValues = new int[] {
-            50
+                50
         };
         mLabels = new String[] {
-            "label 1"
+                "label 1"
         };
         mNumValues = 1;
     }
