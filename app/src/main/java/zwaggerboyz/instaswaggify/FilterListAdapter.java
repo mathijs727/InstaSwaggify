@@ -24,7 +24,6 @@ public class FilterListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
-        public Switch enabledSwitch;
         public SeekBar slider1Seekbar, slider2Seekbar;
     }
 
