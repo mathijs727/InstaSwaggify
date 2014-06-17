@@ -20,7 +20,7 @@ import java.util.List;
 
 public class FilterListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
-    private List<ListItemFilter> mItems;
+    private List<IFilter> mItems;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
@@ -39,7 +39,7 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     @Override
-    public ListItemFilter getItem(int position) {
+    public IFilter getItem(int position) {
         return mItems.get(position);
     }
 
@@ -58,7 +58,6 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.titleTextView = (TextView)convertView.findViewById(R.id.list_item_filter_title);
             viewHolder.label1TextView = (TextView)convertView.findViewById(R.id.list_item_filter_label1);
             viewHolder.label2TextView = (TextView)convertView.findViewById(R.id.list_item_filter_label2);
-            viewHolder.enabledSwitch = (Switch)convertView.findViewById(R.id.list_item_filter_switch);
             viewHolder.slider1Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar1);
             viewHolder.slider2Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar2);
             convertView.setTag(viewHolder);
@@ -66,13 +65,14 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        ListItemFilter item = getItem(position);
-        viewHolder.titleTextView.setText(item.title);
-        viewHolder.label1TextView.setText(item.label1);
-        viewHolder.label2TextView.setText(item.label2);
-        viewHolder.enabledSwitch.setChecked(item.isEnabled);
-        viewHolder.slider1Seekbar.setProgress(item.slider1);
-        viewHolder.slider2Seekbar.setProgress(item.slider2);
+        IFilter item = getItem(position);
+//          DISABLED WHILE REWORKING INTERFACE
+//        viewHolder.titleTextView.setText(item.title);
+//        viewHolder.label1TextView.setText(item.label1);
+//        viewHolder.label2TextView.setText(item.label2);
+//        viewHolder.enabledSwitch.setChecked(item.isEnabled);
+//        viewHolder.slider1Seekbar.setProgress(item.slider1);
+//        viewHolder.slider2Seekbar.setProgress(item.slider2);
         return convertView;
     }
 
@@ -87,7 +87,7 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void reorder(int from, int to) {
-        ListItemFilter element = mItems.remove(from);
+        IFilter element = mItems.remove(from);
 
         mItems.add(to, element);
         notifyDataSetChanged();
@@ -95,7 +95,9 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Adds a new item to the filter list */
     public void add() {
-        mItems.add(new ListItemFilter());
+
+        // TEST ADD
+        mItems.add(new SaturationFilter());
         notifyDataSetChanged();
     }
 }
