@@ -5,17 +5,19 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by Mathijs on 16/06/14.
  */
-public class FilterArrayAdapter extends ArrayAdapter<ListItemFilter> {
-    private final Activity mContext;
-    private ListItemFilter[] mItems;
+public class FilterListAdapter extends BaseAdapter {
+    private final LayoutInflater mInflater;
+    private List<ListItemFilter> mItems;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
@@ -23,18 +25,31 @@ public class FilterArrayAdapter extends ArrayAdapter<ListItemFilter> {
         public SeekBar slider1Seekbar, slider2Seekbar;
     }
 
-    public FilterArrayAdapter(Activity context, ListItemFilter[] items) {
-        super(context, R.layout.list_item_filter, items);
-        mContext = context;
+    public FilterListAdapter(Activity context, List<ListItemFilter> items) {
+        mInflater = context.getLayoutInflater();
         mItems = items;
+    }
+
+    @Override
+    public int getCount() {
+        return mItems.size();
+    }
+
+    @Override
+    public ListItemFilter getItem(int position) {
+        return mItems.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            LayoutInflater inflater = mContext.getLayoutInflater();
-            convertView = inflater.inflate(R.layout.list_item_filter, null);
+            convertView = mInflater.inflate(R.layout.list_item_filter, null);
 
             viewHolder= new ViewHolder();
             viewHolder.titleTextView = (TextView)convertView.findViewById(R.id.list_item_filter_title);
@@ -48,7 +63,7 @@ public class FilterArrayAdapter extends ArrayAdapter<ListItemFilter> {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        ListItemFilter item = mItems[position];
+        ListItemFilter item = getItem(position);
         viewHolder.titleTextView.setText(item.title);
         viewHolder.label1TextView.setText(item.label1);
         viewHolder.label2TextView.setText(item.label2);
