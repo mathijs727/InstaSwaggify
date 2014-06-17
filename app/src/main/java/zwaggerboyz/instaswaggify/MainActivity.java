@@ -5,13 +5,31 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mobeta.android.dslv.DragSortListView;
 
 public class MainActivity extends Activity {
-    //Todo: Maken InstaSwaggerfy
+    DragSortListView mListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ListItemFilter[] items = new ListItemFilter[20];
+        for (int i = 0; i < 20; i++) {
+            items[i] = new ListItemFilter();
+        }
+
+        final FilterArrayAdapter adapter = new FilterArrayAdapter(this, items);
+        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
+        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
+        mListView.setAdapter(adapter);
+        mListView.setRemoveListener(new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
 
