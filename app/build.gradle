@@ -5,7 +5,7 @@ android {
     buildToolsVersion '19.1'
     defaultConfig {
         applicationId 'zwaggerboyz.instaswaggify'
-        minSdkVersion 17
+        minSdkVersion 15
         targetSdkVersion 19
         renderscriptTargetApi 17
         renderscriptSupportMode false
