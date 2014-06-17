@@ -26,14 +26,24 @@ float intensity = 0.f;
 /*
 RenderScript kernel that performs saturation manipulation.
 */
-uchar4 __attribute__((kernel)) saturation(uchar4 in)
+uchar4 __attribute__((kernel)) sepia(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
+    float val = 0.2989f * f4.r + 0.5870f * f4.g + 0.1140f * f4.b;
+    f4.r = f4.g = f4.b = val;
 
     /* sepia calculations */
     f4.r = f4.r + (depth*2);
     f4.g = f4.g + depth;
     f4.b = f4.b - intensity;
 
-    return rsPackColorTo8888(f4);
+    /* clipping check */
+    if(f4.r > 1.0) f4.r = 1.0f;
+    if(f4.g > 1.0) f4.g = 1.0f;
+    if(f4.b > 1.0) f4.b = 1.0f;
+    if(f4.b < 0.0) f4.b = 0.0f;
+
+    float3 mono = {f4.r, f4.g, f4.b};
+
+    return rsPackColorTo8888(mono);
 }
