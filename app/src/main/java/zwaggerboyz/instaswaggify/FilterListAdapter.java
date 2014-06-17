@@ -86,9 +86,10 @@ public class FilterListAdapter extends BaseAdapter {
         mItems.remove(mItems.get(index));
     }
 
-    /*  */
-    public void swap(int from, int to) {
-        Collections.swap(mItems, from, to);
+    public void reorder(int from, int to) {
+        ListItemFilter element = mItems.remove(from);
+
+        mItems.add(to, element);
         notifyDataSetChanged();
     }
 
