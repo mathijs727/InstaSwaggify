@@ -19,18 +19,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final ArrayList<ListItemFilter> items = new ArrayList<ListItemFilter>();
+        final ArrayList<IFilter> items = new ArrayList<IFilter>();
         for (int i = 0; i < 5; i++) {
-            items.add(new ListItemFilter());
-            items.get(i).title = "filter " + (i + 1);
-
-            // PLACEHOLDER TITLE USED FOR DEBUGGING
-            items.get(items.size() - 1).title = "Element " + i;
+            items.add(new SaturationFilter());
         }
 
         adapter = new FilterListAdapter(this, items);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
-    //    mListView = (DragSortListView)findViewById(R.id.activity_main_listview);  is deze regel nodig?
         mListView.setAdapter(adapter);
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
