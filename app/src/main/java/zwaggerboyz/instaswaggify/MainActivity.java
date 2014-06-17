@@ -21,6 +21,9 @@ public class MainActivity extends Activity {
         final ArrayList<ListItemFilter> items = new ArrayList<ListItemFilter>();
         for (int i = 0; i < 20; i++) {
             items.add(new ListItemFilter());
+
+            // PLACEHOLDER TITLE USED FOR DEBUGGING
+            items.get(items.size() - 1).title = "Element " + i;
         }
 
         final FilterListAdapter adapter = new FilterListAdapter(this, items);
