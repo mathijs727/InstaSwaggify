@@ -43,7 +43,7 @@ uchar4 __attribute__((kernel)) sepia(uchar4 in)
     if(f4.b > 1.0) f4.b = 1.0f;
     if(f4.b < 0.0) f4.b = 0.0f;
 
-    float3 mono = {f4.r, f4.g, f4.b};
+    float3 result = {f4.r, f4.g, f4.b};
 
-    return rsPackColorTo8888(mono);
+    return rsPackColorTo8888(result);
 }
