@@ -1,17 +1,23 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
     DragSortListView mListView;
+    ImageView mImageView;
+    RSFilterHelper mRSFilterHelper;
     FilterListAdapter adapter;
 
     @Override
@@ -24,8 +30,18 @@ public class MainActivity extends Activity {
             items.add(new SaturationFilter());
         }
 
+        mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
+        mImageView = (ImageView) findViewById(R.id.activity_main_imageview);
+
+        mRSFilterHelper = new RSFilterHelper();
+        mRSFilterHelper.createRS(this);
+        mRSFilterHelper.setCanvasView(mImageView);
+        mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
+        List<IFilter> filters = new ArrayList<IFilter>();
+        filters.add(new SaturationFilter());
+        mRSFilterHelper.generateBitmap(filters);
+
         adapter = new FilterListAdapter(this, items);
-        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView.setAdapter(adapter);
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
