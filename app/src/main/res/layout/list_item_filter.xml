@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:background="@color/background">
+
     <ImageView
         android:id="@+id/list_item_filter_drag_handle"
         android:background="@drawable/drag"
@@ -11,54 +13,56 @@
         android:layout_height="50dp"
         android:layout_centerVertical="true"/>
 
-    <Switch
-        android:id="@+id/list_item_filter_switch"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/list_item_filter_drag_handle"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/list_item_filter_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FilterName"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/list_item_filter_switch"
-        android:layout_toRightOf="@+id/list_item_filter_switch"/>
+        <TextView
+            android:id="@+id/list_item_filter_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saturation Filter (placeholder)"/>
 
-    <SeekBar
-        android:id="@+id/list_item_filter_seekbar1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/list_item_filter_switch"
-        android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/list_item_filter_switch"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <SeekBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_item_filter_seekbar2"
-        android:layout_below="@+id/list_item_filter_seekbar1"
-        android:layout_alignLeft="@+id/list_item_filter_seekbar1"
-        android:layout_alignEnd="@+id/list_item_filter_seekbar1"/>
+            <TextView
+                android:id="@+id/list_item_filter_label1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_below="@+id/list_item_filter_title"
+                android:layout_toRightOf="@+id/list_item_filter_drag_handle"
+                android:text="Small Text"/>
 
-    <TextView
-        android:id="@+id/list_item_filter_label1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_below="@+id/list_item_filter_switch"
-        android:layout_toRightOf="@+id/list_item_filter_drag_handle"
-        android:text="Small Text"/>
+            <SeekBar
+                android:id="@+id/list_item_filter_seekbar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/list_item_filter_title"
+                android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/list_item_filter_label1"/>
 
-    <TextView
-        android:id="@+id/list_item_filter_label2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_toRightOf="@id/list_item_filter_drag_handle"
-        android:layout_alignTop="@+id/list_item_filter_seekbar2"
-        android:layout_toLeftOf="@+id/list_item_filter_seekbar1"
-        android:text="Small Text"/>
+        </LinearLayout>
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/list_item_filter_label2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_below="@+id/list_item_filter_label1"
+                android:layout_toRightOf="@+id/list_item_filter_drag_handle"
+                android:text="Small Text"/>
+
+            <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_item_filter_seekbar2"
+                android:layout_below="@+id/list_item_filter_seekbar1"
+                android:layout_alignLeft="@+id/list_item_filter_seekbar1"
+                android:layout_alignEnd="@+id/list_item_filter_seekbar1"/>
+    </LinearLayout>
+</LinearLayout>
