@@ -28,10 +28,8 @@ RenderScript kernel that performs saturation manipulation.
 uchar4 __attribute__((kernel)) contrast(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
-    //float val = 0.2989f * f4.r + 0.5870f * f4.g + 0.1140f * f4.b;
-    //f4.r = f4.g = f4.b = val;
 
-    /* sepia calculations */
+    /* contrast calculations */
     f4.r = ((f4.r - 0.5f) * contrastValue) + 0.5f;
     f4.g = ((f4.g - 0.5f) * contrastValue) + 0.5f;
     f4.b = ((f4.b - 0.5f) * contrastValue) + 0.5f;
