@@ -77,16 +77,16 @@ public class SaturationFilter implements IFilter {
     }
 
     public void addKernel(ScriptGroup.Builder scriptBuilder) {
-        //TODO: builder dingen doen yolololo
+        /* TODO: this is supposed to do at least something */
     }
 
     public android.support.v8.renderscript.Script.KernelID getKernelId() {
-        //TODO: rs stuff
+        /* TODO: this is supposed to do at least something */
         return null;
     }
 
     public android.support.v8.renderscript.Script.FieldID getFieldId() {
-        //TODO: nog meer rs dingen
+        /* TODO: this is supposed to do at least something */
         return null;
     }
 }
