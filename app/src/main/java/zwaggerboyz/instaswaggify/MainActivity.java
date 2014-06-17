@@ -2,6 +2,7 @@ package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,7 +18,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<ListItemFilter> items = new ArrayList<ListItemFilter>();
+        final ArrayList<ListItemFilter> items = new ArrayList<ListItemFilter>();
         for (int i = 0; i < 20; i++) {
             items.add(new ListItemFilter());
         }
@@ -26,14 +27,24 @@ public class MainActivity extends Activity {
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
         mListView.setAdapter(adapter);
+
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
-            public void remove(int which) {
+            public void remove(int item) {
+                adapter.remove(item);
                 adapter.notifyDataSetChanged();
             }
         });
-    }
 
+        mListView.setDropListener(new DragSortListView.DropListener() {
+            @Override
+            public void drop(int from, int to) {
+
+                Log.v("Main", "DROPPED FROM: " + from + ". TO: " + to);
+                adapter.swap(from, to);
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
