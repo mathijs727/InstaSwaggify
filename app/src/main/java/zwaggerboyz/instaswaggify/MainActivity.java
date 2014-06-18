@@ -20,7 +20,9 @@ import android.widget.ImageView;
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -109,8 +111,11 @@ public class MainActivity extends Activity {
                 }
             }
 
-            //TODO: add timestamp to photo name
-            File image = new File(imagesFolder, "image.jpg");
+            Date now = new Date();
+            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            String date = simpleFormat.format(now);
+
+            File image = new File(imagesFolder, "Picture " + date + ".jpg" + now.toString() );
             mImageUri = Uri.fromFile(image);
 
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
@@ -133,7 +138,6 @@ public class MainActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
-                    //TODO: fix dit
                     mRSFilterHelper.setBitmap(bitmap);
                 }
                 catch (Exception e) {
