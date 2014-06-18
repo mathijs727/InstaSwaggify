@@ -2,6 +2,7 @@ package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
     private DragSortListView mListView;
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
         final ArrayList<IFilter> items = new ArrayList<IFilter>();
         for (int i = 0; i < 5; i++) {
             items.add(new SaturationFilter());
+
         }
 
         mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
@@ -37,13 +40,13 @@ public class MainActivity extends Activity {
         mAdapter = new FilterListAdapter(this, items);
         mListView.setAdapter(mAdapter);
 
-        /*mRSFilterHelper = new RSFilterHelper();
-         mRSFilterHelper.createRS(this);
-         mRSFilterHelper.setCanvasView(mImageView);
-         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
-         List<IFilter> filters = new ArrayList<IFilter>();
-         filters.add(new SaturationFilter());
-         mRSFilterHelper.generateBitmap(filters);*/
+        mRSFilterHelper = new RSFilterHelper();
+        mRSFilterHelper.createRS(this);
+        mRSFilterHelper.setCanvasView(mImageView);
+        mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
+        List<IFilter> filters = new ArrayList<IFilter>();
+        filters.add(new SaturationFilter());
+        mRSFilterHelper.generateBitmap(filters);
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
@@ -57,7 +60,6 @@ public class MainActivity extends Activity {
             @Override
             public void drop(int from, int to) {
 
-                Log.v("Main", "DROPPED FROM: " + from + ". TO: " + to);
                 mAdapter.reorder(from, to);
             }
         });
