@@ -30,9 +30,6 @@ void init() {
 }
 
 void calculateMatrix() {
-    imageWidth = rsAllocationGetDimX(input);
-    imageHeight = rsAllocationGetDimY(input);
-
     rsMatrixTranslate(&matrix, imageWidth/2.0f, imageHeight/2.0f, 0.0f);
     rsMatrixRotate(&matrix, rotationAngle, 0.0f, 0.0f, 1.0f);
     rsMatrixTranslate(&matrix, -imageWidth/2.0f, -imageHeight/2.0f, 0.0f);

@@ -19,7 +19,7 @@ public class RotationFilter extends AbstractFilterClass {
                 "Angle"
         };
         mValues = new int[] {
-                50
+                0
         };
     }
 
@@ -33,13 +33,14 @@ public class RotationFilter extends AbstractFilterClass {
 
     @Override
     public void setInput(Allocation allocation) {
-        Log.v("RotationFilter", "set input");
         mScript.set_input(allocation);
     }
 
     @Override
     public void updateInternalValues() {
         mScript.set_rotationAngle(normalizeValue(mValues[0], 0.f, 360.f));
+        mScript.set_imageWidth(imageWidth);
+        mScript.set_imageHeight(imageHeight);
         mScript.invoke_calculateMatrix();
     }
 
