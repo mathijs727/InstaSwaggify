@@ -2,20 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity" >
 
-    <item android:id="@+id/take_photo"
+    <item android:id="@+id/action_take_photo"
         android:title="@string/action_take_photo"
         android:icon="@drawable/ic_action_camera"
         android:orderInCategory="97"
         android:showAsAction="ifRoom" />
 
 
-    <item android:id="@+id/select_photo"
+    <item android:id="@+id/action_select_photo"
         android:title="@string/action_select_photo"
         android:icon="@drawable/ic_action_picture"
         android:orderInCategory="98"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/add_filter"
+    <item android:id="@+id/action_add_filter"
         android:title="@string/action_add_filter"
         android:icon="@drawable/ic_action_new"
         android:orderInCategory="99"

@@ -91,14 +91,17 @@ public class MainActivity extends Activity {
 
         if (id == R.id.action_settings) {
             return true;
-        } else if (id == R.id.add_filter) {
+        }
+
+        else if (id == R.id.action_add_filter) {
             mAdapter.add();
             return true;
-        } else if (id == R.id.take_photo) {
+        }
+
+        else if (id == R.id.action_take_photo) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
-
             if (imagesFolder.exists()) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
@@ -106,7 +109,7 @@ public class MainActivity extends Activity {
                 }
             }
 
-            //TODO: add timestamp
+            //TODO: add timestamp to photo name
             File image = new File(imagesFolder, "image.jpg");
             mImageUri = Uri.fromFile(image);
 
@@ -114,7 +117,9 @@ public class MainActivity extends Activity {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
             return true;
-        } else if (id == R.id.select_photo) {
+        }
+
+        else if (id == R.id.action_select_photo) {
             return true;
         }
 
