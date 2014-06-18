@@ -3,8 +3,15 @@
     tools:context=".MainActivity" >
 
     <item android:id="@+id/take_photo"
-        android:title="@string/action_photo"
+        android:title="@string/action_take_photo"
         android:icon="@drawable/ic_action_camera"
+        android:orderInCategory="97"
+        android:showAsAction="ifRoom" />
+
+
+    <item android:id="@+id/select_photo"
+        android:title="@string/action_select_photo"
+        android:icon="@drawable/ic_action_picture"
         android:orderInCategory="98"
         android:showAsAction="ifRoom" />
 

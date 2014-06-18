@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,9 @@ public class MainActivity extends Activity {
     private ImageView mImageView;
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
+
+    private Uri mImageUri;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +82,27 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
         if (id == R.id.action_settings) {
             return true;
-        } else if (id == R.id.add_filter) {
-            mAdapter.add();
-            return true;
-        } else if (id == R.id.take_photo) {
+        }
+
+        else if (id == R.id.add_filter) {
             mAdapter.add();
             return true;
         }
+
+        else if (id == R.id.take_photo) {
+            mAdapter.add();
+            return true;
+        }
+
+        else if (id == R.id.select_photo) {
+            mAdapter.add();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
