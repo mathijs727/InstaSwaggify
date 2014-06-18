@@ -36,7 +36,11 @@ uchar4 __attribute__((kernel)) contrast(uchar4 in)
 
     /* clipping check */
     if(f4.r > 1.0) f4.r = 1.0f;
+    if(f4.r < 0.0) f4.r = 0.0f;
+
     if(f4.g > 1.0) f4.g = 1.0f;
+    if(f4.g < 0.0) f4.g = 0.0f;
+
     if(f4.b > 1.0) f4.b = 1.0f;
     if(f4.b < 0.0) f4.b = 0.0f;
 

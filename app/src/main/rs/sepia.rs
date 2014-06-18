@@ -40,7 +40,6 @@ uchar4 __attribute__((kernel)) sepia(uchar4 in)
     /* clipping check */
     if(f4.r > 1.0) f4.r = 1.0f;
     if(f4.g > 1.0) f4.g = 1.0f;
-    if(f4.b > 1.0) f4.b = 1.0f;
     if(f4.b < 0.0) f4.b = 0.0f;
 
     float3 result = {f4.r, f4.g, f4.b};

@@ -21,10 +21,12 @@
 rs_allocation input;
 float rotationAngle;
 int imageWidth;
-int imageHeight = 0;
+int imageHeight;
 rs_matrix4x4 matrix;
 
 void calculateMatrix() {
+    imageWidth = rsAllocationGetDimX(input);
+    imageHeight = rsAllocationGetDimY(input);
     rsMatrixLoadIdentity(&matrix);
     rsMatrixTranslate(&matrix, imageWidth/2.0f, imageHeight/2.0f, 0.0f);
     rsMatrixRotate(&matrix, rotationAngle, 0.0f, 0.0f, 1.0f);
