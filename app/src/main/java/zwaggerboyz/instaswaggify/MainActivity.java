@@ -1,6 +1,8 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -84,9 +87,22 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+
         } else if (id == R.id.add_filter) {
-            mAdapter.add();
+
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null)
+                fragmentTransaction.remove(prev);
+
+            fragmentTransaction.addToBackStack(null);
+
+            FilterDialog filterDialog = new FilterDialog();
+            filterDialog.show(fragmentTransaction, "dialog");
+
+//            mAdapter.add();
             return true;
+
         } else if (id == R.id.take_photo) {
             mAdapter.add();
             return true;
