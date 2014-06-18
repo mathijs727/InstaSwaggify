@@ -21,6 +21,8 @@ public class FilterDialog extends DialogFragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        getDialog().setTitle("Select filter");
+
         View v = inflater.inflate(R.layout.filterdialog, container, false);
         ListView listView = (ListView) v.findViewById(R.id.filter_dialog_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, filters);

@@ -4,6 +4,7 @@ package zwaggerboyz.instaswaggify;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+import android.util.Log;
 
 /**
  * Created by Mathijs on 16/06/14.
@@ -14,6 +15,8 @@ public abstract class AbstractFilterClass implements IFilter {
     protected int mValues[];
     protected String mLabels[];
     protected int mNumValues;
+    protected int imageHeight;
+    protected int imageWidth;
 
     protected RenderScript mRS;
 
@@ -41,6 +44,11 @@ public abstract class AbstractFilterClass implements IFilter {
         if (i < mNumValues) {
             mValues[i] = value;
         }
+    }
+
+    public void setDimensions(int imageHeight, int imageWidth) {
+        this.imageHeight = imageHeight;
+        this.imageWidth = imageWidth;
     }
 
     public float normalizeValue(int value, float min, float max) {
