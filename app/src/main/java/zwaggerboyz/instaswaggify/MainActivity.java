@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
     private FilterDialog mFilterDialog;
 
     private Uri mImageUri;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermegerd illermenerti
     private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 10495800;
 
     @Override
