@@ -1,6 +1,7 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -113,6 +114,7 @@ public class MainActivity extends Activity {
              * Creates new filter dialog and shows it
              */
             mFilterDialog = new FilterDialog();
+            mFilterDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
             mFilterDialog.show(fragmentTransaction, "dialog");
 
             return true;
