@@ -87,6 +87,9 @@ public class MainActivity extends Activity {
         } else if (id == R.id.add_filter) {
             mAdapter.add();
             return true;
+        } else if (id == R.id.take_photo) {
+            mAdapter.add();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
