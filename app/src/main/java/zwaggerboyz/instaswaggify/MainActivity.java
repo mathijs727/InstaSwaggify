@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             /* Create a folder to store the pictures if it does not exist yet. */
-            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
+            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify Original Pictures");
             if (imagesFolder.exists() == false) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
