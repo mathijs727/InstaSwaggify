@@ -16,7 +16,7 @@
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/add_filter"
-        android:title="@string/action_add"
+        android:title="@string/action_add_filter"
         android:icon="@drawable/ic_action_new"
         android:orderInCategory="99"
         android:showAsAction="ifRoom" />

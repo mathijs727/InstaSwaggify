@@ -2,12 +2,16 @@ package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +19,7 @@ import android.widget.ImageView;
 
 import com.mobeta.android.dslv.DragSortListView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +43,7 @@ public class MainActivity extends Activity {
 
         }
 
-        mListView = (DragSortListView)findViewById(R.id.activity_main_listview);
+        mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
         mImageView = (ImageView) findViewById(R.id.activity_main_imageview);
 
         mAdapter = new FilterListAdapter(this, items);
@@ -86,23 +91,54 @@ public class MainActivity extends Activity {
 
         if (id == R.id.action_settings) {
             return true;
-        }
-
-        else if (id == R.id.add_filter) {
+        } else if (id == R.id.add_filter) {
             mAdapter.add();
             return true;
-        }
+        } else if (id == R.id.take_photo) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        else if (id == R.id.take_photo) {
-            mAdapter.add();
+            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
+
+            if (imagesFolder.exists()) {
+                if (imagesFolder.mkdirs() == false) {
+                    Log.i("Take Photo", "no directory created");
+                    return true;
+                }
+            }
+
+            //TODO: add timestamp
+            File image = new File(imagesFolder, "image.jpg");
+            mImageUri = Uri.fromFile(image);
+
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
             return true;
-        }
-
-        else if (id == R.id.select_photo) {
-            mAdapter.add();
+        } else if (id == R.id.select_photo) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+                    mRSFilterHelper.setBitmap(bitmap);
+                }
+                catch (Exception e) {
+                    Log.e("onActivityResult", "create bitmap failed: " + e);
+                }
+            }
+
+            else {
+                //TODO: error message for user
+            }
+        }
+    }
+
 }
