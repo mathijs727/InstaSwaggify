@@ -92,10 +92,13 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        /* Settings. */
         if (id == R.id.action_settings) {
             return true;
+        }
 
-        } else if (id == R.id.action_add_filter) {
+        /* Add filter. */
+        else if (id == R.id.action_add_filter) {
 
             /**
              * Handles stack for fragments
@@ -116,6 +119,7 @@ public class MainActivity extends Activity {
             return true;
         }
 
+        /* Take a photo with the camera. */
         else if (id == R.id.action_take_photo) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -146,8 +150,8 @@ public class MainActivity extends Activity {
             return true;
         }
 
+        /* Select a photo from the filesystem. */
         else if (id == R.id.action_select_photo) {
-
             Intent pickPic_intent = new Intent();
             pickPic_intent.setType("image/*");
             pickPic_intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -161,7 +165,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        /* Get image taken by the camera. */
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
@@ -177,6 +181,8 @@ public class MainActivity extends Activity {
                 Toast.makeText(this, "Could not take image", Toast.LENGTH_SHORT).show();
             }
         }
+
+        /* Get image selected from the file-system. */
         else if (requestCode == SELECT_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 mImageUri = data.getData();
