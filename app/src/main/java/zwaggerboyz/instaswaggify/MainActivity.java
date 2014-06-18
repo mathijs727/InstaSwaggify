@@ -120,7 +120,7 @@ public class MainActivity extends Activity {
             String date = simpleFormat.format(now);
             Log.i("FILENAME", date + ".jpg");
 
-            File image = new File(imagesFolder, "Picture " + date + ".jpg");
+            File image = new File(imagesFolder, date + ".jpg");
             mImageUri = Uri.fromFile(image);
 
             /* The intent is started. */
