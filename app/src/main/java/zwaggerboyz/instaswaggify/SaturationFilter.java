@@ -16,7 +16,7 @@ public class SaturationFilter extends AbstractFilterClass {
         mNumValues = 1;
 
         mLabels = new String[] {
-                "label 1"
+                "amount"
         };
         mValues = new int[] {
             50

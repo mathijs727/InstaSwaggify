@@ -124,6 +124,7 @@ public class MainActivity extends Activity {
             if (imagesFolder.exists() == false) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
+                    //TODO: warning for user
                     return true;
                 }
             }

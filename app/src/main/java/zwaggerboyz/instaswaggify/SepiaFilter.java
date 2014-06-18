@@ -11,7 +11,7 @@ public class SepiaFilter extends AbstractFilterClass {
     ScriptC_sepia mScript;
 
     public SepiaFilter() {
-        mName = "Intensity";
+        mName = "Sepia";
         mNumValues = 2;
 
         mLabels = new String[] {
