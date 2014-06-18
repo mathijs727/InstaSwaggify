@@ -103,14 +103,16 @@ public class MainActivity extends Activity {
         else if (id == R.id.action_take_photo) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
+            /* Create a folder to store the pictures if it does not exist yet. */
+            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "@string/folder_original_pictures");
             if (imagesFolder.exists()) {
-                if (imagesFolder.mkdirs() == false) {
+                if (!imagesFolder.mkdirs()) {
                     Log.i("Take Photo", "no directory created");
                     return true;
                 }
             }
 
+            /* Get the current time and date to use in the filename. */
             Date now = new Date();
             SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             String date = simpleFormat.format(now);
@@ -118,6 +120,7 @@ public class MainActivity extends Activity {
             File image = new File(imagesFolder, "Picture " + date + ".jpg" + now.toString() );
             mImageUri = Uri.fromFile(image);
 
+            /* The intent is started. */
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
@@ -137,6 +140,7 @@ public class MainActivity extends Activity {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
+                    /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap);
                 }
