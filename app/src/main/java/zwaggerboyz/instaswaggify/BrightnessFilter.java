@@ -5,21 +5,19 @@ import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
 /**
- * Created by Matthijs on 17-6-2014.
+ * Created by Matthijs on 18-6-2014.
  */
-public class SepiaFilter extends AbstractFilterClass {
-    ScriptC_sepia mScript;
+public class BrightnessFilter extends AbstractFilterClass {
+    ScriptC_brightness mScript;
 
-    public SepiaFilter() {
-        mName = "Intensity";
-        mNumValues = 2;
+    public BrightnessFilter() {
+        mName = "Brightness";
+        mNumValues = 1;
 
         mLabels = new String[] {
-                "Intensity",
-                "Depth"
+                "label 1"
         };
         mValues = new int[] {
-                50,
                 50
         };
     }
@@ -28,7 +26,7 @@ public class SepiaFilter extends AbstractFilterClass {
     public void setRS(RenderScript rs) {
         if (mRS == null) {
             mRS = rs;
-            mScript = new ScriptC_sepia(mRS);
+            mScript = new ScriptC_brightness(mRS);
         }
     }
 
@@ -37,13 +35,12 @@ public class SepiaFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_intensity(normalizeValue(mValues[0], 0.f, 1.f));
-        mScript.set_depth(normalizeValue(mValues[1], 0.f, 1.f));
+        mScript.set_brightnessValue(normalizeValue(mValues[0], 0.f, 1.f));
     }
 
     @Override
     public Script.KernelID getKernelId() {
-        return mScript.getKernelID_sepia();
+        return mScript.getKernelID_brightness();
     }
 
     @Override
