@@ -3,6 +3,7 @@ package zwaggerboyz.instaswaggify;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+import android.util.Log;
 
 /**
  * Created by Matthijs on 18-6-2014.
@@ -18,7 +19,7 @@ public class RotationFilter extends AbstractFilterClass {
                 "Angle"
         };
         mValues = new int[] {
-                0
+                50
         };
     }
 
@@ -32,13 +33,14 @@ public class RotationFilter extends AbstractFilterClass {
 
     @Override
     public void setInput(Allocation allocation) {
+        Log.v("RotationFilter", "set input");
         mScript.set_input(allocation);
-        mScript.invoke_calculateMatrix();
     }
 
     @Override
     public void updateInternalValues() {
         mScript.set_rotationAngle(normalizeValue(mValues[0], 0.f, 360.f));
+        mScript.invoke_calculateMatrix();
     }
 
     @Override

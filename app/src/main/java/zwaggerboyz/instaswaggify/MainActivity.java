@@ -1,7 +1,6 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -15,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -32,7 +32,8 @@ public class MainActivity extends Activity {
     private FilterDialog mFilterDialog;
 
     private Uri mImageUri;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermergerd illermenerti
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermegerd illermenerti
+    private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 10495800;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +92,13 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        /* Settings. */
         if (id == R.id.action_settings) {
             return true;
+        }
 
-        } else if (id == R.id.action_add_filter) {
+        /* Add filter. */
+        else if (id == R.id.action_add_filter) {
 
             /**
              * Handles stack for fragments
@@ -110,21 +114,20 @@ public class MainActivity extends Activity {
              * Creates new filter dialog and shows it
              */
             mFilterDialog = new FilterDialog();
-            mFilterDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
             mFilterDialog.show(fragmentTransaction, "dialog");
 
             return true;
         }
 
+        /* Take a photo with the camera. */
         else if (id == R.id.action_take_photo) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             /* Create a folder to store the pictures if it does not exist yet. */
-            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify Original Pictures");
+            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
             if (imagesFolder.exists() == false) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
-                    //TODO: warning for user
                     return true;
                 }
             }
@@ -147,7 +150,13 @@ public class MainActivity extends Activity {
             return true;
         }
 
+        /* Select a photo from the filesystem. */
         else if (id == R.id.action_select_photo) {
+            Intent pickPic_intent = new Intent();
+            pickPic_intent.setType("image/*");
+            pickPic_intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(pickPic_intent, "Select Picture"), SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
+
             return true;
         }
 
@@ -156,8 +165,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("YOLOLO", "DATATA");
-
+        /* Get image taken by the camera. */
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
@@ -169,10 +177,27 @@ public class MainActivity extends Activity {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
                 }
             }
-
-            else {
-                //TODO: error message for user
+            else if (resultCode != RESULT_CANCELED) {
+                Toast.makeText(this, "Could not take image", Toast.LENGTH_SHORT).show();
             }
+        }
+
+        /* Get image selected from the file-system. */
+        else if (requestCode == SELECT_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                mImageUri = data.getData();
+                try {
+                    /* The image is converted to a bitmap and send to the FilterHelper object. */
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+                    mRSFilterHelper.setBitmap(bitmap);
+                } catch (Exception e) {
+                    Log.e("onActivityResult", "create bitmap failed: " + e);
+                }
+            }
+            else if (resultCode != RESULT_CANCELED) {
+                Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
