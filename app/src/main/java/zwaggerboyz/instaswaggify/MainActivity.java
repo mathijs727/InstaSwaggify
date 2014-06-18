@@ -131,7 +131,7 @@ public class MainActivity extends Activity {
             /* Get the current time and date to use in the filename. */
 
             Date now = new Date();
-            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy-HH:mm");
+            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
 
             String date = simpleFormat.format(now);
             Log.i("FILENAME", date + ".jpg");
