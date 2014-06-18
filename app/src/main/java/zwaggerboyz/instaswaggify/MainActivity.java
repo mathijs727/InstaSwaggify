@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -135,7 +131,7 @@ public class MainActivity extends Activity {
             /* Get the current time and date to use in the filename. */
 
             Date now = new Date();
-            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy-HH:mm");
+            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
 
             String date = simpleFormat.format(now);
             Log.i("FILENAME", date + ".jpg");
