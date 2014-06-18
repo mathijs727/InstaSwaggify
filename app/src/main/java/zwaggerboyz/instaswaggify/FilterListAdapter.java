@@ -86,6 +86,11 @@ public class FilterListAdapter extends BaseAdapter {
                 viewHolder.slider1Seekbar.setProgress(item.getValue(0));
                 break;
             case 2:
+                viewHolder.label1TextView.setVisibility(View.VISIBLE);
+                viewHolder.label2TextView.setVisibility(View.VISIBLE);
+                viewHolder.slider1Seekbar.setVisibility(View.VISIBLE);
+                viewHolder.slider2Seekbar.setVisibility(View.VISIBLE);
+
                 viewHolder.label1TextView.setText(item.getLabel(0));
                 viewHolder.label2TextView.setText(item.getLabel(1));
                 viewHolder.slider1Seekbar.setProgress(item.getValue(0));
