@@ -52,14 +52,14 @@ public class MainActivity extends Activity {
         mAdapter = new FilterListAdapter(this, items);
         mListView.setAdapter(mAdapter);
 
-        /*mRSFilterHelper = new RSFilterHelper();
+        mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
         mRSFilterHelper.setCanvasView(mImageView);
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
         List<IFilter> filters = new ArrayList<IFilter>();
-        filters.add(new SaturationFilter());
-        filters.add(new RotationFilter());
-        mRSFilterHelper.generateBitmap(filters);*/
+        //filters.add(new RotationFilter());
+        filters.add(new ThresholdBlurFilter());
+        mRSFilterHelper.generateBitmap(filters);
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override

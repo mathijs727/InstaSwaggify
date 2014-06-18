@@ -8,10 +8,10 @@ import android.util.Log;
 /**
  * Created by Mathijs on 17/06/14.
  */
-public class ThresholdBlur extends AbstractFilterClass {
+public class ThresholdBlurFilter extends AbstractFilterClass {
     ScriptC_threshold_blur mScript;
 
-    public ThresholdBlur() {
+    public ThresholdBlurFilter() {
         mName = "Threshold Blur";
         mNumValues = 4;
 

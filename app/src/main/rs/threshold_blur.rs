@@ -33,7 +33,8 @@ uchar strength;
 RenderScript kernel that inverets the colors.
 */
 
-uchar4 __attribute__((kernel)) threshold_blur(uchar4 in, uint32_t x, uint32_t y) {
+uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
+    uchar4 in = rsGetElementAt_uchar4(input, x, y);
     int redDif, greenDif, blueDif;
     uchar red, green, blue, neighbor;
     long new_y, new_x;
@@ -49,7 +50,7 @@ uchar4 __attribute__((kernel)) threshold_blur(uchar4 in, uint32_t x, uint32_t y)
 
     out = in;
     rsDebug("root", "hello");
-    return in;
+    //return in;
 
     //rsDebug("root imageWidth", imageWidth);
     //rsDebug("root imageHeight", imageHeight);
@@ -66,8 +67,8 @@ uchar4 __attribute__((kernel)) threshold_blur(uchar4 in, uint32_t x, uint32_t y)
                 && new_x >= 0
                 && new_x < imageWidth) {
 
-                rsDebug("new_y", (uint32_t)new_y);
-                rsDebug("new_x", (uint32_t)new_x);
+                //rsDebug("new_y", (uint32_t)new_y);
+                //rsDebug("new_x", (uint32_t)new_x);
 
                 done = 1;
                 neighbour = rsGetElementAt_uchar4(input, (uint32_t)new_x, (uint32_t)new_y);

@@ -53,28 +53,30 @@ public class RSFilterHelper {
     }
 
     public void generateBitmap(List<IFilter> filters) {
+        if (filters.size() == 0) {
+            mCanvasView.setImageBitmap(mBitmapIn);
+            return;
+        }
+
         ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
-        if (filters.size() > 0) {
+        for (IFilter filter : filters) {
+            filter.setRS(mRS);
+            filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
+            filter.updateInternalValues();
+            builder.addKernel(filter.getKernelId());
+        }
 
-            for (IFilter filter : filters) {
-                filter.setRS(mRS);
-                filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
-                filter.updateInternalValues();
-                builder.addKernel(filter.getKernelId());
-            }
-
-            for (int i = 0; i < filters.size()-1; i++) {
-                if (filters.get(i+1).getFieldId() != null) {
-                    builder.addConnection(
-                            mInAllocation.getType(),
-                            filters.get(i).getKernelId(),
-                            filters.get(i + 1).getFieldId());
-                } else {
-                    builder.addConnection(
-                            mInAllocation.getType(),
-                            filters.get(i).getKernelId(),
-                            filters.get(i + 1).getKernelId());
-                }
+        for (int i = 0; i < filters.size()-1; i++) {
+            if (filters.get(i+1).getFieldId() != null) {
+                builder.addConnection(
+                        mInAllocation.getType(),
+                        filters.get(i).getKernelId(),
+                        filters.get(i + 1).getFieldId());
+            } else {
+                builder.addConnection(
+                        mInAllocation.getType(),
+                        filters.get(i).getKernelId(),
+                        filters.get(i + 1).getKernelId());
             }
         }
         mScriptGroup = builder.create();
@@ -103,6 +105,8 @@ public class RSFilterHelper {
 
                 if (filters[0].getFieldId() != null) {
                     filters[0].setInput(mInAllocation);
+                    //mScriptGroup.setInput(filters[0].getKernelId(),
+                    //        mInAllocation);
                 } else {
                     mScriptGroup.setInput(filters[0].getKernelId(),
                             mInAllocation);
