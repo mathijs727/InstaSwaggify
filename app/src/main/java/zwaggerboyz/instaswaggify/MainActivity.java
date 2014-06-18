@@ -1,6 +1,9 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +33,7 @@ public class MainActivity extends Activity {
     private ImageView mImageView;
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
+    private FilterDialog mFilterDialog;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
@@ -93,10 +97,26 @@ public class MainActivity extends Activity {
 
         if (id == R.id.action_settings) {
             return true;
-        }
 
-        else if (id == R.id.action_add_filter) {
-            mAdapter.add();
+        } else if (id == R.id.action_add_filter) {
+
+            /**
+             * Handles stack for fragments
+             */
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null)
+                fragmentTransaction.remove(prev);
+
+            fragmentTransaction.addToBackStack(null);
+
+            /**
+             * Creates new filter dialog and shows it
+             */
+            mFilterDialog = new FilterDialog();
+            mFilterDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+            mFilterDialog.show(fragmentTransaction, "dialog");
+
             return true;
         }
 
@@ -159,4 +179,8 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void addFilter(int i) {
+        mFilterDialog.dismiss();
+        mAdapter.add(i);
+    }
 }
