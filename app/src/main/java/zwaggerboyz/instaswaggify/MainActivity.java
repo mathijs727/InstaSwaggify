@@ -115,21 +115,27 @@ public class MainActivity extends Activity {
         else if (id == R.id.action_take_photo) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+            /* Create a folder to store the pictures if it does not exist yet. */
             File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
-            if (imagesFolder.exists()) {
+            if (imagesFolder.exists() == false) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
                     return true;
                 }
             }
 
-            Date now = new Date();
-            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            String date = simpleFormat.format(now);
+            /* Get the current time and date to use in the filename. */
 
-            File image = new File(imagesFolder, "Picture " + date + ".jpg" + now.toString() );
+            Date now = new Date();
+            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy-HH:mm");
+
+            String date = simpleFormat.format(now);
+            Log.i("FILENAME", date + ".jpg");
+
+            File image = new File(imagesFolder, date + ".jpg");
             mImageUri = Uri.fromFile(image);
 
+            /* The intent is started. */
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
@@ -145,10 +151,12 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("YOLOLO", "DATATA");
 
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
+                    /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap);
                 }
