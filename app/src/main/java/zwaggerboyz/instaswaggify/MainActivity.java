@@ -1,13 +1,12 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +29,7 @@ public class MainActivity extends Activity {
     private ImageView mImageView;
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
+    private FilterDialog mFilterDialog;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
@@ -93,31 +93,53 @@ public class MainActivity extends Activity {
 
         if (id == R.id.action_settings) {
             return true;
-        }
 
-        else if (id == R.id.action_add_filter) {
-            mAdapter.add();
+        } else if (id == R.id.action_add_filter) {
+
+            /**
+             * Handles stack for fragments
+             */
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null)
+                fragmentTransaction.remove(prev);
+
+            fragmentTransaction.addToBackStack(null);
+
+            /**
+             * Creates new filter dialog and shows it
+             */
+            mFilterDialog = new FilterDialog();
+            mFilterDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+            mFilterDialog.show(fragmentTransaction, "dialog");
+
             return true;
         }
 
         else if (id == R.id.action_take_photo) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
-            if (imagesFolder.exists()) {
+            /* Create a folder to store the pictures if it does not exist yet. */
+            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify Original Pictures");
+            if (imagesFolder.exists() == false) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
                     return true;
                 }
             }
 
-            Date now = new Date();
-            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            String date = simpleFormat.format(now);
+            /* Get the current time and date to use in the filename. */
 
-            File image = new File(imagesFolder, "Picture " + date + ".jpg" + now.toString() );
+            Date now = new Date();
+            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+
+            String date = simpleFormat.format(now);
+            Log.i("FILENAME", date + ".jpg");
+
+            File image = new File(imagesFolder, date + ".jpg");
             mImageUri = Uri.fromFile(image);
 
+            /* The intent is started. */
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
@@ -133,10 +155,12 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("YOLOLO", "DATATA");
 
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 try {
+                    /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap);
                 }
@@ -151,4 +175,8 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void addFilter(int i) {
+        mFilterDialog.dismiss();
+        mAdapter.add(i);
+    }
 }
