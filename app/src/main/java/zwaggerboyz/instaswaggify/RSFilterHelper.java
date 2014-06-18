@@ -55,8 +55,10 @@ public class RSFilterHelper {
     public void generateBitmap(List<IFilter> filters) {
         ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
         if (filters.size() > 0) {
+
             for (IFilter filter : filters) {
                 filter.setRS(mRS);
+                filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
                 filter.updateInternalValues();
                 builder.addKernel(filter.getKernelId());
             }

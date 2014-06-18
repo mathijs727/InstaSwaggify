@@ -29,6 +29,8 @@ public interface IFilter {
 
     public void updateInternalValues();
 
+    public void setDimensions(int imageHeight, int imageWidth);
+
     /* */
     public void setInput(Allocation input);
     public Script.KernelID getKernelId();
