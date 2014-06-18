@@ -1,6 +1,7 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -37,7 +38,6 @@ public class MainActivity extends Activity {
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
-    private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 10495800;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,12 +151,6 @@ public class MainActivity extends Activity {
         }
 
         else if (id == R.id.action_select_photo) {
-
-            Intent pickPic_intent = new Intent();
-            pickPic_intent.setType("image/*");
-            pickPic_intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(pickPic_intent, "Select Picture"), SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
-
             return true;
         }
 
@@ -178,25 +172,10 @@ public class MainActivity extends Activity {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
                 }
             }
-            else if (resultCode != RESULT_CANCELED) {
-                Toast.makeText(this, "Could not take image", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else if (requestCode == SELECT_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                mImageUri = data.getData();
-                try {
-                    /* The image is converted to a bitmap and send to the FilterHelper object. */
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
-                    mRSFilterHelper.setBitmap(bitmap);
-                } catch (Exception e) {
-                    Log.e("onActivityResult", "create bitmap failed: " + e);
-                }
-            }
-            else if (resultCode != RESULT_CANCELED) {
-                Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
-            }
 
+            else {
+                //TODO: error message for user
+            }
         }
     }
 

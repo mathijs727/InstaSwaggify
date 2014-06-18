@@ -15,7 +15,7 @@ public class ContrastFilter extends AbstractFilterClass {
         mNumValues = 1;
 
         mLabels = new String[] {
-                "Contrast"
+                "amount"
         };
         mValues = new int[] {
                 50

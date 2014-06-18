@@ -20,8 +20,8 @@
 
 const static float3 gMonoMult = {0.299f, 0.587f, 0.114f};
 
-float depth = 0.f;
-float intensity = 0.f;
+float depth;
+float intensity;
 
 /*
 RenderScript kernel that performs saturation manipulation.
