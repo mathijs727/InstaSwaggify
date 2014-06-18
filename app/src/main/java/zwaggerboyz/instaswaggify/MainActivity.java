@@ -128,6 +128,7 @@ public class MainActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+                    //TODO: fix dit
                     mRSFilterHelper.setBitmap(bitmap);
                 }
                 catch (Exception e) {
