@@ -6,25 +6,9 @@
               android:layout_height="match_parent"
               android:weightSum="1">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.39">
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Saturation"
-            android:id="@+id/button"/>
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="86dp"
-            android:layout_height="wrap_content"
-            android:text="Sepia"
-            android:id="@+id/button2"
-            />
-    </LinearLayout>
+        android:id="@+id/filter_dialog_list"
+        android:layout_weight="1"/>
 </LinearLayout>

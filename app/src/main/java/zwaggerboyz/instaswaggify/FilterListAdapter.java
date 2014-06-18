@@ -112,7 +112,6 @@ public class FilterListAdapter extends BaseAdapter {
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     item.setValue(0, seekBar.getProgress());
-                    Log.v("SeekBar", "Seekbar1 Changed");
                 }
             });
         }
@@ -132,7 +131,6 @@ public class FilterListAdapter extends BaseAdapter {
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     item.setValue(1, seekBar.getProgress());
-                    Log.v("SeekBar", "Seekbar2 Changed");
                 }
             });
         }
@@ -158,10 +156,26 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     /* Adds a new item to the filter list */
-    public void add() {
+    public void add(int filter) {
 
-        // TEST ADD
-        mItems.add(new SaturationFilter());
+        switch (filter) {
+            case 0:
+                mItems.add(new BrightnessFilter());
+                break;
+            case 1:
+                mItems.add(new ContrastFilter());
+                break;
+            case 2:
+                mItems.add(new RotationFilter());
+                break;
+            case 3:
+                mItems.add(new SaturationFilter());
+                break;
+            case 4:
+                mItems.add(new SepiaFilter());
+            default:
+                break;
+        }
         notifyDataSetChanged();
     }
 }

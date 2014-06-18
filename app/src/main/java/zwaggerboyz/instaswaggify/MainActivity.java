@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
     private ImageView mImageView;
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
+    private FilterDialog mFilterDialog;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
@@ -96,8 +97,11 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
 
-        } else if (id == R.id.add_filter) {
+        } else if (id == R.id.action_add_filter) {
 
+            /**
+             * Handles stack for fragments
+             */
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             Fragment prev = getFragmentManager().findFragmentByTag("dialog");
             if (prev != null)
@@ -105,10 +109,12 @@ public class MainActivity extends Activity {
 
             fragmentTransaction.addToBackStack(null);
 
-            FilterDialog filterDialog = new FilterDialog();
-            filterDialog.show(fragmentTransaction, "dialog");
+            /**
+             * Creates new filter dialog and shows it
+             */
+            mFilterDialog = new FilterDialog();
+            mFilterDialog.show(fragmentTransaction, "dialog");
 
-//            mAdapter.add();
             return true;
         }
 
@@ -171,4 +177,8 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void addFilter(int i) {
+        mFilterDialog.dismiss();
+        mAdapter.add(i);
+    }
 }
