@@ -81,7 +81,6 @@ public class RSFilterHelper {
 
         IFilter[] filtersArray = new IFilter[filters.size()];
         filters.toArray(filtersArray);
-        Log.v("RSFilterHelper", "number of filters: " + filtersArray.length);
         mRenderTask = new RenderScriptTask();
         mRenderTask.execute(filtersArray);
     }
