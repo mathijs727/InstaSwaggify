@@ -163,13 +163,15 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void reorder(int from, int to) {
-        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-        bufferLevel++;
-        ((MainActivity)activity).setUndoState(true);
+        if (from != to) {
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            bufferLevel++;
+            ((MainActivity)activity).setUndoState(true);
 
-        IFilter element = mItems.remove(from);
-        mItems.add(to, element);
-        notifyDataSetChanged();
+            IFilter element = mItems.remove(from);
+            mItems.add(to, element);
+            notifyDataSetChanged();
+        }
     }
 
     /* Adds a new item to the filter list */
