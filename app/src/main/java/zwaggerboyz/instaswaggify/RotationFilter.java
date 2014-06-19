@@ -12,6 +12,7 @@ public class RotationFilter extends AbstractFilterClass {
     ScriptC_rotation mScript;
 
     public RotationFilter() {
+        mID = FilterID.ROTATION;
         mName = "Rotation";
         mNumValues = 1;
 

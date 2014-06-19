@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -35,6 +36,8 @@ public class MainActivity extends Activity {
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
     private DialogFragment mDialog;
+    private SharedPreferences favorites;
+//    private SharedPreferences settings;  voor later
     private Menu menu;
 
     private Uri mImageUri;

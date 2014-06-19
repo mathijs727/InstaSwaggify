@@ -4,6 +4,8 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
+import java.util.logging.Filter;
+
 /**
  * Created by Matthijs on 18-6-2014.
  */
@@ -11,14 +13,15 @@ public class BrightnessFilter extends AbstractFilterClass {
     ScriptC_brightness mScript;
 
     public BrightnessFilter() {
+        mID = FilterID.BRIGHTNESS;
         mName = "Brightness";
         mNumValues = 1;
 
         mLabels = new String[] {
-                "amount"
+                "brightness"
         };
         mValues = new int[] {
-                50
+                100
         };
     }
 
@@ -35,7 +38,7 @@ public class BrightnessFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_brightnessValue(normalizeValue(mValues[0], 0.f, 1.f));
+        mScript.set_brightnessValue(normalizeValue(mValues[0], 0.25f, 1.f));
     }
 
     @Override
