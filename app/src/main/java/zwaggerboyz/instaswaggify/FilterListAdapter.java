@@ -8,6 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -236,6 +242,20 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void add_favorite() {
+        try {
+            JSONArray jSONArray = new JSONArray();
+            for (IFilter filter:mItems) {
+                JSONObject jSONObject = new JSONObject();
+                jSONObject.put("name", filter.getName());
+                for (int i = 0; i < filter.getNumValues(); i++) {
+                    jSONObject.put("label" + i, filter.getLabel(i);
+                    jSONObject.put("value" + i, filter.getValue(i));
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 //        String favorites_array [][][]; // parse from json
 //        int favorite_index = 1;
