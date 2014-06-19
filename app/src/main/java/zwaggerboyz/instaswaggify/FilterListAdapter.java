@@ -192,13 +192,20 @@ public class FilterListAdapter extends BaseAdapter {
                 mItems.add(new ContrastFilter());
                 break;
             case 2:
-                mItems.add(new RotationFilter());
+                mItems.add(new GuassianBlurFilter());
                 break;
             case 3:
-                mItems.add(new SaturationFilter());
+                mItems.add(new RotationFilter());
                 break;
             case 4:
+                mItems.add(new SaturationFilter());
+                break;
+            case 5:
                 mItems.add(new SepiaFilter());
+                break;
+            case 6:
+                mItems.add(new ThresholdBlurFilter());
+                break;
             default:
                 break;
         }
