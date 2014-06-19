@@ -135,7 +135,7 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             /* Create a folder to store the pictures if it does not exist yet. */
-            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
+            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify/Original Pictures");
             if (imagesFolder.exists() == false) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
@@ -276,7 +276,7 @@ public class MainActivity extends Activity {
         try {
 
             /* filename is made with a timestamp */
-            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-hh-mm");
             String format = s.format(new Date());
 
             folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggified Pictures");
@@ -287,7 +287,7 @@ public class MainActivity extends Activity {
                 }
             }
 
-            file = new File(folder, "Instaswagiffy_" + format + ".jpg");
+            file = new File(folder, format + ".jpg");
             if (!file.exists()) {
                 file.createNewFile();
             }
