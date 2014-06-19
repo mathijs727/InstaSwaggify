@@ -185,6 +185,13 @@ public class MainActivity extends Activity {
             return true;
         }
 
+        /**
+         * Save new preset
+         */
+        else if (id == R.id.action_add_favorite) {
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
