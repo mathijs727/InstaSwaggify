@@ -156,6 +156,10 @@ public class FilterListAdapter extends BaseAdapter {
         return true;
     }
 
+    public List<IFilter> getItems() {
+        return mItems;
+    }
+
     /* Removes item at index from filter list */
     public void remove(int index) {
         updateBuffer();
@@ -233,44 +237,6 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void add_favorite() {
-
-        String favorites_array [][][]; // parse from json
-        int favorite_index = favorites_array.length;
-        String favorite_name = "Schwarzenegger";
-        int size = mItems.size();
-        AbstractFilterClass.FilterID id;
-        int value1 = 0;
-        int value2 = 0;
-
-        /* open or create file */
-        // filename: R.raw.fav
-
-
-
-        for (int i = 0; i < size; i++) {
-
-            /* get filter id */
-            id = mItems.get(i).getID();
-
-            /* get slider values */
-            switch (mItems.get(i).getNumValues()) {
-                case 1:
-                    value1 = mItems.get(i).getValue(0);
-                    break;
-                case 2:
-                    value1 = mItems.get(i).getValue(0);
-                    value2 = mItems.get(i).getValue(1);
-                    break;
-                default:
-                    break;
-            }
-            favorites_array[favorite_index][i][0] = id.toString();
-            favorites_array[favorite_index][i][1] = Integer.toString(value1);
-            favorites_array[favorite_index][i][2] = Integer.toString(value2);
-        }
-
-        JSONArray mJSONArray = new JSONArray(Arrays.asList(favorites_array));
-
 
     }
 }

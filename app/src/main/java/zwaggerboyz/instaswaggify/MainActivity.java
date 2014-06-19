@@ -221,6 +221,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap);
+                    updateImage(mAdapter.getItems());
                 }
                 catch (Exception e) {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
@@ -239,6 +240,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap);
+                    updateImage(mAdapter.getItems());
                 } catch (Exception e) {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
                 }
