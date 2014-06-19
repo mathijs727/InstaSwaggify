@@ -153,9 +153,8 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Removes item at index from filter list */
     public void remove(int index) {
-        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-        bufferLevel++;
-        mListener.setUndoState(true);
+        updateBuffer();
+
         mItems.remove(mItems.get(index));
 
         mListener.updateImage(mItems);
@@ -163,9 +162,7 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void reorder(int from, int to) {
-        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-        bufferLevel++;
-        mListener.setUndoState(true);
+        updateBuffer();
 
         IFilter element = mItems.remove(from);
         mItems.add(to, element);
@@ -176,9 +173,7 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Adds a new item to the filter list */
     public void add(int filter) {
-        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-        bufferLevel++;
-        mListener.setUndoState(true);
+        updateBuffer();
 
         switch (filter) {
             case 0:
@@ -202,6 +197,18 @@ public class FilterListAdapter extends BaseAdapter {
         mListener.updateImage(mItems);
     }
 
+    private void updateBuffer() {
+        if (bufferLevel < 10) {
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            bufferLevel++;
+            mListener.setUndoState(true);
+        } else {
+            mItemsPreviousBuffer.remove(0);
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            mListener.setUndoState(true);
+        }
+    }
+
     public interface FilterListInterface {
         public void setUndoState(boolean state);
         public void updateImage(List<IFilter> filters);
@@ -216,8 +223,8 @@ public class FilterListAdapter extends BaseAdapter {
         if(bufferLevel == 0) {
             mListener.setUndoState(false);
         }
-        notifyDataSetChanged();
         mListener.updateImage(mItems);
+        notifyDataSetChanged();
     }
 
     public void add_favorite() {
