@@ -36,7 +36,7 @@ public class ContrastFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_contrastValue(normalizeValue(mValues[0], 0.f, 1.f));
+        mScript.set_contrastValue(normalizeValue(mValues[0], 0.1f, 1.f));
     }
 
     @Override
