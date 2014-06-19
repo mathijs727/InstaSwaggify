@@ -22,27 +22,26 @@ const static float3 gMonoMult = {0.299f, 0.587f, 0.114f};
 
 float depth;
 float intensity;
+float3 gSepiaVector;
+
+void calculateVector() {
+    gSepiaVector.r = depth * 2;
+    gSepiaVector.g = depth;
+    gSepiaVector.b = -intensity;
+}
 
 /*
-RenderScript kernel that performs saturation manipulation.
+RenderScript kernel that performs sepia manipulation.
 */
 uchar4 __attribute__((kernel)) sepia(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
-    float val = 0.2989f * f4.r + 0.5870f * f4.g + 0.1140f * f4.b;
-    f4.r = f4.g = f4.b = val;
+    float3 f3 = dot(f4.rgb, gMonoMult);
 
-    /* sepia calculations */
-    f4.r = f4.r + (depth*2);
-    f4.g = f4.g + depth;
-    f4.b = f4.b - intensity;
+    f3 += gSepiaVector;
 
     /* clipping check */
-    if(f4.r > 1.0) f4.r = 1.0f;
-    if(f4.g > 1.0) f4.g = 1.0f;
-    if(f4.b < 0.0) f4.b = 0.0f;
-
-    float3 result = {f4.r, f4.g, f4.b};
+    float3 result = clamp(f3, 0.f, 1.f);
 
     return rsPackColorTo8888(result);
 }
