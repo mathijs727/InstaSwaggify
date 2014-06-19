@@ -14,7 +14,7 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
     public ThresholdBlurFilter() {
         mID = FilterID.THRESHOLD;
         mName = "Threshold Blur";
-        mNumValues = 4;
+        mNumValues = 2;
 
         mLabels = new String[] {
                 "Radius",
