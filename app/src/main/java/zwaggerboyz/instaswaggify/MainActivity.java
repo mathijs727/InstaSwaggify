@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -192,6 +195,10 @@ public class MainActivity extends Activity {
 
         }
 
+        else if (id == R.id.action_save_picture) {
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -236,5 +243,109 @@ public class MainActivity extends Activity {
     public void addFilter(int i) {
         mDialog.dismiss();
         mAdapter.add(i);
+    }
+
+    private void save_picture(Bitmap bitmap) {
+        FileOutputStream output;
+        File folder, file;
+        String state = Environment.getExternalStorageState();
+
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+
+            Toast.makeText(this,
+                    "No SD-card available",
+                    Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        /* Try to open a file to export the picture */
+        try {
+
+            /* filename is made with a timestamp */
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
+            String format = s.format(new Date());
+
+            folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
+            if (folder.exists() == false) {
+                if (folder.mkdirs() == false) {
+                    Log.i("Take Photo", "no directory created");
+                    return;
+                }
+            }
+
+            file = new File(folder, "Instaswagiffy_" + format + ".jpg");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            else {
+                Toast.makeText(this,
+                        "File Already exists",
+                        Toast.LENGTH_SHORT).show();
+
+                Log.i("Pevid", "create file failed");
+                return;
+            }
+
+            output = new FileOutputStream(file);
+        }
+
+        catch (Exception e) {
+            Toast.makeText(this,
+                    "Er trad een fout op bij het exporteren.",
+                    Toast.LENGTH_SHORT).show();
+
+            e.printStackTrace();
+            Log.e("Error opening histogram output stream", e.toString());
+            return;
+
+        }
+
+        try {
+            /* The media scanner has to scan the newly made image, for it to be visible
+             * in the pictures folder.
+             */
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+
+            MediaScannerConnection.scanFile(this,
+                    new String[]{file.toString()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.i("ExternalStorage", "Scanned " + path + ":");
+                            Log.i("ExternalStorage", "-> uri=" + uri);
+                        }
+                    }
+            );
+            Toast.makeText(this, "Picture successfully exported", Toast.LENGTH_SHORT).show();
+
+        }
+
+        catch (Exception e) {
+
+            Toast.makeText(this,
+                    "An error occurred while exported",
+                    Toast.LENGTH_SHORT).show();
+
+            e.printStackTrace();
+            Log.e("Error writing histogram picture", e.toString());
+        }
+
+        finally {
+
+            try {
+                output.flush();
+                output.close();
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this,
+                        "An error occurred while exported",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

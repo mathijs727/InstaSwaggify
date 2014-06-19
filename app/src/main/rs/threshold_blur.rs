@@ -28,7 +28,6 @@ int drop;
 int threshold;
 uchar strength;
 
-
 /*
  RenderScript kernel that inverets the colors.
  */

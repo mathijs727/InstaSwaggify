@@ -39,4 +39,10 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 
+    <item android:id="@+id/action_save_picture"
+        android:title="@string/action_save_picture"
+        android:icon="@drawable/ic_action_save"
+        android:orderInCategory="101"
+        android:showAsAction="never" />
+
 </menu>

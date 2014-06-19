@@ -9,5 +9,6 @@
     <string name="action_favorites">Favorites</string>
     <string name="action_take_photo">Take Photo</string>
     <string name="action_select_photo">Select Photo</string>
+    <string name="action_save_picture">Save Photo</string>
 
 </resources>
