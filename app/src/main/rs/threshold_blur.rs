@@ -49,7 +49,7 @@ uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
     strength = 2;
 
     out = in;
-    rsDebug("root", "hello");
+    //rsDebug("root", "hello");
     //return in;
 
     //rsDebug("root imageWidth", imageWidth);
