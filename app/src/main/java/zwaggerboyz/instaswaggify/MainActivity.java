@@ -1,11 +1,13 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,12 +15,15 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,13 +31,14 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private DragSortListView mListView;
-    private ImageView mImageView;
+    private CanvasView mCanvasView;
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
-    private FilterDialog mFilterDialog;
+    private DialogFragment mDialog;
+    private Menu menu;
 
     private Uri mImageUri;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermegerd illermenerti
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
     private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 10495800;
 
     @Override
@@ -47,14 +53,14 @@ public class MainActivity extends Activity {
         }
 
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
-        mImageView = (ImageView) findViewById(R.id.activity_main_imageview);
+        mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
         mAdapter = new FilterListAdapter(this, items);
         mListView.setAdapter(mAdapter);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
-        mRSFilterHelper.setCanvasView(mImageView);
+        mRSFilterHelper.setCanvasView(mCanvasView);
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
         List<IFilter> filters = new ArrayList<IFilter>();
         //filters.add(new RotationFilter());
@@ -86,6 +92,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -114,8 +121,8 @@ public class MainActivity extends Activity {
             /**
              * Creates new filter dialog and shows it
              */
-            mFilterDialog = new FilterDialog();
-            mFilterDialog.show(fragmentTransaction, "dialog");
+            mDialog = new FilterDialog();
+            mDialog.show(fragmentTransaction, "dialog");
 
             return true;
         }
@@ -161,6 +168,45 @@ public class MainActivity extends Activity {
             return true;
         }
 
+        /**
+         * Select saved filter presets
+         */
+        else if (id == R.id.action_favorites) {
+            /**
+             * Handles stack for fragments
+             */
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null)
+                fragmentTransaction.remove(prev);
+
+            fragmentTransaction.addToBackStack(null);
+
+            /**
+             * Creates new filter dialog and shows it
+             */
+            mDialog = new FavoritesDialog();
+            mDialog.show(fragmentTransaction, "dialog");
+
+            return true;
+        }
+
+        /**
+         * Save new preset
+         */
+        else if (id == R.id.action_add_favorite) {
+
+        }
+
+        else if (id == R.id.action_undo) {
+            setUndoState(false);
+            mAdapter.undo();
+        }
+
+        else if (id == R.id.action_save_picture) {
+            save_picture(mCanvasView.getBitmap());
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -202,8 +248,126 @@ public class MainActivity extends Activity {
         }
     }
 
+    /**
+     * Adds a new filter to the list
+     */
     public void addFilter(int i) {
-        mFilterDialog.dismiss();
+        mDialog.dismiss();
         mAdapter.add(i);
+    }
+
+    private void save_picture(Bitmap bitmap) {
+        FileOutputStream output;
+        File folder, file;
+        String state = Environment.getExternalStorageState();
+
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+
+            Toast.makeText(this,
+                    "No SD-card available",
+                    Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+        /* Try to open a file to export the picture */
+        try {
+
+            /* filename is made with a timestamp */
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
+            String format = s.format(new Date());
+
+            folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggified Pictures");
+            if (folder.exists() == false) {
+                if (folder.mkdirs() == false) {
+                    Log.i("Take Photo", "no directory created");
+                    return;
+                }
+            }
+
+            file = new File(folder, "Instaswagiffy_" + format + ".jpg");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            else {
+                Toast.makeText(this,
+                        "File Already exists",
+                        Toast.LENGTH_SHORT).show();
+
+                Log.i("Pevid", "create file failed");
+                return;
+            }
+
+            output = new FileOutputStream(file);
+        }
+
+        catch (Exception e) {
+            Toast.makeText(this,
+                    "Er trad een fout op bij het exporteren.",
+                    Toast.LENGTH_SHORT).show();
+
+            e.printStackTrace();
+            Log.e("Error opening histogram output stream", e.toString());
+            return;
+
+        }
+
+        try {
+            /* The media scanner has to scan the newly made image, for it to be visible
+             * in the pictures folder.
+             */
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+
+            MediaScannerConnection.scanFile(this,
+                    new String[]{file.toString()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.i("ExternalStorage", "Scanned " + path + ":");
+                            Log.i("ExternalStorage", "-> uri=" + uri);
+                        }
+                    }
+            );
+            Toast.makeText(this, "Picture successfully exported", Toast.LENGTH_SHORT).show();
+
+        }
+
+        catch (Exception e) {
+
+            Toast.makeText(this,
+                    "An error occurred while exported",
+                    Toast.LENGTH_SHORT).show();
+
+            e.printStackTrace();
+            Log.e("Error writing histogram picture", e.toString());
+        }
+
+        finally {
+
+            try {
+                output.flush();
+                output.close();
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this,
+                        "An error occurred while exported",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     * Sets the filter list as this preset
+     */
+    public void setFilter(IFilter[] mItems) {
+
+    }
+
+    public void setUndoState(Boolean state) {
+        menu.findItem(R.id.action_undo).setEnabled(state);
     }
 }
