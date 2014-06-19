@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements FilterListAdapter.FilterListInterface {
     private DragSortListView mListView;
     private CanvasView mCanvasView;
     private RSFilterHelper mRSFilterHelper;
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     private DialogFragment mDialog;
     private SharedPreferences favorites;
 //    private SharedPreferences settings;  voor later
-    private Menu menu;
+    private Menu mMenu;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
@@ -58,17 +58,14 @@ public class MainActivity extends Activity {
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
-        mAdapter = new FilterListAdapter(this, items);
+        mAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
         mListView.setAdapter(mAdapter);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
         mRSFilterHelper.setCanvasView(mCanvasView);
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
-        List<IFilter> filters = new ArrayList<IFilter>();
-        //filters.add(new RotationFilter());
-        filters.add(new GuassianBlurFilter());
-        mRSFilterHelper.generateBitmap(filters);
+        mRSFilterHelper.generateBitmap(new ArrayList<IFilter>());
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
@@ -95,7 +92,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        this.menu = menu;
+        mMenu = menu;
         return true;
     }
 
@@ -387,7 +384,18 @@ public class MainActivity extends Activity {
 
     }
 
-    public void setUndoState(Boolean state) {
-        menu.findItem(R.id.action_undo).setEnabled(state);
+    @Override
+    public void setUndoState(boolean state) {
+        mMenu.findItem(R.id.action_undo).setEnabled(state);
+    }
+
+    @Override
+    public void updateImage(List<IFilter> filters) {
+        Log.v("MainActivity", "updating filters");
+        Log.v("MainActivity", filters.size() + " filters");
+        if (filters.size() > 0) {
+            //Log.v("MainActivity", "Value: " + filters.get(0).getValue(0));
+        }
+        mRSFilterHelper.generateBitmap(filters);
     }
 }
