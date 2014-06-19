@@ -40,7 +40,7 @@ public class GuassianBlurFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.setRadius(normalizeValue(mValues[0], 0.f, 10.f));
+        mScript.setRadius(normalizeValue(mValues[0], 5.f, 20.f));
     }
 
     @Override
