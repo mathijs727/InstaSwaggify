@@ -1,24 +1,14 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
-import android.content.Context;
-import android.media.MediaCodecList;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -194,7 +184,7 @@ public class FilterListAdapter extends BaseAdapter {
                 mItems.add(new ContrastFilter());
                 break;
             case 2:
-                mItems.add(new GuassianBlurFilter());
+                mItems.add(new GaussianBlurFilter());
                 break;
             case 3:
                 mItems.add(new RotationFilter());

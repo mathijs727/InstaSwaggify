@@ -9,10 +9,10 @@ import android.renderscript.ScriptIntrinsicBlur;
 /**
  * Created by Mathijs on 19/06/14.
  */
-public class GuassianBlurFilter extends AbstractFilterClass {
+public class GaussianBlurFilter extends AbstractFilterClass {
     ScriptIntrinsicBlur mScript;
 
-    public GuassianBlurFilter() {
+    public GaussianBlurFilter() {
         mID = FilterID.GAUSSIAN;
         mName = "Guassian Blur";
         mNumValues = 1;
