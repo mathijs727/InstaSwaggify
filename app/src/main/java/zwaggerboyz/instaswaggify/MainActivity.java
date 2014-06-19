@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SurfaceView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,13 +28,13 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     private DragSortListView mListView;
-    private ImageView mImageView;
+    private CanvasView mCanvasView;
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
     private DialogFragment mDialog;
 
     private Uri mImageUri;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermegerd illermenerti
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
     private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 10495800;
 
     @Override
@@ -48,14 +49,14 @@ public class MainActivity extends Activity {
         }
 
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
-        mImageView = (ImageView) findViewById(R.id.activity_main_imageview);
+        mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
         mAdapter = new FilterListAdapter(this, items);
         mListView.setAdapter(mAdapter);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
-        mRSFilterHelper.setCanvasView(mImageView);
+        mRSFilterHelper.setCanvasView(mCanvasView);
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
         List<IFilter> filters = new ArrayList<IFilter>();
         //filters.add(new RotationFilter());

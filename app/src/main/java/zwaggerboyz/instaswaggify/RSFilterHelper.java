@@ -23,7 +23,7 @@ public class RSFilterHelper {
     private Allocation mInAllocation;
     private Allocation[] mOutAllocations;
 
-    private ImageView mCanvasView;
+    private CanvasView mCanvasView;
     private RenderScript mRS;
     private ScriptGroup mScriptGroup;
     private RenderScriptTask mRenderTask;
@@ -48,7 +48,7 @@ public class RSFilterHelper {
         }
     }
 
-    public void setCanvasView(ImageView canvasView) {
+    public void setCanvasView(CanvasView canvasView) {
         mCanvasView = canvasView;
     }
 
