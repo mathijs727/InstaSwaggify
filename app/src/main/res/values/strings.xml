@@ -11,5 +11,14 @@
     <string name="action_select_photo">Select Photo</string>
     <string name="action_undo">Undo</string>
     <string name="action_save_picture">Save Photo</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
 
+
+    <string name="compression_prompt">Choose a country</string>
+
+    <string-array name="compression">
+        <item>JPG</item>
+        <item>PNG</item>
+    </string-array>
 </resources>

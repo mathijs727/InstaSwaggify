@@ -206,7 +206,10 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         }
 
         else if (id == R.id.action_save_picture) {
-            save_picture(mCanvasView.getBitmap());
+            ExportDialog exportDialog= new ExportDialog();
+            exportDialog.show(getFragmentManager(), "Export Dialog");
+
+            //save_picture(mCanvasView.getBitmap());
         }
 
         return super.onOptionsItemSelected(item);
@@ -260,14 +263,19 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mAdapter.add(i);
     }
 
-    private void save_picture(Bitmap bitmap) {
+    protected void save_picture(Bitmap.CompressFormat compression, int quality) {
         FileOutputStream output;
         File folder, file;
         String state = Environment.getExternalStorageState();
+        Bitmap bitmap = mCanvasView.getBitmap();
         boolean externalIsAvailable = true;
         Toast errorToast = Toast.makeText(this,
                 "Error while exporting image.",
                 Toast.LENGTH_SHORT);
+
+        if(bitmap == null) {
+            return;
+        }
 
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
             externalIsAvailable = false;
@@ -340,7 +348,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
              * in the pictures folder.
              */
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+            bitmap.compress(compression, quality, output);
 
             MediaScannerConnection.scanFile(this,
                     new String[]{file.toString()}, null,
@@ -399,3 +407,4 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mRSFilterHelper.generateBitmap(filters);
     }
 }
+
