@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -253,9 +255,13 @@ public class MainActivity extends Activity {
         FileOutputStream output;
         File folder, file;
         String state = Environment.getExternalStorageState();
+        boolean externalIsAvaible = true;
+        Toast errorToast = Toast.makeText(this,
+                "Er trad een fout op bij het exporteren.",
+                Toast.LENGTH_SHORT);
 
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
-
+            externalIsAvaible = false;
             Toast.makeText(this,
                     "No SD-card available",
                     Toast.LENGTH_SHORT).show();
@@ -267,18 +273,34 @@ public class MainActivity extends Activity {
         try {
 
             /* filename is made with a timestamp */
-            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
-            String format = s.format(new Date());
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+            String date = s.format(new Date());
 
-            folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggified Pictures");
+            if (!externalIsAvaible) {
+                folder = new File("InstasSwaggify");
+            }
+            else {
+                folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify");
+            }
+
             if (folder.exists() == false) {
                 if (folder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
+                    errorToast.show();
                     return;
                 }
             }
 
-            file = new File(folder, "Instaswagiffy_" + format + ".jpg");
+            folder = new File(folder, "Swaggified pictures");
+            if (folder.exists() == false) {
+                if (folder.mkdirs() == false) {
+                    Log.i("Take Photo", "no directory created");
+                    errorToast.show();
+                    return;
+                }
+            }
+
+            file = new File(folder, date + ".jpg");
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -296,10 +318,7 @@ public class MainActivity extends Activity {
         }
 
         catch (Exception e) {
-            Toast.makeText(this,
-                    "Er trad een fout op bij het exporteren.",
-                    Toast.LENGTH_SHORT).show();
-
+            errorToast.show();
             e.printStackTrace();
             Log.e("Error opening histogram output stream", e.toString());
             return;
