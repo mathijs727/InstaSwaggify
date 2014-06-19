@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/activity_main_imageview"
+    <zwaggerboyz.instaswaggify.CanvasView
+        android:id="@+id/activity_main_canvasview"
         android:layout_toLeftOf="@+id/activity_main_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
