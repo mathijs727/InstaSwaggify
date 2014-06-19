@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -31,6 +32,8 @@ public class MainActivity extends Activity {
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
     private DialogFragment mDialog;
+    private SharedPreferences favorites;
+//    private SharedPreferences settings;  voor later
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermegerd illermenerti
@@ -189,7 +192,7 @@ public class MainActivity extends Activity {
          * Save new preset
          */
         else if (id == R.id.action_add_favorite) {
-
+            mAdapter.add_favorite();
         }
 
         return super.onOptionsItemSelected(item);

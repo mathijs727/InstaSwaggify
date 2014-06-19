@@ -13,6 +13,7 @@ public class GuassianBlurFilter extends AbstractFilterClass {
     ScriptIntrinsicBlur mScript;
 
     public GuassianBlurFilter() {
+        mID = FilterID.GAUSSIAN;
         mName = "Guassian Blur";
         mNumValues = 1;
 

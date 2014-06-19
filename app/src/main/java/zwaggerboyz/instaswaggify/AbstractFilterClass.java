@@ -11,6 +11,12 @@ import android.util.Log;
  */
 
 public abstract class AbstractFilterClass implements IFilter {
+
+    public enum FilterID {
+        BRIGHTNESS, CONTRAST, ROTATION, SATURATION, SEPIA, GAUSSIAN, THRESHOLD
+    }
+
+    protected FilterID mID;
     protected String mName;
     protected int mValues[];
     protected String mLabels[];
@@ -22,6 +28,10 @@ public abstract class AbstractFilterClass implements IFilter {
 
     public String getName() {
         return mName;
+    }
+
+    public FilterID getID() {
+        return  mID;
     }
 
     public String getLabel(int i) {

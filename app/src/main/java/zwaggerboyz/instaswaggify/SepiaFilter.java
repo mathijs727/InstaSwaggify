@@ -11,6 +11,7 @@ public class SepiaFilter extends AbstractFilterClass {
     ScriptC_sepia mScript;
 
     public SepiaFilter() {
+        mID = FilterID.SEPIA;
         mName = "Sepia";
         mNumValues = 2;
 

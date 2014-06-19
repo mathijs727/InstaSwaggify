@@ -12,6 +12,7 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
     ScriptC_threshold_blur mScript;
 
     public ThresholdBlurFilter() {
+        mID = FilterID.THRESHOLD;
         mName = "Threshold Blur";
         mNumValues = 4;
 

@@ -11,6 +11,7 @@ public class ContrastFilter extends AbstractFilterClass {
     ScriptC_contrast mScript;
 
     public ContrastFilter() {
+        mID = FilterID.CONTRAST;
         mName = "Contrast";
         mNumValues = 1;
 

@@ -8,9 +8,15 @@ import android.renderscript.Script;
 /**
  * Created by Mathijs on 17/06/14.
  */
+
 public interface IFilter {
+
+
     /* Returns the filter name. */
     public String getName();
+
+    /* Returns the filter ID */
+    public AbstractFilterClass.FilterID getID();
 
     /* Returns label i. */
     public String getLabel(int i);

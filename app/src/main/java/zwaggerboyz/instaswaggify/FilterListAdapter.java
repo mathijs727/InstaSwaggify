@@ -183,4 +183,37 @@ public class FilterListAdapter extends BaseAdapter {
         }
         notifyDataSetChanged();
     }
+
+    public void add_favorite() {
+
+        String favorite_name = "Schwarzenegger";
+        int size = mItems.size();
+        AbstractFilterClass.FilterID id;
+        int value1 = 0;
+        int value2 = 0;
+
+        /* open or create file */
+        // filename: R.raw.fav
+
+
+
+        for (int i = 0; i < size; i++) {
+
+            /* get filter id */
+            id = mItems.get(i).getID();
+
+            /* get slider values */
+            switch (mItems.get(i).getNumValues()) {
+                case 1:
+                    value1 = mItems.get(i).getValue(0);
+                    break;
+                case 2:
+                    value1 = mItems.get(i).getValue(0);
+                    value2 = mItems.get(i).getValue(1);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
