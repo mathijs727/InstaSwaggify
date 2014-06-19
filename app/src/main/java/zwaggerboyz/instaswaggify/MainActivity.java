@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
         List<IFilter> filters = new ArrayList<IFilter>();
         //filters.add(new RotationFilter());
-        filters.add(new ThresholdBlurFilter());
+        filters.add(new GuassianBlurFilter());
         mRSFilterHelper.generateBitmap(filters);
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
