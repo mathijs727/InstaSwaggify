@@ -30,6 +30,7 @@ void init() {
 }
 
 void calculateMatrix() {
+    rsMatrixLoadIdentity(&matrix);
     rsMatrixTranslate(&matrix, imageWidth/2.0f, imageHeight/2.0f, 0.0f);
     rsMatrixRotate(&matrix, rotationAngle, 0.0f, 0.0f, 1.0f);
     rsMatrixTranslate(&matrix, -imageWidth/2.0f, -imageHeight/2.0f, 0.0f);
