@@ -233,8 +233,18 @@ public class MainActivity extends Activity {
         }
     }
 
+    /**
+     * Adds a new filter to the list
+     */
     public void addFilter(int i) {
         mDialog.dismiss();
         mAdapter.add(i);
+    }
+
+    /**
+     * Sets the filter list as this preset
+     */
+    public void setFilter(IFilter[] mItems) {
+
     }
 }
