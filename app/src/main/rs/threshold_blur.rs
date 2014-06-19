@@ -30,26 +30,28 @@ uchar strength;
 
 
 /*
-RenderScript kernel that inverets the colors.
-*/
+ RenderScript kernel that inverets the colors.
+ */
 
 uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
     uchar4 in = rsGetElementAt_uchar4(input, x, y);
+    float4 diff4;
     int redDif, greenDif, blueDif;
     uchar red, green, blue, neighbor;
     long new_y, new_x;
-    uchar4 out, neighbour;
-    int diff, dist, done = 0;
+    float4 neighbour;
+    float4 out;
+    int done = 0;
+    float diff, dist;
 
     uchar4 empty = {255, 0, 0, 0};
 
-    radius = 100;
-    drop = 5;
-    threshold = 5;
-    strength = 2;
+    radius = 10;
+    drop = 2;
+    threshold = 200;
+    strength = 10;
 
-    out = in;
-    //rsDebug("root", "hello");
+    out = convert_float4(in);
     //return in;
 
     //rsDebug("root imageWidth", imageWidth);
@@ -60,10 +62,12 @@ uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
 
         for (int y_offset = -radius; y_offset <= radius; y_offset++) {
             new_y = y + y_offset;
+            x_offset = abs(x_offset);
+            y_offset = abs(y_offset);
+
             if (new_y >= 0
                 && new_y < imageHeight
-                && new_x != x
-                && new_y != y
+                && x_offset + y_offset <= radius
                 && new_x >= 0
                 && new_x < imageWidth) {
 
@@ -71,38 +75,27 @@ uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
                 //rsDebug("new_x", (uint32_t)new_x);
 
                 done = 1;
-                neighbour = rsGetElementAt_uchar4(input, (uint32_t)new_x, (uint32_t)new_y);
+                neighbour = convert_float4(rsGetElementAt_uchar4(input, (uint32_t)new_x, (uint32_t)new_y));
 
-                if (x_offset < 0)
-                    x_offset = x_offset * -1;
-                if (y_offset < 0)
-                    y_offset = y_offset * -1;
 
-                if(x_offset > y_offset)
-                    dist = (int)x_offset;
-                else
-                    dist = (int)y_offset;
+                dist = max(x_offset, y_offset);
 
                 dist = dist * drop;
-                redDif = (int)abs(out.r - neighbour.r);
-                blueDif = (int)abs(out.b - neighbour.b);
-                greenDif = (int)abs(out.g - neighbour.g);
 
-                diff = redDif * redDif + greenDif * greenDif + blueDif * blueDif;
+                diff4 = fabs(out - neighbour);
+                diff = dot(diff4, diff4);
+
                 if (diff > threshold) {
                     continue;
                 }
 
-                out.r = (out.r * (uchar)dist + neighbour.r * strength) / ((uchar)dist + strength);
-                out.g = (out.g * (uchar)dist + neighbour.g * strength) / ((uchar)dist + strength);
-                out.b = (out.b * (uchar)dist + neighbour.b * strength) / ((uchar)dist + strength);
+                out = (out * dist + neighbour * strength) / (dist + strength);
             }
         }
 
     }
-
     if (done)
-        return out;
+        return convert_uchar4(out);
     else
         return empty;
 }
