@@ -5,15 +5,21 @@
     <item android:id="@+id/action_take_photo"
         android:title="@string/action_take_photo"
         android:icon="@drawable/ic_action_camera"
-        android:orderInCategory="97"
+        android:orderInCategory="96"
         android:showAsAction="ifRoom" />
 
 
     <item android:id="@+id/action_select_photo"
         android:title="@string/action_select_photo"
         android:icon="@drawable/ic_action_picture"
-        android:orderInCategory="98"
+        android:orderInCategory="97"
         android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_favorites"
+          android:title="@string/action_favorites"
+          android:icon="@drawable/ic_action_favorites"
+          android:orderInCategory="98"
+          android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_add_filter"
         android:title="@string/action_add_filter"

@@ -1,6 +1,7 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -29,7 +30,7 @@ public class MainActivity extends Activity {
     private ImageView mImageView;
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
-    private FilterDialog mFilterDialog;
+    private DialogFragment mDialog;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermegerd illermenerti
@@ -114,8 +115,8 @@ public class MainActivity extends Activity {
             /**
              * Creates new filter dialog and shows it
              */
-            mFilterDialog = new FilterDialog();
-            mFilterDialog.show(fragmentTransaction, "dialog");
+            mDialog = new FilterDialog();
+            mDialog.show(fragmentTransaction, "dialog");
 
             return true;
         }
@@ -157,6 +158,29 @@ public class MainActivity extends Activity {
             pickPic_intent.setType("image/*");
             pickPic_intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(pickPic_intent, "Select Picture"), SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
+
+            return true;
+        }
+
+        /**
+         * Select saved filter presets
+         */
+        else if (id == R.id.action_favorites) {
+            /**
+             * Handles stack for fragments
+             */
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null)
+                fragmentTransaction.remove(prev);
+
+            fragmentTransaction.addToBackStack(null);
+
+            /**
+             * Creates new filter dialog and shows it
+             */
+            mDialog = new FavoritesDialog();
+            mDialog.show(fragmentTransaction, "dialog");
 
             return true;
         }
@@ -203,7 +227,7 @@ public class MainActivity extends Activity {
     }
 
     public void addFilter(int i) {
-        mFilterDialog.dismiss();
+        mDialog.dismiss();
         mAdapter.add(i);
     }
 }
