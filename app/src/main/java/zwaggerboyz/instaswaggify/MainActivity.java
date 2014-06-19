@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
     private DialogFragment mDialog;
+    private Menu menu;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996; //ermegerd illermenerti
@@ -87,6 +88,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -192,6 +194,11 @@ public class MainActivity extends Activity {
 
         }
 
+        else if (id == R.id.action_undo) {
+            setUndoState(false);
+            mAdapter.undo();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -246,5 +253,9 @@ public class MainActivity extends Activity {
      */
     public void setFilter(IFilter[] mItems) {
 
+    }
+
+    public void setUndoState(Boolean state) {
+        menu.findItem(R.id.action_undo).setEnabled(state);
     }
 }
