@@ -64,8 +64,8 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
         mRSFilterHelper.setCanvasView(mCanvasView);
-        mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
-        mRSFilterHelper.generateBitmap(new ArrayList<IFilter>());
+        mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data), true);
+        mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
@@ -220,7 +220,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
-                    mRSFilterHelper.setBitmap(bitmap);
+                    mRSFilterHelper.setBitmap(bitmap, true);
                     updateImage(mAdapter.getItems());
                 }
                 catch (Exception e) {
@@ -239,7 +239,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
-                    mRSFilterHelper.setBitmap(bitmap);
+                    mRSFilterHelper.setBitmap(bitmap, true);
                     updateImage(mAdapter.getItems());
                 } catch (Exception e) {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
@@ -396,6 +396,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
     @Override
     public void updateImage(List<IFilter> filters) {
-        mRSFilterHelper.generateBitmap(filters);
+        mRSFilterHelper.generateBitmap(filters, this);
     }
 }

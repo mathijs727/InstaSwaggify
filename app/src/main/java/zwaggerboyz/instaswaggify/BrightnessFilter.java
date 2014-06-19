@@ -27,7 +27,7 @@ public class BrightnessFilter extends AbstractFilterClass {
 
     @Override
     public void setRS(RenderScript rs) {
-        if (mRS == null) {
+        if (mRS != rs) {
             mRS = rs;
             mScript = new ScriptC_brightness(mRS);
         }

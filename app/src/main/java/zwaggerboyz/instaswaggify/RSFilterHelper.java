@@ -13,12 +13,16 @@ import android.widget.ImageView;
 
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created by Mathijs on 17/06/14.
  */
 public class RSFilterHelper {
     private final int NUM_BITMAPS = 3;
+    private int mTimesProcessed = 0;
     private int mCurrentBitmap = 0;
+    private Context mContext;
     private Bitmap mBitmapIn;
     private Bitmap[] mBitmapsOut;
     private Allocation mInAllocation;
@@ -29,10 +33,11 @@ public class RSFilterHelper {
     private ScriptGroup mScriptGroup;
     private RenderScriptTask mRenderTask;
 
-    private static final int BITMAP_MAX_WIDTH = 1000;
-    private static final int BITMAP_MAX_HEIGHT = 1000;
+    private static final int BITMAP_MAX_WIDTH = 600;
+    private static final int BITMAP_MAX_HEIGHT = 600;
 
     public void createRS(Context context) {
+        mContext = context;
         mRS = RenderScript.create(context);
     }
 
@@ -54,8 +59,12 @@ public class RSFilterHelper {
         }
     }
 
-    public void setBitmap(Bitmap origBitmap) {
-        mBitmapIn = resizeBitmap(origBitmap);
+    public void setBitmap(Bitmap origBitmap, boolean resize) {
+        if (resize)
+            mBitmapIn = resizeBitmap(origBitmap);
+        else
+            mBitmapIn = origBitmap;
+
         mBitmapsOut = new Bitmap[NUM_BITMAPS];
         for (int i = 0; i < NUM_BITMAPS; ++i) {
             mBitmapsOut[i] = Bitmap.createBitmap(mBitmapIn.getWidth(),
@@ -74,7 +83,7 @@ public class RSFilterHelper {
         mCanvasView = canvasView;
     }
 
-    public void generateBitmap(List<IFilter> filters) {
+    public void generateBitmap(List<IFilter> filters, Context context) {
         if (mBitmapIn == null)
             return;
 
@@ -82,6 +91,15 @@ public class RSFilterHelper {
             mCanvasView.setBitmap(mBitmapIn);
             mCanvasView.invalidate();
             return;
+        }
+
+        mTimesProcessed++;
+        if (mTimesProcessed == 30) {
+            mTimesProcessed = 0;
+            mRS.destroy();
+            mRS = null;
+            mRS = RenderScript.create(context);
+            setBitmap(mBitmapIn, false);
         }
 
         ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
