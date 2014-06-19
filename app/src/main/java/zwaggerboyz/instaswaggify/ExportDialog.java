@@ -18,30 +18,6 @@ import android.widget.Spinner;
  * Created by zeta on 6/19/14.
  */
 
-/*class ExportDialog2 {
-        public ExportDialog(Context context) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-            builder.setMessage("hello")
-                    .setTitle("Export Picture")
-                    .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-
-
-                        }
-                    })
-
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                        }
-                    });
-
-            AlertDialog dialog = builder.create();
-        }
-}*/
-
 public class ExportDialog extends DialogFragment {
     int quality = 60;
     Bitmap.CompressFormat compression= Bitmap.CompressFormat.JPEG;
@@ -68,7 +44,6 @@ public class ExportDialog extends DialogFragment {
         qualitySlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                Log.i("pevid", "quality " + progress);
                 setQuality(progress);
             }
 
@@ -87,8 +62,8 @@ public class ExportDialog extends DialogFragment {
 
         compressionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.i("Pevid", "selected option " + i);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int compressionId, long l) {
+                setCompression(compressionId);
             }
 
             @Override
@@ -100,16 +75,16 @@ public class ExportDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.export_dialog, null);
 
-
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(view)
+        builder .setView(view)
+
                 // Add action buttons
                 .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                     @Override
@@ -123,10 +98,10 @@ public class ExportDialog extends DialogFragment {
                         ExportDialog.this.getDialog().cancel();
                     }
                 });
-        builder.setTitle("Export Picture");
 
-        dialog = builder.create();
+        builder.setTitle("Export Picture");
         setListeners(view);
-        return dialog;
+
+        return builder.create();
     }
 }
