@@ -97,113 +97,116 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        /* Settings. */
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch(id) {
 
-        /* Add filter. */
-        else if (id == R.id.action_add_filter) {
+            /* Settings. */
+            case R.id.action_settings: {
+                return true;
+            }
 
-            /**
-             * Handles stack for fragments
-             */
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-            if (prev != null)
-                fragmentTransaction.remove(prev);
+            /* Add filter. */
+            case R.id.action_add_filter: {
 
-            fragmentTransaction.addToBackStack(null);
+                /**
+                 * Handles stack for fragments
+                 */
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null)
+                    fragmentTransaction.remove(prev);
 
-            /**
-             * Creates new filter dialog and shows it
-             */
-            mDialog = new FilterDialog();
-            mDialog.show(fragmentTransaction, "dialog");
+                fragmentTransaction.addToBackStack(null);
 
-            return true;
-        }
+                /**
+                 * Creates new filter dialog and shows it
+                 */
+                mDialog = new FilterDialog();
+                mDialog.show(fragmentTransaction, "dialog");
 
-        /* Take a photo with the camera. */
-        else if (id == R.id.action_take_photo) {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                return true;
+            }
+
+            /* Take a photo with the camera. */
+            case R.id.action_take_photo: {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             /* Create a folder to store the pictures if it does not exist yet. */
-            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
-            if (imagesFolder.exists() == false) {
-                if (imagesFolder.mkdirs() == false) {
-                    Log.i("Take Photo", "no directory created");
-                    return true;
+                File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
+                if (imagesFolder.exists() == false) {
+                    if (imagesFolder.mkdirs() == false) {
+                        Log.i("Take Photo", "no directory created");
+                        return true;
+                    }
                 }
-            }
 
             /* Get the current time and date to use in the filename. */
 
-            Date now = new Date();
-            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
+                Date now = new Date();
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
-            String date = simpleFormat.format(now);
-            Log.i("FILENAME", date + ".jpg");
+                String date = simpleFormat.format(now);
+                Log.i("FILENAME", date + ".jpg");
 
-            File image = new File(imagesFolder, date + ".jpg");
-            mImageUri = Uri.fromFile(image);
+                File image = new File(imagesFolder, date + ".jpg");
+                mImageUri = Uri.fromFile(image);
 
             /* The intent is started. */
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
-            return true;
-        }
+                return true;
+            }
 
-        /* Select a photo from the filesystem. */
-        else if (id == R.id.action_select_photo) {
-            Intent pickPic_intent = new Intent();
-            pickPic_intent.setType("image/*");
-            pickPic_intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(pickPic_intent, "Select Picture"), SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
+            /* Select a photo from the filesystem. */
+            case R.id.action_select_photo: {
+                Intent pickPic_intent = new Intent();
+                pickPic_intent.setType("image/*");
+                pickPic_intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(pickPic_intent, "Select Picture"), SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
 
-            return true;
-        }
-
-        /**
-         * Select saved filter presets
-         */
-        else if (id == R.id.action_favorites) {
-            /**
-             * Handles stack for fragments
-             */
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-            if (prev != null)
-                fragmentTransaction.remove(prev);
-
-            fragmentTransaction.addToBackStack(null);
+                return true;
+            }
 
             /**
-             * Creates new filter dialog and shows it
+             * Select saved filter presets
              */
-            mDialog = new FavoritesDialog();
-            mDialog.show(fragmentTransaction, "dialog");
+            case R.id.action_favorites: {
+                /**
+                 * Handles stack for fragments
+                 */
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null)
+                    fragmentTransaction.remove(prev);
 
-            return true;
-        }
+                fragmentTransaction.addToBackStack(null);
 
-        /**
-         * Save new preset
-         */
-        else if (id == R.id.action_add_favorite) {
+                /**
+                 * Creates new filter dialog and shows it
+                 */
+                mDialog = new FavoritesDialog();
+                mDialog.show(fragmentTransaction, "dialog");
 
-        }
+                return true;
+            }
 
-        else if (id == R.id.action_undo) {
-            mAdapter.undo();
-        }
+            /**
+             * Save new preset
+             */
+            case R.id.action_add_favorite: {
+                break;
+            }
 
-        else if (id == R.id.action_save_picture) {
-            ExportDialog exportDialog= new ExportDialog();
-            exportDialog.show(getFragmentManager(), "Export Dialog");
+            case R.id.action_undo: {
+                mAdapter.undo();
+            }
 
-            //save_picture(mCanvasView.getBitmap());
+            case R.id.action_save_picture: {
+                ExportDialog exportDialog = new ExportDialog();
+                exportDialog.show(getFragmentManager(), "Export Dialog");
+
+                //save_picture(mCanvasView.getBitmap());
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -258,9 +261,11 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     }
 
     protected void save_picture(Bitmap.CompressFormat compression, int quality) {
-        FileOutputStream output;
         File folder, file;
+        FileOutputStream output;
         String state = Environment.getExternalStorageState();
+        String extension;
+
         Bitmap bitmap = mCanvasView.getBitmap();
         boolean externalIsAvailable = true;
         Toast errorToast = Toast.makeText(this,
@@ -269,6 +274,13 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
         if(bitmap == null) {
             return;
+        }
+
+        if(compression == Bitmap.CompressFormat.JPEG) {
+            extension = ".jpg";
+        }
+        else {
+            extension = ".png";
         }
 
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
@@ -312,7 +324,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 }
             }
 
-            file = new File(folder, date + ".jpg");
+            file = new File(folder, date + extension);
             if (!file.exists()) {
                 file.createNewFile();
             }
