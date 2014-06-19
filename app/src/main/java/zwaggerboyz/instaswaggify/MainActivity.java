@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -36,8 +35,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     private RSFilterHelper mRSFilterHelper;
     private FilterListAdapter mAdapter;
     private DialogFragment mDialog;
-    private SharedPreferences favorites;
-//    private SharedPreferences settings;  voor later
     private Menu mMenu;
 
     private Uri mImageUri;
@@ -82,9 +79,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 mAdapter.reorder(from, to);
             }
         });
-
-        String fav_title = "Favorites";
-        //favorites = getPreferences();
 
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);

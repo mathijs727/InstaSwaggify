@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">InstaSwaggify</string>
+    <string name="app_name">Insta$waggify</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_add_filter">Add Filter</string>
