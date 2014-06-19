@@ -18,7 +18,7 @@
 #pragma rs java_package_name(zwaggerboyz.instaswaggify)
 #pragma rs_fp_relaxed
 
-const static float3 gMonoMult = {0.299f, 0.587f, 0.114f};
+const static float3 gHalf = {.5f, .5f, .5f};
 
 float contrastValue = 0.f;
 
@@ -28,23 +28,7 @@ RenderScript kernel that performs saturation manipulation.
 uchar4 __attribute__((kernel)) contrast(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
-
-    /* contrast calculations */
-    f4.r = ((f4.r - 0.5f) * contrastValue) + 0.5f;
-    f4.g = ((f4.g - 0.5f) * contrastValue) + 0.5f;
-    f4.b = ((f4.b - 0.5f) * contrastValue) + 0.5f;
-
-    /* clipping check */
-    if(f4.r > 1.0) f4.r = 1.0f;
-    if(f4.r < 0.0) f4.r = 0.0f;
-
-    if(f4.g > 1.0) f4.g = 1.0f;
-    if(f4.g < 0.0) f4.g = 0.0f;
-
-    if(f4.b > 1.0) f4.b = 1.0f;
-    if(f4.b < 0.0) f4.b = 0.0f;
-
-    float3 result = {f4.r, f4.g, f4.b};
+    float3 result = ((f4.rgb - gHalf) * contrastValue) + gHalf;
 
     return rsPackColorTo8888(result);
 }
