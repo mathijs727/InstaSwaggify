@@ -2,6 +2,7 @@ package zwaggerboyz.instaswaggify;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.renderscript.Allocation;
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by Mathijs on 17/06/14.
  */
 public class RSFilterHelper {
-    private final int NUM_BITMAPS = 3;
+    private final int NUM_BITMAPS = 2;
     private int mCurrentBitmap = 0;
     private Bitmap mBitmapIn;
     private Bitmap[] mBitmapsOut;
@@ -28,12 +29,33 @@ public class RSFilterHelper {
     private ScriptGroup mScriptGroup;
     private RenderScriptTask mRenderTask;
 
+    private static final int BITMAP_MAX_WIDTH = 1000;
+    private static final int BITMAP_MAX_HEIGHT = 1000;
+
     public void createRS(Context context) {
         mRS = RenderScript.create(context);
     }
 
+    private Bitmap resizeBitmap(Bitmap in) {
+        int width = in.getWidth();
+        int height = in.getHeight();
+
+        if (width < BITMAP_MAX_WIDTH &&
+            height < BITMAP_MAX_HEIGHT)
+            return in;
+
+        double xScale = (double)BITMAP_MAX_WIDTH / width;
+        double yScale = (double)BITMAP_MAX_HEIGHT / height;
+
+        if (xScale > yScale) {
+            return Bitmap.createScaledBitmap(in, (int)(width * xScale), (int)(height * xScale), false);
+        } else {
+            return Bitmap.createScaledBitmap(in, (int)(width * yScale), (int)(height * yScale), false);
+        }
+    }
+
     public void setBitmap(Bitmap origBitmap) {
-        mBitmapIn = origBitmap;
+        mBitmapIn = resizeBitmap(origBitmap);
         mBitmapsOut = new Bitmap[NUM_BITMAPS];
         for (int i = 0; i < NUM_BITMAPS; ++i) {
             mBitmapsOut[i] = Bitmap.createBitmap(mBitmapIn.getWidth(),
@@ -108,9 +130,7 @@ public class RSFilterHelper {
                 index = mCurrentBitmap;
 
                 if (filters[0].getFieldId() != null) {
-                    filters[0].setInput(mInAllocation);
-                    //mScriptGroup.setInput(filters[0].getKernelId(),
-                    //        mInAllocation);
+                    filters[0].setInput(mInAllocation);;
                 } else {
                     mScriptGroup.setInput(filters[0].getKernelId(),
                             mInAllocation);
