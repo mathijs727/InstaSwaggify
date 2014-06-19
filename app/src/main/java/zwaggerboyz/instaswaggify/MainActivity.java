@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
         }
 
         else if (id == R.id.action_save_picture) {
-
+            save_picture(mCanvasView.getBitmap());
         }
 
         return super.onOptionsItemSelected(item);
@@ -270,7 +270,7 @@ public class MainActivity extends Activity {
             SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
             String format = s.format(new Date());
 
-            folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
+            folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggified Pictures");
             if (folder.exists() == false) {
                 if (folder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
