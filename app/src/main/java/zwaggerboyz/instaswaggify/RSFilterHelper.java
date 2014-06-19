@@ -23,7 +23,7 @@ public class RSFilterHelper {
     private Allocation mInAllocation;
     private Allocation[] mOutAllocations;
 
-    private ImageView mCanvasView;
+    private CanvasView mCanvasView;
     private RenderScript mRS;
     private ScriptGroup mScriptGroup;
     private RenderScriptTask mRenderTask;
@@ -48,13 +48,13 @@ public class RSFilterHelper {
         }
     }
 
-    public void setCanvasView(ImageView canvasView) {
+    public void setCanvasView(CanvasView canvasView) {
         mCanvasView = canvasView;
     }
 
     public void generateBitmap(List<IFilter> filters) {
         if (filters.size() == 0) {
-            mCanvasView.setImageBitmap(mBitmapIn);
+            mCanvasView.setBitmap(mBitmapIn);
             return;
         }
 
@@ -126,7 +126,7 @@ public class RSFilterHelper {
             if (result != -1) {
                 // Request UI update
                 //mCanvasView.setImage(mBitmapsOut[index]);
-                mCanvasView.setImageBitmap(mBitmapsOut[result]);
+                mCanvasView.setBitmap(mBitmapsOut[result]);
             }
         }
 

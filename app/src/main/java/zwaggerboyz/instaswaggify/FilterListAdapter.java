@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import java.util.List;
 public class FilterListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private List<IFilter> mItems;
+    private List<IFilter> mItemsPrevious = new ArrayList<IFilter>();
+    private Activity activity;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
@@ -31,6 +34,7 @@ public class FilterListAdapter extends BaseAdapter {
     public FilterListAdapter(Activity context, List<IFilter> items) {
         mInflater = context.getLayoutInflater();
         mItems = items;
+        activity = context;
     }
 
     @Override
@@ -150,18 +154,25 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Removes item at index from filter list */
     public void remove(int index) {
+        mItemsPrevious.addAll(mItems);
+        ((MainActivity)activity).setUndoState(true);
+
         mItems.remove(mItems.get(index));
     }
 
     public void reorder(int from, int to) {
-        IFilter element = mItems.remove(from);
+        mItemsPrevious.addAll(mItems);
+        ((MainActivity)activity).setUndoState(true);
 
+        IFilter element = mItems.remove(from);
         mItems.add(to, element);
         notifyDataSetChanged();
     }
 
     /* Adds a new item to the filter list */
     public void add(int filter) {
+        mItemsPrevious.addAll(mItems);
+        ((MainActivity)activity).setUndoState(true);
 
         switch (filter) {
             case 0:
@@ -181,6 +192,16 @@ public class FilterListAdapter extends BaseAdapter {
             default:
                 break;
         }
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Undo last change. Only remembers last change.
+     */
+    public void undo() {
+        mItems.clear();
+        mItems.addAll(mItemsPrevious);
+        mItemsPrevious.clear();
         notifyDataSetChanged();
     }
 

@@ -23,11 +23,17 @@ public class FilterDialog extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         getDialog().setTitle("Select filter");
 
-        View v = inflater.inflate(R.layout.filterdialog, container, false);
-        ListView listView = (ListView) v.findViewById(R.id.filter_dialog_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, filters);
+        /**
+         * Setting up ListView and the adapter
+         */
+        View mView = inflater.inflate(R.layout.filterdialog, container, false);
+        ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, filters);
         listView.setAdapter(adapter);
 
+        /**
+         * List item listeners
+         */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -35,6 +41,6 @@ public class FilterDialog extends DialogFragment {
             }
         });
 
-        return v;
+        return mView;
     }
 }

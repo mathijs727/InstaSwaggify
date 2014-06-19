@@ -13,31 +13,46 @@ import android.widget.ListView;
  * Created by scoud on 19-6-14.
  */
 public class FavoritesDialog extends DialogFragment {
-    private String[] filters = {"PLACEHOLDER", "Contrast", "Rotation", "Saturation", "Sepia"};
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        getDialog().setTitle("Select filter");
+        getDialog().setTitle("Select preset");
 
-        View v = inflater.inflate(R.layout.filterdialog, container, false);
-        ListView listView = (ListView) v.findViewById(R.id.filter_dialog_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, filters);
+        /**
+         * Setting up ListView and the adapter
+         */
+        View mView = inflater.inflate(R.layout.filterdialog, container, false);
+        ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());
         listView.setAdapter(adapter);
 
+        /**
+         * List item listeners
+         */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((MainActivity)getActivity()).addFilter(i);
+                //TODO: Handle this (Uses this preset)
+//                ((MainActivity)getActivity()).setFilter();
             }
         });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO: Handle this (Removes this preset)
                 return false;
             }
         });
 
-        return v;
+        return mView;
+    }
+
+    /**
+     * Fetches saved favorites
+     */
+    private String[] getFavorites() {
+        //TODO: Implement this (Fetches all favorites from file)
+        return new String[] {};
     }
 }
