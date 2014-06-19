@@ -1,24 +1,20 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
-import android.content.Context;
-import android.media.MediaCodecList;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -171,13 +167,15 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void reorder(int from, int to) {
-        updateBuffer();
+        if (from != to) {
+            updateBuffer();
 
-        IFilter element = mItems.remove(from);
-        mItems.add(to, element);
+            IFilter element = mItems.remove(from);
+            mItems.add(to, element);
 
-        notifyDataSetChanged();
-        mListener.updateImage(mItems);
+            notifyDataSetChanged();
+            mListener.updateImage(mItems);
+        }
     }
 
     /* Adds a new item to the filter list */
@@ -192,13 +190,20 @@ public class FilterListAdapter extends BaseAdapter {
                 mItems.add(new ContrastFilter());
                 break;
             case 2:
-                mItems.add(new RotationFilter());
+                mItems.add(new GaussianBlurFilter());
                 break;
             case 3:
-                mItems.add(new SaturationFilter());
+                mItems.add(new RotationFilter());
                 break;
             case 4:
+                mItems.add(new SaturationFilter());
+                break;
+            case 5:
                 mItems.add(new SepiaFilter());
+                break;
+            case 6:
+                mItems.add(new ThresholdBlurFilter());
+                break;
             default:
                 break;
         }
@@ -237,6 +242,20 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void add_favorite() {
+        try {
+            JSONArray jSONArray = new JSONArray();
+            for (IFilter filter:mItems) {
+                JSONObject jSONObject = new JSONObject();
+                jSONObject.put("name", filter.getName());
+                for (int i = 0; i < filter.getNumValues(); i++) {
+                    jSONObject.put("label" + i, filter.getLabel(i));
+                    jSONObject.put("value" + i, filter.getValue(i));
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 //        String favorites_array [][][]; // parse from json
 //        int favorite_index = 1;

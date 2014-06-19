@@ -228,7 +228,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 }
             }
             else if (resultCode != RESULT_CANCELED) {
-                Toast.makeText(this, "Could not take image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Could not capture image", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -264,13 +264,13 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         FileOutputStream output;
         File folder, file;
         String state = Environment.getExternalStorageState();
-        boolean externalIsAvaible = true;
+        boolean externalIsAvailable = true;
         Toast errorToast = Toast.makeText(this,
-                "Er trad een fout op bij het exporteren.",
+                "Error while exporting image.",
                 Toast.LENGTH_SHORT);
 
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            externalIsAvaible = false;
+            externalIsAvailable = false;
             Toast.makeText(this,
                     "No SD-card available",
                     Toast.LENGTH_SHORT).show();
@@ -286,7 +286,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
             String date = s.format(new Date());
 
-            if (!externalIsAvaible) {
+            if (!externalIsAvailable) {
                 folder = new File("InstasSwaggify");
             }
             else {
