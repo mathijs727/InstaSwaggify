@@ -12,6 +12,7 @@ public class SaturationFilter extends AbstractFilterClass {
     ScriptC_saturation mScript;
 
     public SaturationFilter() {
+        mID = FilterID.SATURATION;
         mName = "Saturation";
         mNumValues = 1;
 

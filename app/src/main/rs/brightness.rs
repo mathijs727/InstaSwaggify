@@ -18,30 +18,15 @@
 #pragma rs java_package_name(zwaggerboyz.instaswaggify)
 #pragma rs_fp_relaxed
 
-const static float3 gMonoMult = {0.299f, 0.587f, 0.114f};
-
 float brightnessValue = 0.f;
 
 /*
-RenderScript kernel that performs saturation manipulation.
+RenderScript kernel that performs brightness manipulation.
 */
 uchar4 __attribute__((kernel)) brightness(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
-
-    /* brightness calculations */
-    float val = f4.r + f4.g + f4.b;
-
-    f4.r = f4.r * brightnessValue;
-    f4.g = f4.g * brightnessValue;
-    f4.b = f4.b * brightnessValue;
-
-    /* clipping check */
-    if(f4.r > 1.0) f4.r = 1.0f;
-    if(f4.g > 1.0) f4.g = 1.0f;
-    if(f4.b > 1.0) f4.b = 1.0f;
-
-    float3 result = {f4.r, f4.g, f4.b};
+    float3 result = f4.rgb * brightnessValue;
 
     return rsPackColorTo8888(result);
 }

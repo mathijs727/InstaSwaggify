@@ -19,7 +19,7 @@
 #pragma rs_fp_relaxed
 
 /*
-RenderScript kernel that inverets the colors.
+RenderScript kernel that inverts the colors.
 */
 
 uchar4 __attribute__((kernel)) invert(uchar4 in, uint32_t x, uint32_t y) {

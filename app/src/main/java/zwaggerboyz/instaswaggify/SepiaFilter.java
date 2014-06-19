@@ -11,6 +11,7 @@ public class SepiaFilter extends AbstractFilterClass {
     ScriptC_sepia mScript;
 
     public SepiaFilter() {
+        mID = FilterID.SEPIA;
         mName = "Sepia";
         mNumValues = 2;
 
@@ -39,6 +40,7 @@ public class SepiaFilter extends AbstractFilterClass {
     public void updateInternalValues() {
         mScript.set_intensity(normalizeValue(mValues[0], 0.05f, 0.4f));
         mScript.set_depth(normalizeValue(mValues[1], 0.f, 0.5f));
+        mScript.invoke_calculateVector();
     }
 
     @Override

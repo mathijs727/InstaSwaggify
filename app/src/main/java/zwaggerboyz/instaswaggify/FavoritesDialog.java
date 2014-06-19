@@ -18,6 +18,9 @@ public class FavoritesDialog extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         getDialog().setTitle("Select preset");
 
+        /**
+         * Setting up ListView and the adapter
+         */
         View mView = inflater.inflate(R.layout.filterdialog, container, false);
         ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());

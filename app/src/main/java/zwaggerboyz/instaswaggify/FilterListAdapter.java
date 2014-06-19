@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +22,9 @@ import java.util.List;
 public class FilterListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private List<IFilter> mItems;
+    private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
+    private int bufferLevel = 0;
+    private Activity activity;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
@@ -31,6 +35,7 @@ public class FilterListAdapter extends BaseAdapter {
     public FilterListAdapter(Activity context, List<IFilter> items) {
         mInflater = context.getLayoutInflater();
         mItems = items;
+        activity = context;
     }
 
     @Override
@@ -150,18 +155,27 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Removes item at index from filter list */
     public void remove(int index) {
+        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+        bufferLevel++;
+        ((MainActivity)activity).setUndoState(true);
+
         mItems.remove(mItems.get(index));
     }
 
     public void reorder(int from, int to) {
-        IFilter element = mItems.remove(from);
+        if (from != to) {
+            addToBuffer();
 
-        mItems.add(to, element);
-        notifyDataSetChanged();
+            IFilter element = mItems.remove(from);
+            mItems.add(to, element);
+            notifyDataSetChanged();
+        }
     }
 
     /* Adds a new item to the filter list */
     public void add(int filter) {
+
+        addToBuffer();
 
         switch (filter) {
             case 0:
@@ -182,5 +196,63 @@ public class FilterListAdapter extends BaseAdapter {
                 break;
         }
         notifyDataSetChanged();
+    }
+
+    private void addToBuffer() {
+        if (bufferLevel < 10) {
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            bufferLevel++;
+            ((MainActivity)activity).setUndoState(true);
+        } else {
+            mItemsPreviousBuffer.remove(0);
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            bufferLevel++;
+            ((MainActivity)activity).setUndoState(true);
+        }
+    }
+
+    /**
+     * Undo last change. Only remembers last change.
+     */
+    public void undo() {
+        mItems.clear();
+        mItems.addAll(mItemsPreviousBuffer.remove(--bufferLevel));
+        if(bufferLevel == 0) {
+            ((MainActivity)activity).setUndoState(false);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void add_favorite() {
+
+        String favorite_name = "Schwarzenegger";
+        int size = mItems.size();
+        AbstractFilterClass.FilterID id;
+        int value1 = 0;
+        int value2 = 0;
+
+        /* open or create file */
+        // filename: R.raw.fav
+
+
+
+        for (int i = 0; i < size; i++) {
+
+            /* get filter id */
+            id = mItems.get(i).getID();
+
+            /* get slider values */
+            switch (mItems.get(i).getNumValues()) {
+                case 1:
+                    value1 = mItems.get(i).getValue(0);
+                    break;
+                case 2:
+                    value1 = mItems.get(i).getValue(0);
+                    value2 = mItems.get(i).getValue(1);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
