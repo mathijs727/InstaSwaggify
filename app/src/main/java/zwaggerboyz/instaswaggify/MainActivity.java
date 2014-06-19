@@ -269,7 +269,8 @@ public class MainActivity extends Activity {
             return;
         }
 
-        /* Try to open a file to export the picture */
+        /* Try to open a file to export the picture
+         */
         try {
 
             /* filename is made with a timestamp */
