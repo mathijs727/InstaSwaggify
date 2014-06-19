@@ -173,13 +173,15 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void reorder(int from, int to) {
-        updateBuffer();
+        if (from != to) {
+            updateBuffer();
 
-        IFilter element = mItems.remove(from);
-        mItems.add(to, element);
+            IFilter element = mItems.remove(from);
+            mItems.add(to, element);
 
-        notifyDataSetChanged();
-        mListener.updateImage(mItems);
+            notifyDataSetChanged();
+            mListener.updateImage(mItems);
+        }
     }
 
     /* Adds a new item to the filter list */
