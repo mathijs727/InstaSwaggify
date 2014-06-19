@@ -2,6 +2,7 @@ package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.MediaCodecList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,19 +28,19 @@ import java.util.List;
 public class FilterListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private List<IFilter> mItems;
-    private List<IFilter> mItemsPrevious = new ArrayList<IFilter>();
-    private Activity activity;
+    private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
+    private int bufferLevel = 0;
+    private FilterListInterface mListener;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
         public SeekBar slider1Seekbar, slider2Seekbar;
-        public int SeekBar1Value, SeekBar2Value;
     }
 
-    public FilterListAdapter(Activity context, List<IFilter> items) {
-        mInflater = context.getLayoutInflater();
+    public FilterListAdapter(Activity activity, FilterListInterface listener, List<IFilter> items) {
+        mInflater = activity.getLayoutInflater();
         mItems = items;
-        activity = context;
+        mListener = listener;
     }
 
     @Override
@@ -114,38 +115,36 @@ public class FilterListAdapter extends BaseAdapter {
         if (item.getNumValues() > 0) {
             viewHolder.slider1Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        item.setValue(0, progress);
+                        mListener.updateImage(mItems);
+                    }
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
+                public void onStartTrackingTouch(SeekBar seekBar) { }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    item.setValue(0, seekBar.getProgress());
-                }
+                public void onStopTrackingTouch(SeekBar seekBar) { }
             });
         }
 
         if (item.getNumValues() > 1) {
             viewHolder.slider2Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        item.setValue(1, progress);
+                        mListener.updateImage(mItems);
+                    }
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
+                public void onStartTrackingTouch(SeekBar seekBar) { }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    item.setValue(1, seekBar.getProgress());
-                }
+                public void onStopTrackingTouch(SeekBar seekBar) { }
             });
         }
 
@@ -159,25 +158,27 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Removes item at index from filter list */
     public void remove(int index) {
-        mItemsPrevious.addAll(mItems);
-        ((MainActivity)activity).setUndoState(true);
+        updateBuffer();
 
         mItems.remove(mItems.get(index));
+
+        mListener.updateImage(mItems);
+        notifyDataSetChanged();
     }
 
     public void reorder(int from, int to) {
-        mItemsPrevious.addAll(mItems);
-        ((MainActivity)activity).setUndoState(true);
+        updateBuffer();
 
         IFilter element = mItems.remove(from);
         mItems.add(to, element);
+
         notifyDataSetChanged();
+        mListener.updateImage(mItems);
     }
 
     /* Adds a new item to the filter list */
     public void add(int filter) {
-        mItemsPrevious.addAll(mItems);
-        ((MainActivity)activity).setUndoState(true);
+        updateBuffer();
 
         switch (filter) {
             case 0:
@@ -198,6 +199,24 @@ public class FilterListAdapter extends BaseAdapter {
                 break;
         }
         notifyDataSetChanged();
+        mListener.updateImage(mItems);
+    }
+
+    private void updateBuffer() {
+        if (bufferLevel < 10) {
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            bufferLevel++;
+            mListener.setUndoState(true);
+        } else {
+            mItemsPreviousBuffer.remove(0);
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            mListener.setUndoState(true);
+        }
+    }
+
+    public interface FilterListInterface {
+        public void setUndoState(boolean state);
+        public void updateImage(List<IFilter> filters);
     }
 
     /**
@@ -205,8 +224,11 @@ public class FilterListAdapter extends BaseAdapter {
      */
     public void undo() {
         mItems.clear();
-        mItems.addAll(mItemsPrevious);
-        mItemsPrevious.clear();
+        mItems.addAll(mItemsPreviousBuffer.remove(--bufferLevel));
+        if(bufferLevel == 0) {
+            mListener.setUndoState(false);
+        }
+        mListener.updateImage(mItems);
         notifyDataSetChanged();
     }
 

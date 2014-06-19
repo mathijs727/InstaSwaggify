@@ -4,41 +4,41 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
  * Created by Peter on 19-6-2014.
  */
 
-public class CanvasView extends View {
+public class CanvasView extends View  {
     private Bitmap bitmap;
-    private Bitmap [] pictures = new Bitmap [10];
+    private CanvasDraggableItem [] pictures = new CanvasDraggableItem [10];
     private Rect destination = null;
 
-    // constructor
+    private void finishConstructor() {
+        this.setOnTouchListener(new CanvasTouchListener(this));
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.swag);
+        pictures[0] = new CanvasDraggableItem(bitmap, 0.2f, 0.2f);
+    }
+
+    // finishConstructor
     public CanvasView(Context context) {
         super(context);
-        pictures[0] = BitmapFactory.decodeFile("@drawable/swag");
-        bitmap = BitmapFactory.decodeFile("@drawable/swag");
+        finishConstructor();
     }
 
-    // constructor
+    // finishConstructor
     public CanvasView(Context context, AttributeSet attributes) {
         super(context, attributes);
-        pictures[0] = BitmapFactory.decodeFile("@drawable/swag");
-        bitmap = BitmapFactory.decodeFile("@drawable/swag");
+        finishConstructor();
     }
 
-    // constructor
+    // finishConstructor
     public CanvasView(Context context, AttributeSet attributes, int style) {
         super(context, attributes, style);
-        pictures[0] = BitmapFactory.decodeFile("@drawable/swag");
-        bitmap = BitmapFactory.decodeFile("@drawable/swag");
+        finishConstructor();
     }
 
     @Override
@@ -70,6 +70,35 @@ public class CanvasView extends View {
         canvas.drawColor(R.color.background);
 
         canvas.drawBitmap(bitmap, null, destination, null );
+
+        for (CanvasDraggableItem picture : pictures) {
+            if (picture != null) {
+                canvas.drawBitmap(picture.getBitmap(),
+                    destination.left + destination.width() * picture.getX() - 0.5f * picture.getWidth(),
+                    destination.top + destination.height() * picture.getY() - 0.5f * picture.getHeight(),
+                    null);
+            }
+        }
+    }
+
+    public void onTouchDown (int x, int y) {
+        for (CanvasDraggableItem picture : pictures) {
+            // check if on coordinades
+            // set selected
+        }
+    }
+
+    public void onTouchMove (int x, int y) {
+        // move selected
+
+    }
+
+    public void onTouchUp () {
+        for (CanvasDraggableItem picture : pictures) {
+            if (picture != null && picture.isSelected()) {
+                picture.setSelected(false);
+            }
+        }
     }
 
     public void setBitmap (Bitmap newBitmap) {
@@ -80,7 +109,6 @@ public class CanvasView extends View {
     public Bitmap getBitmap () {
         return bitmap;
     }
-
 }
 
 

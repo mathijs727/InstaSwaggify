@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,13 +17,12 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SurfaceView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements FilterListAdapter.FilterListInterface {
     private DragSortListView mListView;
     private CanvasView mCanvasView;
     private RSFilterHelper mRSFilterHelper;
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     private DialogFragment mDialog;
     private SharedPreferences favorites;
 //    private SharedPreferences settings;  voor later
-    private Menu menu;
+    private Menu mMenu;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
@@ -58,17 +58,14 @@ public class MainActivity extends Activity {
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
-        mAdapter = new FilterListAdapter(this, items);
+        mAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
         mListView.setAdapter(mAdapter);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
         mRSFilterHelper.setCanvasView(mCanvasView);
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data));
-        List<IFilter> filters = new ArrayList<IFilter>();
-        //filters.add(new RotationFilter());
-        filters.add(new GuassianBlurFilter());
-        mRSFilterHelper.generateBitmap(filters);
+        mRSFilterHelper.generateBitmap(new ArrayList<IFilter>());
 
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
@@ -98,7 +95,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        this.menu = menu;
+        mMenu = menu;
         return true;
     }
 
@@ -138,7 +135,7 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             /* Create a folder to store the pictures if it does not exist yet. */
-            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggify Original Pictures");
+            File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
             if (imagesFolder.exists() == false) {
                 if (imagesFolder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
@@ -205,7 +202,6 @@ public class MainActivity extends Activity {
         }
 
         else if (id == R.id.action_undo) {
-            setUndoState(false);
             mAdapter.undo();
         }
 
@@ -266,9 +262,13 @@ public class MainActivity extends Activity {
         FileOutputStream output;
         File folder, file;
         String state = Environment.getExternalStorageState();
+        boolean externalIsAvaible = true;
+        Toast errorToast = Toast.makeText(this,
+                "Er trad een fout op bij het exporteren.",
+                Toast.LENGTH_SHORT);
 
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
-
+            externalIsAvaible = false;
             Toast.makeText(this,
                     "No SD-card available",
                     Toast.LENGTH_SHORT).show();
@@ -276,22 +276,39 @@ public class MainActivity extends Activity {
             return;
         }
 
-        /* Try to open a file to export the picture */
+        /* Try to open a file to export the picture
+         */
         try {
 
             /* filename is made with a timestamp */
-            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy_hh-mm-ss");
-            String format = s.format(new Date());
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+            String date = s.format(new Date());
 
-            folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Instaswaggified Pictures");
+            if (!externalIsAvaible) {
+                folder = new File("InstasSwaggify");
+            }
+            else {
+                folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify");
+            }
+
             if (folder.exists() == false) {
                 if (folder.mkdirs() == false) {
                     Log.i("Take Photo", "no directory created");
+                    errorToast.show();
                     return;
                 }
             }
 
-            file = new File(folder, "Instaswagiffy_" + format + ".jpg");
+            folder = new File(folder, "Swaggified pictures");
+            if (folder.exists() == false) {
+                if (folder.mkdirs() == false) {
+                    Log.i("Take Photo", "no directory created");
+                    errorToast.show();
+                    return;
+                }
+            }
+
+            file = new File(folder, date + ".jpg");
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -309,10 +326,7 @@ public class MainActivity extends Activity {
         }
 
         catch (Exception e) {
-            Toast.makeText(this,
-                    "Er trad een fout op bij het exporteren.",
-                    Toast.LENGTH_SHORT).show();
-
+            errorToast.show();
             e.printStackTrace();
             Log.e("Error opening histogram output stream", e.toString());
             return;
@@ -373,7 +387,18 @@ public class MainActivity extends Activity {
 
     }
 
-    public void setUndoState(Boolean state) {
-        menu.findItem(R.id.action_undo).setEnabled(state);
+    @Override
+    public void setUndoState(boolean state) {
+        mMenu.findItem(R.id.action_undo).setEnabled(state);
+    }
+
+    @Override
+    public void updateImage(List<IFilter> filters) {
+        Log.v("MainActivity", "updating filters");
+        Log.v("MainActivity", filters.size() + " filters");
+        if (filters.size() > 0) {
+            //Log.v("MainActivity", "Value: " + filters.get(0).getValue(0));
+        }
+        mRSFilterHelper.generateBitmap(filters);
     }
 }
