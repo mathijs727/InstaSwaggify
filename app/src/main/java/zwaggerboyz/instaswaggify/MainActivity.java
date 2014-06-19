@@ -86,6 +86,9 @@ public class MainActivity extends Activity {
             }
         });
 
+        String fav_title = "Favorites";
+        //favorites = getPreferences();
+
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
         soundThread.start();
