@@ -5,27 +5,33 @@
     <item android:id="@+id/action_take_photo"
         android:title="@string/action_take_photo"
         android:icon="@drawable/ic_action_camera"
-        android:orderInCategory="96"
+        android:orderInCategory="95"
         android:showAsAction="ifRoom" />
 
 
     <item android:id="@+id/action_select_photo"
         android:title="@string/action_select_photo"
         android:icon="@drawable/ic_action_picture"
-        android:orderInCategory="97"
+        android:orderInCategory="96"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_favorites"
           android:title="@string/action_favorites"
-          android:icon="@drawable/ic_action_favorites"
-          android:orderInCategory="98"
+          android:icon="@drawable/ic_action_important"
+          android:orderInCategory="97"
           android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_add_filter"
         android:title="@string/action_add_filter"
         android:icon="@drawable/ic_action_new"
-        android:orderInCategory="99"
+        android:orderInCategory="98"
         android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_add_favorite"
+          android:title="@string/action_add_favorite"
+          android:icon="@drawable/ic_action_new"
+          android:orderInCategory="99"
+          android:showAsAction="never" />
 
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
