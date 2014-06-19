@@ -156,6 +156,10 @@ public class FilterListAdapter extends BaseAdapter {
         return true;
     }
 
+    public List<IFilter> getItems() {
+        return mItems;
+    }
+
     /* Removes item at index from filter list */
     public void remove(int index) {
         updateBuffer();
