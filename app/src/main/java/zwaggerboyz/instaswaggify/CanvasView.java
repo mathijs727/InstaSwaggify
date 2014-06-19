@@ -19,7 +19,7 @@ public class CanvasView extends View  {
     private Bitmap bitmap;
     private Rect destination = null;
     private ArrayList<CanvasDraggableItem> pictures = new ArrayList<CanvasDraggableItem>();
-    public CanvasDraggableItem selected = null;
+    private CanvasDraggableItem selected = null;
     private int xoffset, yoffset;
 
     private void finishConstructor() {
@@ -120,9 +120,11 @@ public class CanvasView extends View  {
     }
 
     public void onTouchUp (float x, float y) {
-        onTouchMove(x, y);
-        pictures.add(selected);
         selected = null;
+
+        for (CanvasDraggableItem picture : pictures) {
+            Log.i("IK BEN ER NOG", picture.getLeft() + " : " + picture.getRight());
+        }
     }
 
     public void setBitmap (Bitmap newBitmap) {
