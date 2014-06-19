@@ -204,7 +204,7 @@ public class FilterListAdapter extends BaseAdapter {
      */
     public void undo() {
         mItems.clear();
-        mItems.addAll(mItemsPreviousBuffer.remove(bufferLevel--));
+        mItems.addAll(mItemsPreviousBuffer.remove(--bufferLevel));
         if(bufferLevel == 0) {
             ((MainActivity)activity).setUndoState(false);
         }
