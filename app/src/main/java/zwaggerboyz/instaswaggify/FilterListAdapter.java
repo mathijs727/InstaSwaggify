@@ -22,7 +22,8 @@ import java.util.List;
 public class FilterListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private List<IFilter> mItems;
-    private List<IFilter> mItemsPrevious = new ArrayList<IFilter>();
+    private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
+    private int bufferLevel = 0;
     private Activity activity;
 
     private class ViewHolder {
@@ -154,14 +155,16 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Removes item at index from filter list */
     public void remove(int index) {
-        mItemsPrevious.addAll(mItems);
+        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+        bufferLevel++;
         ((MainActivity)activity).setUndoState(true);
 
         mItems.remove(mItems.get(index));
     }
 
     public void reorder(int from, int to) {
-        mItemsPrevious.addAll(mItems);
+        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+        bufferLevel++;
         ((MainActivity)activity).setUndoState(true);
 
         IFilter element = mItems.remove(from);
@@ -171,7 +174,8 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Adds a new item to the filter list */
     public void add(int filter) {
-        mItemsPrevious.addAll(mItems);
+        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+        bufferLevel++;
         ((MainActivity)activity).setUndoState(true);
 
         switch (filter) {
@@ -200,8 +204,10 @@ public class FilterListAdapter extends BaseAdapter {
      */
     public void undo() {
         mItems.clear();
-        mItems.addAll(mItemsPrevious);
-        mItemsPrevious.clear();
+        mItems.addAll(mItemsPreviousBuffer.remove(--bufferLevel));
+        if(bufferLevel == 0) {
+            ((MainActivity)activity).setUndoState(false);
+        }
         notifyDataSetChanged();
     }
 
