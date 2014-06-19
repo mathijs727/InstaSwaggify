@@ -254,7 +254,7 @@ public class FilterListAdapter extends BaseAdapter {
                 JSONObject jSONObject = new JSONObject();
                 jSONObject.put("name", filter.getName());
                 for (int i = 0; i < filter.getNumValues(); i++) {
-                    jSONObject.put("label" + i, filter.getLabel(i);
+                    jSONObject.put("label" + i, filter.getLabel(i));
                     jSONObject.put("value" + i, filter.getValue(i));
 
                 }
