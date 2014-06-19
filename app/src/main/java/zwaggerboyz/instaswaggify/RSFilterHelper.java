@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Mathijs on 17/06/14.
  */
 public class RSFilterHelper {
-    private final int NUM_BITMAPS = 2;
+    private final int NUM_BITMAPS = 3;
     private int mCurrentBitmap = 0;
     private Bitmap mBitmapIn;
     private Bitmap[] mBitmapsOut;
