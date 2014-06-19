@@ -146,7 +146,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             /* Get the current time and date to use in the filename. */
 
             Date now = new Date();
-            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
             String date = simpleFormat.format(now);
             Log.i("FILENAME", date + ".jpg");
@@ -283,7 +283,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         try {
 
             /* filename is made with a timestamp */
-            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm");
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
             String date = s.format(new Date());
 
             if (!externalIsAvailable) {
