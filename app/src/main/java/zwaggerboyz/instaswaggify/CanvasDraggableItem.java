@@ -6,9 +6,18 @@ import android.graphics.Bitmap;
  * Created by Peter on 19-6-2014.
  */
 public class CanvasDraggableItem {
-    private int x, y, width, height;
-    private boolean selected;
+    private float x, y;
+    private int width, height;
+    private boolean selected = false;
     private Bitmap bitmap;
+
+    public CanvasDraggableItem (Bitmap bitmap, float x, float y) {
+        this.bitmap = bitmap;
+        this.x = x;
+        this.y = y;
+        this.width = bitmap.getWidth();
+        this.height = bitmap.getHeight();
+    }
 
     public Bitmap getBitmap() {
         return bitmap;
@@ -18,19 +27,19 @@ public class CanvasDraggableItem {
         this.bitmap = bitmap;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
