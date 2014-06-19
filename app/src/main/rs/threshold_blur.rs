@@ -35,47 +35,45 @@ uchar strength;
 uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
     uchar4 in = rsGetElementAt_uchar4(input, x, y);
     float4 diff4;
-    int redDif, greenDif, blueDif;
-    uchar red, green, blue, neighbor;
-    long new_y, new_x;
+    int new_y, new_x;
     float4 neighbour;
     float4 out;
     int done = 0;
     float diff, dist;
 
-    uchar4 empty = {255, 0, 0, 0};
+    uchar4 empty = {255, 0, 0, 255};
 
     radius = 10;
     drop = 2;
-    threshold = 200;
-    strength = 10;
+    threshold = 500;
+    strength = 2;
 
     out = convert_float4(in);
-    //return in;
 
-    //rsDebug("root imageWidth", imageWidth);
-    //rsDebug("root imageHeight", imageHeight);
 
     for (int x_offset = -radius; x_offset <= radius; x_offset++) {
         new_x = x + x_offset;
 
         for (int y_offset = -radius; y_offset <= radius; y_offset++) {
             new_y = y + y_offset;
+
+            rsDebug("---------------", 0);
+            rsDebug("new_y >= 0 ||", new_y >= 0);
+            rsDebug("new_x >= 0 ||", new_x >= 0);
+            rsDebug("new_x < imagewidth ||", x < imageWidth);
+            rsDebug("new_y < imageHeight ||", y < imageHeight);
+            rsDebug("x_offset + y_offset <= radius ||", x_offset + y_offset <= radius);
+
             x_offset = abs(x_offset);
             y_offset = abs(y_offset);
-
-            if (new_y >= 0
-                && new_y < imageHeight
-                && x_offset + y_offset <= radius
+            if (   new_y >= 0
                 && new_x >= 0
-                && new_x < imageWidth) {
-
-                //rsDebug("new_y", (uint32_t)new_y);
-                //rsDebug("new_x", (uint32_t)new_x);
+                && new_x < imageWidth
+                && new_y < imageHeight
+                && x_offset + y_offset <= radius) {
 
                 done = 1;
                 neighbour = convert_float4(rsGetElementAt_uchar4(input, (uint32_t)new_x, (uint32_t)new_y));
-
 
                 dist = max(x_offset, y_offset);
 
@@ -93,9 +91,14 @@ uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
         }
 
     }
-    if (done)
+
+    if (done) {
+        rsDebug("is done?", 1);
         return convert_uchar4(out);
-    else
+    }
+    else {
+        rsDebug("is done?", 0);
         return empty;
+    }
 }
 
