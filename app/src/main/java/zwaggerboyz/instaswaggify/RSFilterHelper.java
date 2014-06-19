@@ -54,7 +54,7 @@ public class RSFilterHelper {
 
     public void generateBitmap(List<IFilter> filters) {
         if (filters.size() == 0) {
-            mCanvasView.setImageBitmap(mBitmapIn);
+            mCanvasView.setBitmap(mBitmapIn);
             return;
         }
 
@@ -126,7 +126,7 @@ public class RSFilterHelper {
             if (result != -1) {
                 // Request UI update
                 //mCanvasView.setImage(mBitmapsOut[index]);
-                mCanvasView.setImageBitmap(mBitmapsOut[result]);
+                mCanvasView.setBitmap(mBitmapsOut[result]);
             }
         }
 

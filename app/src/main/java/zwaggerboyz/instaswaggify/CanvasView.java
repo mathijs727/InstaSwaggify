@@ -52,8 +52,6 @@ public class CanvasView extends View {
             int bitmapHeight = bitmap.getHeight();
             int bitmapWidth = bitmap.getWidth();
 
-            Log.i("WAARDES:", "" + canvasHeight + " " + canvasWidth + " : " + bitmapHeight + " " + bitmapWidth);
-
             if (((float) bitmapHeight / (float) bitmapWidth) < ((float) canvasHeight / (float) canvasWidth)) {
                 float scale = (float) canvasWidth / (float) bitmapWidth;
                 int offset = Math.round((canvasHeight - (bitmapHeight * scale)) * 0.5f);
@@ -67,17 +65,20 @@ public class CanvasView extends View {
             else {
                 destination = new Rect(0, 0, canvasWidth, canvasHeight);
             }
-
         }
 
-        canvas.drawColor(Color.RED);
+        canvas.drawColor(R.color.background);
 
         canvas.drawBitmap(bitmap, null, destination, null );
     }
 
-    public void setImageBitmap (Bitmap newBitmap) {
+    public void setBitmap (Bitmap newBitmap) {
         bitmap = newBitmap;
         destination = null;
+    }
+
+    public Bitmap getBitmap () {
+        return bitmap;
     }
 
 }
