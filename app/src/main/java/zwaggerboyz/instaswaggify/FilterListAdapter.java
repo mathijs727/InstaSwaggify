@@ -113,6 +113,7 @@ public class FilterListAdapter extends BaseAdapter {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (fromUser) {
                         item.setValue(0, progress);
+                        mItems.get(position).setValue(1, progress);
                         mListener.updateImage(mItems);
                     }
                 }
@@ -121,7 +122,9 @@ public class FilterListAdapter extends BaseAdapter {
                 public void onStartTrackingTouch(SeekBar seekBar) { }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    updateBuffer();
+                }
             });
         }
 
@@ -131,6 +134,7 @@ public class FilterListAdapter extends BaseAdapter {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (fromUser) {
                         item.setValue(1, progress);
+                        mItems.get(position).setValue(1, progress);
                         mListener.updateImage(mItems);
                     }
                 }
@@ -139,7 +143,9 @@ public class FilterListAdapter extends BaseAdapter {
                 public void onStartTrackingTouch(SeekBar seekBar) { }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    updateBuffer();
+                }
             });
         }
 
@@ -198,7 +204,7 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     private void updateBuffer() {
-        if (bufferLevel < 10) {
+        if (bufferLevel < 25) {
             mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
             bufferLevel++;
             mListener.setUndoState(true);
