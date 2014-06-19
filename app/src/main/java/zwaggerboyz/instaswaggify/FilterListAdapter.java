@@ -164,9 +164,7 @@ public class FilterListAdapter extends BaseAdapter {
 
     public void reorder(int from, int to) {
         if (from != to) {
-            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-            bufferLevel++;
-            ((MainActivity)activity).setUndoState(true);
+            addToBuffer();
 
             IFilter element = mItems.remove(from);
             mItems.add(to, element);
@@ -176,9 +174,8 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Adds a new item to the filter list */
     public void add(int filter) {
-        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-        bufferLevel++;
-        ((MainActivity)activity).setUndoState(true);
+
+        addToBuffer();
 
         switch (filter) {
             case 0:
@@ -199,6 +196,19 @@ public class FilterListAdapter extends BaseAdapter {
                 break;
         }
         notifyDataSetChanged();
+    }
+
+    private void addToBuffer() {
+        if (bufferLevel < 10) {
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            bufferLevel++;
+            ((MainActivity)activity).setUndoState(true);
+        } else {
+            mItemsPreviousBuffer.remove(0);
+            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
+            bufferLevel++;
+            ((MainActivity)activity).setUndoState(true);
+        }
     }
 
     /**
