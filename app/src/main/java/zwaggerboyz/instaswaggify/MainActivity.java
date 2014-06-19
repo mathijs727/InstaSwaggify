@@ -199,7 +199,6 @@ public class MainActivity extends Activity {
         }
 
         else if (id == R.id.action_undo) {
-            setUndoState(false);
             mAdapter.undo();
         }
 
