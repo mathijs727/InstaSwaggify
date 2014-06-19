@@ -58,6 +58,7 @@ public class RSFilterHelper {
 
         if (filters.size() == 0) {
             mCanvasView.setBitmap(mBitmapIn);
+            mCanvasView.invalidate();
             return;
         }
 

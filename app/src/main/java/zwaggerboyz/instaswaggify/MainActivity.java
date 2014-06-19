@@ -83,6 +83,9 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             }
         });
 
+        String fav_title = "Favorites";
+        //favorites = getPreferences();
+
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
         soundThread.start();
@@ -391,11 +394,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
     @Override
     public void updateImage(List<IFilter> filters) {
-        Log.v("MainActivity", "updating filters");
-        Log.v("MainActivity", filters.size() + " filters");
-        if (filters.size() > 0) {
-            //Log.v("MainActivity", "Value: " + filters.get(0).getValue(0));
-        }
         mRSFilterHelper.generateBitmap(filters);
     }
 }
