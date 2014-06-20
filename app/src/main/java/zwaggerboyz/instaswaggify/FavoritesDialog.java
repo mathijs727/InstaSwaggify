@@ -33,8 +33,8 @@ public class FavoritesDialog extends DialogFragment {
         /**
          * Setting up ListView and the adapter
          */
-        View mView = inflater.inflate(R.layout.filterdialog, container, false);
-        ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
+        final View mView = inflater.inflate(R.layout.filterdialog, container, false);
+        final ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
 
         /* show favorites if available */
         if (getFavorites().length > 0) {
@@ -67,6 +67,7 @@ public class FavoritesDialog extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 remove_favorite(favoritesTitle);
+                                listView.setAdapter(new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites()));
                             }
                         }
                 );
