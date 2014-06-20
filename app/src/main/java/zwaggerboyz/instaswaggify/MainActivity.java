@@ -210,7 +210,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 exportDialog.show(getFragmentManager(), "Export Dialog");
                 return true;
 
-                //save_picture(mCanvasView.getBitmap());
+                //save_picture(mCanvasView.getBitmap());   nog nodig?
             }
 
             case R.id.action_clear: {

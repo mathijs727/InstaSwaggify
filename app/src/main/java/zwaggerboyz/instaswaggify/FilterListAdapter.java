@@ -285,9 +285,6 @@ public class FilterListAdapter extends BaseAdapter {
             e.printStackTrace();
         }
 
-        ///* ask user for new favorite's name */
-        //String favoritesTitle = "Fav" + Integer.toString(jsonObject.length());
-
         /* create array of current filter states */
         try {
             JSONArray newFilterArray = new JSONArray();
@@ -312,7 +309,6 @@ public class FilterListAdapter extends BaseAdapter {
 
         /* favorites array to String */
         favoritesString = jsonObject.toString();
-        Log.e("FilterListAdapter", "JSONstring: " + favoritesString);
 
         /* add store favorites String sharedPreferences */
         prefs.edit().putString("Favorites", favoritesString).commit();
