@@ -33,8 +33,8 @@ public class FilterListAdapter extends BaseAdapter {
     private Activity mActivity;
 
     private class ViewHolder {
-        public TextView titleTextView, label1TextView, label2TextView;
-        public SeekBar slider1Seekbar, slider2Seekbar;
+        public TextView titleTextView, label1TextView, label2TextView, label3TextView;
+        public SeekBar slider1Seekbar, slider2Seekbar, slider3Seekbar;
     }
 
     public FilterListAdapter(Activity activity, FilterListInterface listener, List<IFilter> items) {
@@ -69,8 +69,10 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.titleTextView = (TextView)convertView.findViewById(R.id.list_item_filter_title);
             viewHolder.label1TextView = (TextView)convertView.findViewById(R.id.list_item_filter_label1);
             viewHolder.label2TextView = (TextView)convertView.findViewById(R.id.list_item_filter_label2);
+            viewHolder.label3TextView = (TextView)convertView.findViewById(R.id.list_item_filter_label3);
             viewHolder.slider1Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar1);
             viewHolder.slider2Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar2);
+            viewHolder.slider3Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar3);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
@@ -86,8 +88,10 @@ public class FilterListAdapter extends BaseAdapter {
             case 0:
                 viewHolder.label1TextView.setVisibility(View.GONE);
                 viewHolder.label2TextView.setVisibility(View.GONE);
+                viewHolder.label3TextView.setVisibility(View.GONE);
                 viewHolder.slider1Seekbar.setVisibility(View.GONE);
                 viewHolder.slider2Seekbar.setVisibility(View.GONE);
+                viewHolder.slider3Seekbar.setVisibility(View.GONE);
                 break;
             case 1:
                 viewHolder.label1TextView.setVisibility(View.VISIBLE);
@@ -96,18 +100,37 @@ public class FilterListAdapter extends BaseAdapter {
                 viewHolder.slider1Seekbar.setProgress(item.getValue(0));
 
                 viewHolder.label2TextView.setVisibility(View.GONE);
+                viewHolder.label3TextView.setVisibility(View.GONE);
                 viewHolder.slider2Seekbar.setVisibility(View.GONE);
+                viewHolder.slider3Seekbar.setVisibility(View.GONE);
                 break;
             case 2:
                 viewHolder.label1TextView.setVisibility(View.VISIBLE);
                 viewHolder.label2TextView.setVisibility(View.VISIBLE);
+                viewHolder.label3TextView.setVisibility(View.GONE);
                 viewHolder.slider1Seekbar.setVisibility(View.VISIBLE);
                 viewHolder.slider2Seekbar.setVisibility(View.VISIBLE);
+                viewHolder.slider3Seekbar.setVisibility(View.GONE);
 
                 viewHolder.label1TextView.setText(item.getLabel(0));
                 viewHolder.label2TextView.setText(item.getLabel(1));
                 viewHolder.slider1Seekbar.setProgress(item.getValue(0));
                 viewHolder.slider2Seekbar.setProgress(item.getValue(1));
+                break;
+            case 3:
+                viewHolder.label1TextView.setVisibility(View.VISIBLE);
+                viewHolder.label2TextView.setVisibility(View.VISIBLE);
+                viewHolder.label3TextView.setVisibility(View.VISIBLE);
+                viewHolder.slider1Seekbar.setVisibility(View.VISIBLE);
+                viewHolder.slider2Seekbar.setVisibility(View.VISIBLE);
+                viewHolder.slider3Seekbar.setVisibility(View.VISIBLE);
+
+                viewHolder.label1TextView.setText(item.getLabel(0));
+                viewHolder.label2TextView.setText(item.getLabel(1));
+                viewHolder.label3TextView.setText(item.getLabel(2));
+                viewHolder.slider1Seekbar.setProgress(item.getValue(0));
+                viewHolder.slider2Seekbar.setProgress(item.getValue(1));
+                viewHolder.slider3Seekbar.setProgress(item.getValue(2));
                 break;
         }
 
@@ -152,6 +175,27 @@ public class FilterListAdapter extends BaseAdapter {
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     item.setValue(1, seekBar.getProgress());
+                    mListener.updateImage(mItems);
+                }
+            });
+        }
+
+        if (item.getNumValues() > 2) {
+            viewHolder.slider3Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    /*if (fromUser) {
+                        item.setValue(1, progress);
+                        mListener.updateImage(mItems);
+                    }*/
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) { }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    item.setValue(2, seekBar.getProgress());
                     mListener.updateImage(mItems);
                 }
             });
