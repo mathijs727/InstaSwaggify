@@ -29,6 +29,6 @@ uchar4 __attribute__((kernel)) contrast(uchar4 in)
 {
     float4 f4 = rsUnpackColor8888(in);
     float3 result = ((f4.rgb - gHalf) * contrastValue) + gHalf;
-
+    result = clamp(result, 0.f, 1.f);
     return rsPackColorTo8888(result);
 }

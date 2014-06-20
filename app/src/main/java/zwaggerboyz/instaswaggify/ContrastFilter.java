@@ -19,7 +19,7 @@ public class ContrastFilter extends AbstractFilterClass {
                 "amount"
         };
         mValues = new int[] {
-                50
+                11
         };
     }
 
@@ -36,7 +36,7 @@ public class ContrastFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_contrastValue(normalizeValue(mValues[0], 0.1f, 1.f));
+        mScript.set_contrastValue(normalizeValue(mValues[0], 0.75f, 3.f));
     }
 
     @Override

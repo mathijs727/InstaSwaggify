@@ -21,7 +21,7 @@ public class BrightnessFilter extends AbstractFilterClass {
                 "brightness"
         };
         mValues = new int[] {
-                100
+                33
         };
     }
 
@@ -38,7 +38,7 @@ public class BrightnessFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_brightnessValue(normalizeValue(mValues[0], 0.25f, 1.f));
+        mScript.set_brightnessValue(normalizeValue(mValues[0], 0.5f, 2.f));
     }
 
     @Override

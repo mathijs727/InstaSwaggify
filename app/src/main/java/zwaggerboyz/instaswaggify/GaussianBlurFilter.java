@@ -21,7 +21,7 @@ public class GaussianBlurFilter extends AbstractFilterClass {
                 "radius"
         };
         mValues = new int[] {
-                50
+                20
         };
     }
 
@@ -40,7 +40,7 @@ public class GaussianBlurFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.setRadius(normalizeValue(mValues[0], 2.f, 20.f));
+        mScript.setRadius(normalizeValue(mValues[0], 1.f, 20.f));
     }
 
     @Override
