@@ -123,7 +123,7 @@ public class CanvasView extends View  {
         selected = null;
 
         for (CanvasDraggableItem picture : pictures) {
-            Log.i("IK BEN ER NOG", picture.getLeft() + " : " + picture.getRight());
+            Log.i("IK BEN ER NOG", picture.getLeft() + " : " + picture.getTop());
         }
     }
 
@@ -134,6 +134,11 @@ public class CanvasView extends View  {
 
     public Bitmap getBitmap () {
         return bitmap;
+    }
+
+    public void resetDestination () {
+        destination = null;
+        this.invalidate();
     }
 }
 
