@@ -379,7 +379,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         catch (Exception e) {
 
             Toast.makeText(this,
-                    "An error occurred while exported",
+                    "An error occurred while exporting",
                     Toast.LENGTH_SHORT).show();
 
             e.printStackTrace();
@@ -396,7 +396,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(this,
-                        "An error occurred while exported",
+                        "An error occurred while exporting",
                         Toast.LENGTH_SHORT).show();
             }
         }

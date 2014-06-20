@@ -1,6 +1,8 @@
 package zwaggerboyz.instaswaggify;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,7 @@ public class FavoritesDialog extends DialogFragment {
          */
         View mView = inflater.inflate(R.layout.filterdialog, container, false);
         ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());
         listView.setAdapter(adapter);
 
         /**
@@ -40,7 +42,24 @@ public class FavoritesDialog extends DialogFragment {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO: Handle this (Removes this preset)
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                builder1.setMessage("Delete " + adapterView.getItemAtPosition(i) + "?");
+                builder1.setCancelable(true);
+                builder1.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                builder1.setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
                 return false;
             }
         });
@@ -53,6 +72,6 @@ public class FavoritesDialog extends DialogFragment {
      */
     private String[] getFavorites() {
         //TODO: Implement this (Fetches all favorites from file)
-        return new String[] {};
+        return new String[] {"TEST"};
     }
 }
