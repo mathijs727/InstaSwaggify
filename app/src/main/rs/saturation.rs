@@ -32,7 +32,8 @@ uchar4 __attribute__((kernel)) saturation(uchar4 in)
     result = mix(result, f4.rgb, saturationValue);
     if (result.r > 1.0 | result.g > 1.0 | result.b > 1.0) {
         float scale = 1 / fmax(result.r, fmax(result.g, result.b));
-        result = scale*result;
+        float3 vscale = {scale, scale, scale};
+        result = scale * result;
     }
     return rsPackColorTo8888(result);
 }
