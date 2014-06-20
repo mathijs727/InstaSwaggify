@@ -57,15 +57,14 @@ public class CanvasView extends View  {
         canvas.drawBitmap(bitmap, null, destination, null );
 
         for (CanvasDraggableItem picture : pictures) {
-            if (picture != null) {
-                Rect pictureDestination = new Rect (
-                    (int)(destination.left + destination.width() * picture.getLeft()),
-                    (int)(destination.top + destination.height() * picture.getTop()),
-                    (int)(destination.left + destination.width() * picture.getRight()),
-                    (int)(destination.top + destination.height() * picture.getBottom())
-                    );
-                canvas.drawBitmap(picture.getBitmap(), null, pictureDestination, null);
-            }
+            Rect pictureDestination = new Rect (
+                (int)(destination.left + destination.width() * picture.getLeft()),
+                (int)(destination.top + destination.height() * picture.getTop()),
+                (int)(destination.left + destination.width() * picture.getRight()),
+                (int)(destination.top + destination.height() * picture.getBottom())
+                );
+            canvas.drawBitmap(picture.getBitmap(), null, pictureDestination, null);
+
         }
     }
 
