@@ -318,7 +318,6 @@ public class FilterListAdapter extends BaseAdapter {
         SharedPreferences prefs = mActivity.getPreferences(Context.MODE_PRIVATE);
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject jsonObject = null;
-        JSONArray jsonFavorites = null;
 
         try {
             if (favoritesString.equals("")) {
@@ -338,7 +337,7 @@ public class FilterListAdapter extends BaseAdapter {
             JSONObject jSONObjectFilter;
             for (IFilter filter:mItems) {
                 jSONObjectFilter = new JSONObject();
-                jSONObjectFilter.put("name", filter.getName());
+                jSONObjectFilter.put("id", filter.getID());
                 for (int i = 0; i < filter.getNumValues(); i++) {
                     jSONObjectFilter.put("value" + i, filter.getValue(i));
                 }
