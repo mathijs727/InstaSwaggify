@@ -413,13 +413,16 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
      * Sets the filter list as this preset
      */
     public void setFilter(String fav_key) {
+
+        mAdapter.clearFilters();
         SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject favoritesObject = null;
         JSONObject jsonFilter = null;
         JSONArray favortiesArray = null;
-        int value0, value1, value2;
+        int numValues, value0, value1, value2;
         String filterId = "";
+        AbstractFilterClass.FilterID id;
 
         IFilter filter = null;
     //    mAdapter
@@ -430,11 +433,32 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
             for (int i = 0; i < favortiesArray.length(); i++) {
                 Log.e("MainActivity", "show favorite: " + favortiesArray.get(i));
-                filterId = (String)jsonFilter.get("id");
+                jsonFilter = new JSONObject(favortiesArray.get(i).toString());
+                filterId = jsonFilter.getString("id");
+                id = AbstractFilterClass.FilterID.valueOf(filterId);
 
-                Log.e("MainActivity", "filterId: " + filterId);
+                // TODO add filter to mAdapter and set the values!
+                switch (id) {
+                    case BRIGHTNESS:
+                        break;
+                    case CONTRAST:
+                        break;
+                    case GAUSSIAN:
+                        break;
+                    case ROTATION:
+                        break;
+                    case SATURATION:
+                        break;
+                    case SEPIA:
+                        break;
+                    case NOISE:
+                        break;
+                    case INVERT:
+                        break;
+                    case COLORIZE:
+                        break;
+                }
             }
-
         }
         catch (Exception e) {
             e.printStackTrace();

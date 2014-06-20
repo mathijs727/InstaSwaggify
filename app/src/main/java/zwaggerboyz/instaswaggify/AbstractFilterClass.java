@@ -13,7 +13,7 @@ import android.util.Log;
 public abstract class AbstractFilterClass implements IFilter {
 
     public enum FilterID {
-        BRIGHTNESS, CONTRAST, ROTATION, SATURATION, SEPIA, GAUSSIAN, THRESHOLD
+        BRIGHTNESS, CONTRAST, GAUSSIAN, ROTATION, SATURATION, SEPIA, NOISE, INVERT, COLORIZE, THRESHOLD
     }
 
     protected FilterID mID;
