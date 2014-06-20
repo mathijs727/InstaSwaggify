@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -22,6 +23,9 @@ import android.widget.Toast;
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.io.ByteArrayOutputStream;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -440,8 +444,33 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     /**
      * Sets the filter list as this preset
      */
-    public void setFilter(IFilter[] mItems) {
+    public void setFilter(String fav_key) {
+        SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
+        String favoritesString = prefs.getString("Favorites", "");
+        JSONObject favoritesObject = null;
+        JSONObject jsonFilter = null;
+        JSONArray favortiesArray = null;
+        int value0, value1, value2;
+        String filterId = "";
 
+        IFilter filter = null;
+    //    mAdapter
+
+        try {
+            favoritesObject = new JSONObject(favoritesString);
+            favortiesArray = favoritesObject.getJSONArray(fav_key);
+
+            for (int i = 0; i < favortiesArray.length(); i++) {
+                Log.e("MainActivity", "show favorite: " + favortiesArray.get(i));
+                filterId = (String)jsonFilter.get("id");
+
+                Log.e("MainActivity", "filterId: " + filterId);
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

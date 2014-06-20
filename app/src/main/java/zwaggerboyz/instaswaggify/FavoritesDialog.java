@@ -50,8 +50,9 @@ public class FavoritesDialog extends DialogFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO: Handle this (Uses this preset)
-//                ((MainActivity)getActivity()).setFilter();
+
+
+                ((MainActivity)getActivity()).setFilter(adapterView.getItemAtPosition(i).toString());
             }
         });
 
