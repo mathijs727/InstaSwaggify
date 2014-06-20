@@ -11,6 +11,7 @@ public class InvertColorsFilter extends AbstractFilterClass {
     ScriptC_invert_colors mScript;
 
     public InvertColorsFilter() {
+        mID = FilterID.INVERT;
         mName = "Invert";
         mNumValues = 0;
 

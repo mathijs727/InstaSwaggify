@@ -292,7 +292,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
      */
     public void setFilter(String fav_key) {
 
-        mAdapter.clearFilters();
+    //    mAdapter.clearFilters();
         SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject favoritesObject = null;
@@ -300,10 +300,11 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         JSONArray favortiesArray = null;
         int numValues, value0, value1, value2;
         String filterId = "";
+        List<IFilter> filterArray = new ArrayList<IFilter>();
         AbstractFilterClass.FilterID id;
 
         IFilter filter = null;
-    //    mAdapter
+
 
         try {
             favoritesObject = new JSONObject(favoritesString);
@@ -315,28 +316,60 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 filterId = jsonFilter.getString("id");
                 id = AbstractFilterClass.FilterID.valueOf(filterId);
 
-                // TODO add filter to mAdapter and set the values!
+                /* create according filter and add to filter list */
                 switch (id) {
                     case BRIGHTNESS:
+                        filter = new BrightnessFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filterArray.add(filter);
                         break;
                     case CONTRAST:
+                        filter = new ContrastFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filterArray.add(filter);
                         break;
                     case GAUSSIAN:
+                        filter = new GaussianBlurFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filterArray.add(filter);
                         break;
                     case ROTATION:
+                        filter = new RotationFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filterArray.add(filter);
                         break;
                     case SATURATION:
+                        filter = new SaturationFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filterArray.add(filter);
                         break;
                     case SEPIA:
+                        filter = new SepiaFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filter.setValue(1, jsonFilter.getInt("value1"));
+                        filterArray.add(filter);
                         break;
                     case NOISE:
+                        filter = new NoiseFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filterArray.add(filter);
                         break;
                     case INVERT:
+                        filter = new InvertColorsFilter();
+                        filterArray.add(filter);
                         break;
                     case COLORIZE:
+                        filter = new ColorizeFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filter.setValue(1, jsonFilter.getInt("value1"));
+                        filter.setValue(2, jsonFilter.getInt("value2"));
+                        filterArray.add(filter);
                         break;
                 }
             }
+            mAdapter.setmItems(filterArray);
+            mAdapter.updateList();
+            mDialog.dismiss();
         }
         catch (Exception e) {
             e.printStackTrace();

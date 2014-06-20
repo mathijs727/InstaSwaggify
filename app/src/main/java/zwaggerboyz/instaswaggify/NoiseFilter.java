@@ -13,6 +13,7 @@ public class NoiseFilter extends AbstractFilterClass {
     public NoiseFilter() {
         mName = "Noise";
         mNumValues = 1;
+        mID = FilterID.NOISE;
 
         mLabels = new String[] {
                 "noise"
