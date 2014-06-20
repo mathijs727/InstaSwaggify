@@ -1,6 +1,8 @@
 package zwaggerboyz.instaswaggify;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ public class FilterListAdapter extends BaseAdapter {
     private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
     private int bufferLevel = 0;
     private FilterListInterface mListener;
+    private Activity mActivity;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView;
@@ -37,6 +40,7 @@ public class FilterListAdapter extends BaseAdapter {
         mInflater = activity.getLayoutInflater();
         mItems = items;
         mListener = listener;
+        mActivity = activity;
     }
 
     @Override
@@ -112,17 +116,20 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.slider1Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) {
+                    /*if (fromUser) {
                         item.setValue(0, progress);
                         mListener.updateImage(mItems);
-                    }
+                    }*/
                 }
 
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) { }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    item.setValue(0, seekBar.getProgress());
+                    mListener.updateImage(mItems);
+                }
             });
         }
 
@@ -130,17 +137,20 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.slider2Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) {
+                    /*if (fromUser) {
                         item.setValue(1, progress);
                         mListener.updateImage(mItems);
-                    }
+                    }*/
                 }
 
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) { }
 
                 @Override
-                public void onStopTrackingTouch(SeekBar seekBar) { }
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    item.setValue(1, seekBar.getProgress());
+                    mListener.updateImage(mItems);
+                }
             });
         }
 
@@ -242,20 +252,60 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void add_favorite() {
+
+        /* parse current favorite list to JSONArray */
+        SharedPreferences prefs = mActivity.getPreferences(Context.MODE_PRIVATE);
+        String favoritesString = prefs.getString("Favorites", "");
+        JSONObject jsonObject = null;
+        JSONArray jsonFavorites = null;
+
+        // TODO: parse favoritesString to JSONObject
+
         try {
-            JSONArray jSONArray = new JSONArray();
+            jsonObject = new JSONObject(favoritesString);
+            jsonFavorites = jsonObject.getJSONArray(favoritesString);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /* ask user for new favorite's name */
+        String favoritesTitle = "Fav" + Integer.toString(jsonFavorites.length());
+
+
+        /* create array of current filter states */
+        try {
+            JSONArray newFilterArray = new JSONArray();
+            JSONObject jSONObjectFilter;
             for (IFilter filter:mItems) {
-                JSONObject jSONObject = new JSONObject();
-                jSONObject.put("name", filter.getName());
+                jSONObjectFilter = new JSONObject();
+                jSONObjectFilter.put("name", filter.getName());
                 for (int i = 0; i < filter.getNumValues(); i++) {
-                    jSONObject.put("label" + i, filter.getLabel(i));
-                    jSONObject.put("value" + i, filter.getValue(i));
+                    jSONObjectFilter.put("label" + i, filter.getLabel(i));
+                    jSONObjectFilter.put("value" + i, filter.getValue(i));
 
                 }
+
+                /* add filter to favorite */
+                newFilterArray.put(jSONObjectFilter.toString());
             }
+
+            /* add new favorite to favorites list */
+            jsonObject.put(favoritesTitle, newFilterArray);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        /* favorites array to String */
+        favoritesString = jsonObject.toString();    // not sure
+
+
+        /* add store favorites String sharedPreferences */
+        prefs.edit().putString("Favorites", favoritesString).commit();      // not sure
+
+
+
 
 //        String favorites_array [][][]; // parse from json
 //        int favorite_index = 1;
