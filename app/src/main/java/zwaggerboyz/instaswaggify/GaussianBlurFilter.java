@@ -14,7 +14,7 @@ public class GaussianBlurFilter extends AbstractFilterClass {
 
     public GaussianBlurFilter() {
         mID = FilterID.GAUSSIAN;
-        mName = "Guassian Blur";
+        mName = "Gaussian Blur";
         mNumValues = 1;
 
         mLabels = new String[] {
@@ -40,7 +40,7 @@ public class GaussianBlurFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.setRadius(normalizeValue(mValues[0], 5.f, 20.f));
+        mScript.setRadius(normalizeValue(mValues[0], 2.f, 20.f));
     }
 
     @Override

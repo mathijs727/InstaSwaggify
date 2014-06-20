@@ -5,23 +5,18 @@ import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
 /**
- * Created by Matthijs on 17-6-2014.
+ * Created by Matthijs on 20-6-2014.
  */
-public class SepiaFilter extends AbstractFilterClass {
-    ScriptC_sepia mScript;
+public class InvertColorsFilter extends AbstractFilterClass {
+    ScriptC_invert_colors mScript;
 
-    public SepiaFilter() {
-        mID = FilterID.SEPIA;
-        mName = "Sepia";
-        mNumValues = 2;
+    public InvertColorsFilter() {
+        mName = "Invert";
+        mNumValues = 0;
 
         mLabels = new String[] {
-                "Intensity",
-                "Depth"
         };
         mValues = new int[] {
-                10,
-                20
         };
     }
 
@@ -29,7 +24,7 @@ public class SepiaFilter extends AbstractFilterClass {
     public void setRS(RenderScript rs) {
         if (mRS != rs) {
             mRS = rs;
-            mScript = new ScriptC_sepia(mRS);
+            mScript = new ScriptC_invert_colors(mRS);
         }
     }
 
@@ -38,14 +33,11 @@ public class SepiaFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_intensity(normalizeValue(mValues[0], 0.05f, 0.4f));
-        mScript.set_depth(normalizeValue(mValues[1], 0.f, 0.5f));
-        mScript.invoke_calculateVector();
     }
 
     @Override
     public Script.KernelID getKernelId() {
-        return mScript.getKernelID_sepia();
+        return mScript.getKernelID_invert();
     }
 
     @Override

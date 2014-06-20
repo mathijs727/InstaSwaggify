@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:orientation="horizontal"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:gravity="right">
 
     <ImageView
         android:id="@+id/list_item_filter_drag_handle"

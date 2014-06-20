@@ -13,17 +13,17 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 public class SoundThread extends Thread {
 
-    MediaPlayer audiofile;
+    MediaPlayer audioFile;
 
     public SoundThread (Context context, int resourceID) {
         MediaPlayer mp = MediaPlayer.create(context, resourceID);
         mp.setLooping(false);
-        audiofile = mp;
+        audioFile = mp;
     }
 
     public void run() {
-        audiofile.start();
-        while(audiofile.isPlaying());
-        audiofile.release();
+        audioFile.start();
+        while(audioFile.isPlaying());
+        audioFile.release();
     }
 }

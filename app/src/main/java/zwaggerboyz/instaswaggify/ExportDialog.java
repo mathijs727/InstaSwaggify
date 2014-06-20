@@ -99,7 +99,7 @@ public class ExportDialog extends DialogFragment {
                     }
                 });
 
-        builder.setTitle("Export Picture");
+        builder.setTitle(R.string.export_dialog_title);
         setListeners(view);
 
         return builder.create();

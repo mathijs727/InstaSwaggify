@@ -3,6 +3,7 @@ package zwaggerboyz.instaswaggify;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -214,6 +215,12 @@ public class FilterListAdapter extends BaseAdapter {
             case 6:
                 mItems.add(new ThresholdBlurFilter());
                 break;
+            case 7:
+                mItems.add(new NoiseFilter());
+                break;
+            case 8:
+                mItems.add(new InvertColorsFilter());
+                break;
             default:
                 break;
         }
@@ -258,7 +265,7 @@ public class FilterListAdapter extends BaseAdapter {
         mListener.updateImage(mItems);
     }
 
-    public void add_favorite() {
+    public void add_favorite(String favoritesTitle) {
 
         /* parse current favorite list to JSONArray */
         SharedPreferences prefs = mActivity.getPreferences(Context.MODE_PRIVATE);
@@ -266,19 +273,17 @@ public class FilterListAdapter extends BaseAdapter {
         JSONObject jsonObject = null;
         JSONArray jsonFavorites = null;
 
-        // TODO: parse favoritesString to JSONObject
-
         try {
-            jsonObject = new JSONObject(favoritesString);
-            jsonFavorites = jsonObject.getJSONArray(favoritesString);
+            if (favoritesString.equals("")) {
+                jsonObject = new JSONObject();
+            }
+            else {
+                jsonObject = new JSONObject(favoritesString);
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
-        /* ask user for new favorite's name */
-        String favoritesTitle = "Fav" + Integer.toString(jsonFavorites.length());
-
 
         /* create array of current filter states */
         try {
@@ -288,9 +293,7 @@ public class FilterListAdapter extends BaseAdapter {
                 jSONObjectFilter = new JSONObject();
                 jSONObjectFilter.put("name", filter.getName());
                 for (int i = 0; i < filter.getNumValues(); i++) {
-                    jSONObjectFilter.put("label" + i, filter.getLabel(i));
                     jSONObjectFilter.put("value" + i, filter.getValue(i));
-
                 }
 
                 /* add filter to favorite */
@@ -305,53 +308,10 @@ public class FilterListAdapter extends BaseAdapter {
         }
 
         /* favorites array to String */
-        favoritesString = jsonObject.toString();    // not sure
-
+        favoritesString = jsonObject.toString();
 
         /* add store favorites String sharedPreferences */
-        prefs.edit().putString("Favorites", favoritesString).commit();      // not sure
-
-
-
-
-//        String favorites_array [][][]; // parse from json
-//        int favorite_index = 1;
-//        String favorite_name = "Schwarzenegger";
-//        int size = mItems.size();
-//        AbstractFilterClass.FilterID id;
-//        int value1 = 0;
-//        int value2 = 0;
-//
-//        /* open or create file */
-//        // filename: R.raw.fav
-//
-//
-//
-//        for (int i = 0; i < size; i++) {
-//
-//            /* get filter id */
-//            id = mItems.get(i).getID();
-//
-//            /* get slider values */
-//            switch (mItems.get(i).getNumValues()) {
-//                case 1:
-//                    value1 = mItems.get(i).getValue(0);
-//                    break;
-//                case 2:
-//                    value1 = mItems.get(i).getValue(0);
-//                    value2 = mItems.get(i).getValue(1);
-//                    break;
-//                default:
-//                    break;
-//            }
-//            favorites_array[favorite_index][i][0] = id.toString();
-//            favorites_array[favorite_index][i][1] = Integer.toString(value1);
-//            favorites_array[favorite_index][i][2] = Integer.toString(value2);
-//        }
-//
-//        JSONArray mJSONArray = new JSONArray(Arrays.asList(favorites_array));
-
-
+        prefs.edit().putString("Favorites", favoritesString).commit();
     }
 }
 

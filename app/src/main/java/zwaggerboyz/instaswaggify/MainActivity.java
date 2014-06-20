@@ -194,6 +194,9 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
              * Save new preset
              */
             case R.id.action_add_favorite: {
+                SavePresetDialog dialog = new SavePresetDialog();
+                dialog.setAdapter(mAdapter);
+                dialog.show(getFragmentManager(), "Save Preset");
                 return true;
             }
 
@@ -207,7 +210,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 exportDialog.show(getFragmentManager(), "Export Dialog");
                 return true;
 
-                //save_picture(mCanvasView.getBitmap());
+                //save_picture(mCanvasView.getBitmap());   nog nodig?
             }
 
             case R.id.action_clear: {
@@ -379,7 +382,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         catch (Exception e) {
 
             Toast.makeText(this,
-                    "An error occurred while exported",
+                    "An error occurred while exporting",
                     Toast.LENGTH_SHORT).show();
 
             e.printStackTrace();
@@ -396,7 +399,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(this,
-                        "An error occurred while exported",
+                        "An error occurred while exporting",
                         Toast.LENGTH_SHORT).show();
             }
         }
