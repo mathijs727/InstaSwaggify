@@ -21,7 +21,7 @@
     <string name="export_dialog_title">Export Dialog</string>
     <string name="export_dialog_text">Export Quality</string>
     <string name="share_dialog_title">Share Picture</string>
-    <string name="filter_dialog_title">Share Picture</string>
+    <string name="filter_dialog_title">Select Filter</string>
 
     <string name="compression_prompt">Choose a compression</string>
 
