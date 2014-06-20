@@ -194,21 +194,27 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
              * Save new preset
              */
             case R.id.action_add_favorite: {
-                break;
+                return true;
             }
 
             case R.id.action_undo: {
                 mAdapter.undo();
+                return true;
             }
 
             case R.id.action_save_picture: {
                 ExportDialog exportDialog = new ExportDialog();
                 exportDialog.show(getFragmentManager(), "Export Dialog");
+                return true;
 
                 //save_picture(mCanvasView.getBitmap());
             }
-        }
 
+            case R.id.action_clear: {
+                mAdapter.clearFilters();
+                return true;
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 

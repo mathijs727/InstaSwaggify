@@ -251,6 +251,13 @@ public class FilterListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void clearFilters() {
+        updateBuffer();
+        mItems.clear();
+        notifyDataSetChanged();
+        mListener.updateImage(mItems);
+    }
+
     public void add_favorite() {
 
         /* parse current favorite list to JSONArray */
