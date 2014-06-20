@@ -22,8 +22,10 @@
         <TextView
             android:id="@+id/list_item_filter_title"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:text="Saturation Filter (placeholder-title)"/>
+            android:layout_height="30dp"
+            android:text="Placeholder Filter"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center_vertical"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +37,8 @@
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="value 1 etc."/>
+                android:text="value 1 etc."
+                android:gravity="center_vertical"/>
 
             <SeekBar
                 android:id="@+id/list_item_filter_seekbar1"
@@ -54,7 +57,8 @@
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="value 2 etc."/>
+                android:text="value 2 etc."
+                android:gravity="center_vertical"/>
 
             <SeekBar
                 android:id="@+id/list_item_filter_seekbar2"
@@ -74,7 +78,8 @@
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="value 2 etc."/>
+                android:text="value 3 etc."
+                android:gravity="center_vertical"/>
 
             <SeekBar
                 android:id="@+id/list_item_filter_seekbar3"
