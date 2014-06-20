@@ -28,7 +28,12 @@ public class FavoritesDialog extends DialogFragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        getDialog().setTitle("Select preset");
+        if (getFavorites().length > 0) {
+            getDialog().setTitle("Select preset");
+        }
+        else {
+            getDialog().setTitle("No favorites yet");
+        }
 
         /**
          * Setting up ListView and the adapter
@@ -37,13 +42,8 @@ public class FavoritesDialog extends DialogFragment {
         final ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
 
         /* show favorites if available */
-        if (getFavorites().length > 0) {
-            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());
-            listView.setAdapter(adapter);
-        }
-        else {
-            // TODO: write something like "No filters! Add some (hit the star)!"
-        }
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());
+        listView.setAdapter(adapter);
 
         /**
          * List item listeners
