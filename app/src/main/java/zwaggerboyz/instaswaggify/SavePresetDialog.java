@@ -54,7 +54,7 @@ public class SavePresetDialog extends DialogFragment {
                     }
                 });
 
-        builder.setTitle("Export Picture");
+        builder.setTitle(R.string.preset_dialog_title);
         return builder.create();
     }
 }
