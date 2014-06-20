@@ -14,7 +14,7 @@ public class GaussianBlurFilter extends AbstractFilterClass {
 
     public GaussianBlurFilter() {
         mID = FilterID.GAUSSIAN;
-        mName = "Guassian Blur";
+        mName = "Gaussian Blur";
         mNumValues = 1;
 
         mLabels = new String[] {
