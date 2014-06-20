@@ -6,23 +6,41 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by zeta on 6/19/14.
  */
 
 public class ExportDialog extends DialogFragment {
-    int quality = 60;
-    Bitmap.CompressFormat compression= Bitmap.CompressFormat.JPEG;
-    SeekBar qualitySlider;
-    Spinner compressionSpinner;
+    private boolean notifySucces = true;
+    protected int quality = 60;
+    CanvasView mCanvasView;
+    protected Bitmap.CompressFormat compression= Bitmap.CompressFormat.JPEG;
+
+    public void setNotifySucces(boolean notify) {
+        notifySucces = notify;
+    }
+
+    public void setmCanvasView(CanvasView canvas){
+        mCanvasView = canvas;
+    }
 
     protected void setQuality(int quality) {
         this.quality = quality;
@@ -73,6 +91,10 @@ public class ExportDialog extends DialogFragment {
         });
     }
 
+    protected void acceptHandler() {
+        save_picture();
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -89,7 +111,7 @@ public class ExportDialog extends DialogFragment {
                 .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        ((MainActivity)getActivity()).save_picture(compression, quality);
+                        acceptHandler();
                     }
                 })
 
@@ -104,4 +126,148 @@ public class ExportDialog extends DialogFragment {
 
         return builder.create();
     }
+
+    protected Uri save_picture() {
+        File folder, file;
+        FileOutputStream output;
+        String state = Environment.getExternalStorageState();
+        String extension;
+        Uri fileUri;
+
+        Bitmap bitmap = mCanvasView.getBitmap();
+        boolean externalIsAvailable = true;
+        Toast errorToast = Toast.makeText(getActivity(),
+                "Error while exporting image.",
+                Toast.LENGTH_SHORT);
+
+        if(bitmap == null) {
+            return null;
+        }
+
+        if(compression == Bitmap.CompressFormat.JPEG) {
+            extension = ".jpg";
+        }
+        else {
+            extension = ".png";
+        }
+
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            externalIsAvailable = false;
+            Toast.makeText(getActivity(),
+                    "No SD-card available",
+                    Toast.LENGTH_SHORT).show();
+
+            return null;
+        }
+
+        /* Try to open a file to export the picture
+         */
+        try {
+
+            /* filename is made with a timestamp */
+            SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
+            String date = s.format(new Date());
+
+            if (!externalIsAvailable) {
+                folder = new File("InstasSwaggify");
+            }
+            else {
+                folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify");
+            }
+
+            if (folder.exists() == false) {
+                if (folder.mkdirs() == false) {
+                    Log.i("Take Photo", "no directory created");
+                    errorToast.show();
+                    return null;
+                }
+            }
+
+            folder = new File(folder, "Swaggified pictures");
+            if (folder.exists() == false) {
+                if (folder.mkdirs() == false) {
+                    Log.i("Take Photo", "no directory created");
+                    errorToast.show();
+                    return null;
+                }
+            }
+
+            file = new File(folder, date + extension);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            else {
+                Toast.makeText(getActivity(),
+                        "File Already exists",
+                        Toast.LENGTH_SHORT).show();
+
+                Log.i("Pevid", "create file failed");
+                return null;
+            }
+
+            fileUri = Uri.fromFile(file);
+            output = new FileOutputStream(file);
+        }
+
+        catch (Exception e) {
+            errorToast.show();
+            e.printStackTrace();
+            Log.e("Error opening histogram output stream", e.toString());
+            return null;
+
+        }
+
+        try {
+            /* The media scanner has to scan the newly made image, for it to be visible
+             * in the pictures folder.
+             */
+
+            bitmap.compress(compression, quality, output);
+
+            MediaScannerConnection.scanFile(getActivity(),
+                    new String[]{file.toString()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.i("ExternalStorage", "Scanned " + path + ":");
+                            Log.i("ExternalStorage", "-> uri=" + uri);
+                        }
+                    }
+            );
+
+            if(notifySucces)
+                Toast.makeText(getActivity(), "Picture successfully exported", Toast.LENGTH_SHORT).show();
+
+        }
+
+        catch (Exception e) {
+
+            Toast.makeText(getActivity(),
+                    "An error occurred while exporting",
+                    Toast.LENGTH_SHORT).show();
+
+            e.printStackTrace();
+            Log.e("Error writing histogram picture", e.toString());
+        }
+
+        finally {
+
+            try {
+                output.flush();
+                output.close();
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(),
+                        "An error occurred while exporting",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return fileUri;
+    }
+
+
 }

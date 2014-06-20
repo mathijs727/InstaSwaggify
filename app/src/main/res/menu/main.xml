@@ -62,6 +62,10 @@
         android:title="@string/action_share"
         android:icon="@drawable/ic_action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:actionProviderClass=
+            "android.widget.ShareActionProvider"
+        android:showAsAction="ifRoom" />
+
+/>
 
 </menu>
