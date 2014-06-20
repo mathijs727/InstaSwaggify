@@ -57,15 +57,14 @@ public class CanvasView extends View  {
         canvas.drawBitmap(bitmap, null, destination, null );
 
         for (CanvasDraggableItem picture : pictures) {
-            if (picture != null) {
-                Rect pictureDestination = new Rect (
-                    (int)(destination.left + destination.width() * picture.getLeft()),
-                    (int)(destination.top + destination.height() * picture.getTop()),
-                    (int)(destination.left + destination.width() * picture.getRight()),
-                    (int)(destination.top + destination.height() * picture.getBottom())
-                    );
-                canvas.drawBitmap(picture.getBitmap(), null, pictureDestination, null);
-            }
+            Rect pictureDestination = new Rect (
+                (int)(destination.left + destination.width() * picture.getLeft()),
+                (int)(destination.top + destination.height() * picture.getTop()),
+                (int)(destination.left + destination.width() * picture.getRight()),
+                (int)(destination.top + destination.height() * picture.getBottom())
+                );
+            canvas.drawBitmap(picture.getBitmap(), null, pictureDestination, null);
+
         }
     }
 
@@ -123,7 +122,7 @@ public class CanvasView extends View  {
         selected = null;
 
         for (CanvasDraggableItem picture : pictures) {
-            Log.i("IK BEN ER NOG", picture.getLeft() + " : " + picture.getRight());
+            Log.i("IK BEN ER NOG", picture.getLeft() + " : " + picture.getTop());
         }
     }
 
@@ -134,6 +133,11 @@ public class CanvasView extends View  {
 
     public Bitmap getBitmap () {
         return bitmap;
+    }
+
+    public void resetDestination () {
+        destination = null;
+        this.invalidate();
     }
 }
 
