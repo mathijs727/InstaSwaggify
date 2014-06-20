@@ -30,7 +30,10 @@ uchar4 __attribute__((kernel)) saturation(uchar4 in)
     float4 f4 = rsUnpackColor8888(in);
     float3 result = dot(f4.rgb, gMonoMult);
     result = mix(result, f4.rgb, saturationValue);
-
+    if (result.r > 1.0 | result.g > 1.0 | result.b > 1.0) {
+        float scale = 1 / fmax(result.r, fmax(result.g, result.b));
+        result = scale*result;
+    }
     return rsPackColorTo8888(result);
 }
 
