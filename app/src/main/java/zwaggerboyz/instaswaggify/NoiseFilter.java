@@ -18,7 +18,7 @@ public class NoiseFilter extends AbstractFilterClass {
                 "noise"
         };
         mValues = new int[] {
-                10
+                20
         };
     }
 
@@ -35,7 +35,7 @@ public class NoiseFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_noiseValue(normalizeValue(mValues[0], 0.02f, 1.f));
+        mScript.set_noiseValue(normalizeValue(mValues[0], 0.f, 0.25f));
     }
 
     @Override

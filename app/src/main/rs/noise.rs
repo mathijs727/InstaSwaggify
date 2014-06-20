@@ -30,6 +30,7 @@ uchar4 __attribute__((kernel)) noise(uchar4 in, uint32_t x, uint32_t y) {
                     noiseValue * 2 * (rsRand(1.f) - 0.5f) ,
                     noiseValue * 2 * (rsRand(1.f) - 0.5f)};
     float3 result = f4.rgb + f3;
+    result = clamp(result, 0.f, 1.f);
     return rsPackColorTo8888(result);
 
 }
