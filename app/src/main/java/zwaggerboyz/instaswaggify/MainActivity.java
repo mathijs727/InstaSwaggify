@@ -194,7 +194,9 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
              * Save new preset
              */
             case R.id.action_add_favorite: {
-                mAdapter.add_favorite();
+                SavePresetDialog dialog = new SavePresetDialog();
+                dialog.setAdapter(mAdapter);
+                dialog.show(getFragmentManager(), "Save Preset");
                 return true;
             }
 
