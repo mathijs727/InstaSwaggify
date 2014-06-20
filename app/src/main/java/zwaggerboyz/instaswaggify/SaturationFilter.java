@@ -37,7 +37,7 @@ public class SaturationFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_saturationValue(normalizeValue(mValues[0], 0.f, 1.f));
+        mScript.set_saturationValue(normalizeValue(mValues[0], 0.f, 2.f));
     }
 
     @Override

@@ -265,6 +265,9 @@ public class FilterListAdapter extends BaseAdapter {
             case 7:
                 mItems.add(new InvertColorsFilter());
                 break;
+            case 8:
+                mItems.add(new ColorizeFilter());
+                break;
             default:
                 break;
         }
