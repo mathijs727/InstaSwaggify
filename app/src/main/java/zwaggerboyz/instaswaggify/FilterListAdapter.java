@@ -215,6 +215,12 @@ public class FilterListAdapter extends BaseAdapter {
             case 6:
                 mItems.add(new ThresholdBlurFilter());
                 break;
+            case 7:
+                mItems.add(new NoiseFilter());
+                break;
+            case 8:
+                mItems.add(new InvertColorsFilter());
+                break;
             default:
                 break;
         }

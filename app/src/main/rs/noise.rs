@@ -18,14 +18,18 @@
 #pragma rs java_package_name(zwaggerboyz.instaswaggify)
 #pragma rs_fp_relaxed
 
-const static float3 f3 = {1, 1, 1};
+float noiseValue = 0.f;
 
 /*
-RenderScript kernel that inverts the colors.
+RenderScript kernel that adds random noise.
 */
 
-uchar4 __attribute__((kernel)) invert(uchar4 in, uint32_t x, uint32_t y) {
+uchar4 __attribute__((kernel)) noise(uchar4 in, uint32_t x, uint32_t y) {
     float4 f4 = rsUnpackColor8888(in);
-    float3 result =  f3 - f4.rgb;
+    float3 f3 = {   noiseValue * 2 * (rsRand(1.f) - 0.5f) ,
+                    noiseValue * 2 * (rsRand(1.f) - 0.5f) ,
+                    noiseValue * 2 * (rsRand(1.f) - 0.5f)};
+    float3 result = f4.rgb + f3;
     return rsPackColorTo8888(result);
+
 }

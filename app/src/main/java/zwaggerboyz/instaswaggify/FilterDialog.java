@@ -17,7 +17,7 @@ import java.util.Arrays;
  * Created by scoud on 18-6-14.
  */
 public class FilterDialog extends DialogFragment {
-    private String[] filters = {"Brightness", "Contrast", "Gaussian", "Rotation", "Saturation", "Sepia", "Threshold"};
+    private String[] filters = {"Brightness", "Contrast", "Gaussian", "Rotation", "Saturation", "Sepia", "Threshold", "Noise", "Invert Colors"};
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
