@@ -16,10 +16,12 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends Activity implements FilterListAdapter.FilterListInterface {
+    private ShareActionProvider mShareActionProvider;
     private DragSortListView mListView;
     private CanvasView mCanvasView;
     private RSFilterHelper mRSFilterHelper;
@@ -207,10 +210,39 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
             case R.id.action_save_picture: {
                 ExportDialog exportDialog = new ExportDialog();
+                exportDialog.setmCanvasView(mCanvasView);
                 exportDialog.show(getFragmentManager(), "Export Dialog");
                 return true;
 
-                //save_picture(mCanvasView.getBitmap());   nog nodig?
+            }
+
+            case R.id.action_share: {
+
+/*                Bitmap icon = mCanvasView.getBitmap();
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
+
+                try {
+                    f.createNewFile();
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
+                startActivity(Intent.createChooser(share, "Share Image"));*/
+                ShareDialog dialog = new ShareDialog();
+                dialog.setmCanvasView(mCanvasView);
+                dialog.setNotifySucces(false);
+
+                dialog.show(getFragmentManager(), "Share Dialog");
+
+                return true;
+
             }
 
             case R.id.action_clear: {
@@ -420,6 +452,12 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     @Override
     public void updateImage(List<IFilter> filters) {
         mRSFilterHelper.generateBitmap(filters, this);
+    }
+
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 }
 
