@@ -139,6 +139,10 @@ public class CanvasView extends View  {
         destination = null;
         this.invalidate();
     }
+
+    public void addDraggable (CanvasDraggableItem item) {
+        pictures.add(item);
+    }
 }
 
 

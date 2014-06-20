@@ -90,11 +90,13 @@ public class FilterListAdapter extends BaseAdapter {
                 viewHolder.slider2Seekbar.setVisibility(View.GONE);
                 break;
             case 1:
-                viewHolder.label2TextView.setVisibility(View.GONE);
-                viewHolder.slider2Seekbar.setVisibility(View.GONE);
-
+                viewHolder.label1TextView.setVisibility(View.VISIBLE);
+                viewHolder.slider1Seekbar.setVisibility(View.VISIBLE);
                 viewHolder.label1TextView.setText(item.getLabel(0));
                 viewHolder.slider1Seekbar.setProgress(item.getValue(0));
+
+                viewHolder.label2TextView.setVisibility(View.GONE);
+                viewHolder.slider2Seekbar.setVisibility(View.GONE);
                 break;
             case 2:
                 viewHolder.label1TextView.setVisibility(View.VISIBLE);
@@ -282,9 +284,6 @@ public class FilterListAdapter extends BaseAdapter {
             e.printStackTrace();
         }
 
-        ///* ask user for new favorite's name */
-        //String favoritesTitle = "Fav" + Integer.toString(jsonObject.length());
-
         /* create array of current filter states */
         try {
             JSONArray newFilterArray = new JSONArray();
@@ -309,7 +308,6 @@ public class FilterListAdapter extends BaseAdapter {
 
         /* favorites array to String */
         favoritesString = jsonObject.toString();
-        Log.e("FilterListAdapter", "JSONstring: " + favoritesString);
 
         /* add store favorites String sharedPreferences */
         prefs.edit().putString("Favorites", favoritesString).commit();
