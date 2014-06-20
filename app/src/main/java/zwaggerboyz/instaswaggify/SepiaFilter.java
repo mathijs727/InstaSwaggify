@@ -20,8 +20,8 @@ public class SepiaFilter extends AbstractFilterClass {
                 "Depth"
         };
         mValues = new int[] {
-                90,
-                60
+                10,
+                20
         };
     }
 
