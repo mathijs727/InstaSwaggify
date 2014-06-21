@@ -314,7 +314,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             favortiesArray = favoritesObject.getJSONArray(fav_key);
 
             for (int i = 0; i < favortiesArray.length(); i++) {
-                Log.e("MainActivity", "show favorite: " + favortiesArray.get(i));
                 jsonFilter = new JSONObject(favortiesArray.get(i).toString());
                 filterId = jsonFilter.getString("id");
                 id = AbstractFilterClass.FilterID.valueOf(filterId);
