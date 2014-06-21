@@ -108,6 +108,9 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
             /* Settings. */
             case R.id.action_settings: {
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
+                mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
+                mCanvasView.invalidate();
                 return true;
             }
 

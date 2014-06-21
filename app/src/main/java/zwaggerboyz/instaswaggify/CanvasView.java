@@ -16,30 +16,34 @@ import java.util.ArrayList;
  */
 
 public class CanvasView extends View  {
-    private Bitmap bitmap;
-    private Rect destination = null;
-    private ArrayList<CanvasDraggableItem> pictures = new ArrayList<CanvasDraggableItem>();
-    private CanvasDraggableItem selected = null;
-    private int xoffset, yoffset;
+    private Bitmap mBitmap;
+    private Rect mBackgroundRect = new Rect();
+    private ArrayList<CanvasDraggableItem> mOverlays = new ArrayList<CanvasDraggableItem>();
+    private CanvasDraggableItem mSelected = null;
+    private int mXOffset, mYOffset;
+    private double mImgScale = 1.0;
 
     private void finishConstructor() {
-        this.setOnTouchListener(new CanvasTouchListener(this));
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
-        pictures.add(new CanvasDraggableItem(bitmap, 0.45f, 0.45f, 0.55f, 0.55f));
+        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
+        //mOverlays.add(new CanvasDraggableItem(bitmap, 100, 100));
+        //mOverlays.add(new CanvasDraggableItem(bitmap, 200, 100));
     }
 
     public CanvasView(Context context) {
         super(context);
+        setOnTouchListener(new CanvasTouchListener(this));
         finishConstructor();
     }
 
     public CanvasView(Context context, AttributeSet attributes) {
         super(context, attributes);
+        setOnTouchListener(new CanvasTouchListener(this));
         finishConstructor();
     }
 
     public CanvasView(Context context, AttributeSet attributes, int style) {
         super(context, attributes, style);
+        setOnTouchListener(new CanvasTouchListener(this));
         finishConstructor();
     }
 
@@ -49,57 +53,107 @@ public class CanvasView extends View  {
 
         canvas.drawColor(R.color.background);
 
-        /* If there is no destination calculated yet, we have to calculate it now. */
-        if (destination == null) {
-            updateDestination();
-        }
+        canvas.drawBitmap(mBitmap, null, mBackgroundRect, null );
 
-        canvas.drawBitmap(bitmap, null, destination, null );
-
-        for (CanvasDraggableItem picture : pictures) {
-            Rect pictureDestination = new Rect (
-                (int)(destination.left + destination.width() * picture.getLeft()),
-                (int)(destination.top + destination.height() * picture.getTop()),
-                (int)(destination.left + destination.width() * picture.getRight()),
-                (int)(destination.top + destination.height() * picture.getBottom())
-                );
-            canvas.drawBitmap(picture.getBitmap(), null, pictureDestination, null);
-
+        for (CanvasDraggableItem overlay : mOverlays) {
+            canvas.drawBitmap(overlay.getBitmap(), null, overlay.getRect(), null);
         }
     }
 
-    private void updateDestination () {
-        int canvasHeight = getHeight();
-        int canvasWidth = getWidth();
-        int bitmapHeight = bitmap.getHeight();
-        int bitmapWidth = bitmap.getWidth();
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
 
-        if (((float) bitmapHeight / (float) bitmapWidth) < ((float) canvasHeight / (float) canvasWidth)) {
-            float scale = (float) canvasWidth / (float) bitmapWidth;
-            yoffset = Math.round((canvasHeight - (bitmapHeight * scale)) * 0.5f);
-            xoffset = 0;
-            destination = new Rect(0, yoffset, canvasWidth, canvasHeight - yoffset);
-        }
-        else if (((float) bitmapHeight / (float) bitmapWidth) > ((float) canvasHeight / (float) canvasWidth)) {
-            float scale = (float) canvasHeight / (float) bitmapHeight;
-            xoffset = Math.round((canvasWidth - (bitmapWidth * scale)) * 0.5f);
-            yoffset = 0;
-            destination = new Rect(xoffset, 0, canvasWidth - xoffset, canvasHeight);
-        }
-        else {
-            xoffset = 0;
-            yoffset = 0;
-            destination = new Rect(0, 0, canvasWidth, canvasHeight);
-        }
+        recalculateSize(w, h, false);
     }
 
-    public void onTouchDown (float x, float y) {
-        float relativex = (x - xoffset) / (getWidth() - 2.0f * xoffset);
-        float relativey = (y - yoffset) / (getHeight() - 2.0f * yoffset);
+    public void recalculateSize(int width, int height, boolean newImage) {
+        int centreX = width / 2;
+        int centreY = height / 2;
 
-        for (CanvasDraggableItem picture : pictures) {
-            if (picture.isWithinBounds(relativex, relativey)) {
-                selected = picture;
+        int left, top, right, bot;
+
+        double imgXScale = (double)width / mBitmap.getWidth();
+        double imgYScale = (double)height / mBitmap.getHeight();
+
+        if (imgXScale > imgYScale) {
+            top = 0;
+            bot = height;
+            left = centreX - (int)(mBitmap.getWidth() * imgYScale / 2.0);
+            right = width - left;
+
+            Rect rect;
+            int cX, cY, nX, nY;
+            for (CanvasDraggableItem overlay : mOverlays) {
+                rect = overlay.getRect();
+                cX = rect.centerX() - mXOffset;
+                cY = rect.centerY() - mYOffset;
+
+                nX = (int)(cX / mImgScale * imgYScale) + left;
+                nY = (int)(cY / mImgScale * imgYScale) + top;
+
+                if (!newImage) {
+                    overlay.move(nX, nY);
+                    overlay.resizeImage(imgYScale / mImgScale);
+                }
+            }
+            mImgScale = imgYScale;
+        } else {
+            left = 0;
+            right = width;
+            top = centreY - (int)(mBitmap.getHeight() * imgXScale / 2.0);
+            bot = height - top;
+
+            Rect rect;
+            int cX, cY, nX, nY;
+            for (CanvasDraggableItem overlay : mOverlays) {
+                rect = overlay.getRect();
+                cX = rect.centerX() - mXOffset;
+                cY = rect.centerY() - mYOffset;
+
+                nX = (int)(cX / mImgScale * imgXScale) + left;
+                nY = (int)(cY / mImgScale * imgXScale) + top;
+
+                if (!newImage) {
+                    overlay.move(nX, nY);
+                    overlay.resizeImage(imgXScale / mImgScale);
+                }
+            }
+            mImgScale = imgXScale;
+        }
+
+        if (newImage) {
+            int x, y;
+            for (CanvasDraggableItem overlay : mOverlays) {
+                x = overlay.getRect().centerX();
+                y = overlay.getRect().centerY();
+
+                if (x < left)
+                    x = left;
+                if (x > right)
+                    x = right;
+                if (y < top)
+                    y = top;
+                if (y > bot)
+                    y = bot;
+
+                overlay.move(x, y);
+            }
+        }
+
+        mXOffset = left;
+        mYOffset = top;
+        mBackgroundRect.set(left, top, right, bot);
+    }
+
+    public void onTouchDown (int x, int y) {
+        /* Loop through the items backwards because the last item in the list is the top most item */
+        int length = mOverlays.size();
+        CanvasDraggableItem overlay;
+        for (int i = length - 1; i >= 0; i--) {
+            overlay = mOverlays.get(i);
+            if (overlay.isWithinBounds(x, y)) {
+                mSelected = overlay;
                 return;
             }
         }
@@ -107,41 +161,39 @@ public class CanvasView extends View  {
         this.invalidate();
     }
 
-    public void onTouchMove (float x, float y) {
-        if (selected != null) {
-            float relativex = (x - xoffset) / (getWidth() - 2.0f * xoffset);
-            float relativey = (y - yoffset) / (getHeight() - 2.0f * yoffset);
+    public void onTouchMove (int x, int y) {
+        if (x < mXOffset ||
+            x > (getWidth() - mXOffset) ||
+            y < mYOffset ||
+            y > (getHeight() - mYOffset))
+            return;
 
-            selected.move(relativex, relativey);
+        if (mSelected != null) {
+            mSelected.move(x, y);
         }
 
         this.invalidate();
     }
 
-    public void onTouchUp (float x, float y) {
-        selected = null;
-
-        for (CanvasDraggableItem picture : pictures) {
-            Log.i("IK BEN ER NOG", picture.getLeft() + " : " + picture.getTop());
-        }
+    public void onTouchUp (int x, int y) {
+        mSelected = null;
     }
 
-    public void setBitmap (Bitmap newBitmap) {
-        bitmap = newBitmap;
-        destination = null;
+    public void setBitmap (Bitmap bitmap) {
+        mBitmap = bitmap;
+
+        if (getWidth() != 0) {
+            recalculateSize(getWidth(), getHeight(), true);
+        }
+        Log.v("CanvasView", "Canvas width: " + getWidth());
     }
 
     public Bitmap getBitmap () {
-        return bitmap;
-    }
-
-    public void resetDestination () {
-        destination = null;
-        this.invalidate();
+        return mBitmap;
     }
 
     public void addDraggable (CanvasDraggableItem item) {
-        pictures.add(item);
+        mOverlays.add(item);
     }
 }
 

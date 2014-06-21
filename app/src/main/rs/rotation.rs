@@ -47,7 +47,7 @@ uchar4 __attribute__((kernel)) rotation(uint32_t x, uint32_t y)
     float trans_x = trans.x;
     float trans_y = trans.y;
 
-    if (trans_x > 0 && trans_x < imageWidth && trans_y > 0 && trans_y < imageHeight) {
+    if (trans_x >= 0 && trans_x <= imageWidth && trans_y >= 0 && trans_y <= imageHeight) {
         return rsGetElementAt_uchar4(input, trans_x, trans_y);
     } else {
         return rsPackColorTo8888(1.0f, 1.0f, 1.0f);

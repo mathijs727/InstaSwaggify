@@ -7,50 +7,38 @@ import android.graphics.Rect;
  * Created by Peter on 19-6-2014.
  */
 public class CanvasDraggableItem {
-    private float left, top, right, bottom;
-    private Bitmap bitmap;
+    private Rect mRect;
+    private int mHalfWidth, mHalfHeight;
+    private Bitmap mBitmap;
 
-    public CanvasDraggableItem (Bitmap bitmap, float left, float top, float right, float bottom) {
-        this.bitmap = bitmap;
-        this.left = left;
-        this.right = right;
-        this.top = top;
-        this.bottom = bottom;
+    public CanvasDraggableItem (Bitmap bitmap, int x, int y) {
+        mBitmap = bitmap;
+        mHalfWidth = bitmap.getWidth() / 2;
+        mHalfHeight = bitmap.getHeight() / 2;
+        mRect = new Rect(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
     }
 
-    public void move (float newX, float newY) {
-        if (newX >= 0 && newX <= 1 && newY >= 0 && newY <= 1) {
-            float width = right - left;
-            float height = top - bottom;
-
-            left = newX - 0.5f * width;
-            right = newX + 0.5f * width;
-            top = newY - 0.5F * height;
-            bottom = newY + 0.5f * height;
-        }
+    public void move (int x, int y) {
+        mRect.set(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
     }
 
-    public float getLeft() {
-        return left;
+    public boolean isWithinBounds (int x, int y) {
+        return mRect.contains(x,  y);
     }
 
-    public float getTop() {
-        return top;
-    }
-
-    public float getRight() {
-        return right;
-    }
-
-    public float getBottom() {
-        return bottom;
-    }
-
-    public boolean isWithinBounds (float x, float y) {
-        return (x >= left && x <= right && y >= top && y <= bottom);
+    public Rect getRect() {
+        return mRect;
     }
 
     public Bitmap getBitmap() {
-        return bitmap;
+        return mBitmap;
+    }
+
+    public void resizeImage(double scale) {
+        mHalfWidth = (int) (mHalfWidth * scale);
+        mHalfHeight = (int) (mHalfHeight * scale);
+
+        /* Make sure the rectangle gets resized */
+        move(mRect.centerX(), mRect.centerY());
     }
 }

@@ -19,15 +19,15 @@ public class CanvasTouchListener implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                mCanvasView.onTouchDown(event.getX(), event.getY());
+                mCanvasView.onTouchDown((int)event.getX(), (int)event.getY());
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                mCanvasView.onTouchMove(event.getX(), event.getY());
+                mCanvasView.onTouchMove((int)event.getX(), (int)event.getY());
                 return true;
 
             case MotionEvent.ACTION_UP:
-                mCanvasView.onTouchUp(event.getX(), event.getY());
+                mCanvasView.onTouchUp((int)event.getX(), (int)event.getY());
                 return true;
 
             default:
