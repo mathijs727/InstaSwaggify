@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,17 +17,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.mobeta.android.dslv.DragSortListView;
 
-import java.io.ByteArrayOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,10 +32,12 @@ import java.util.List;
 
 public class MainActivity extends Activity implements FilterListAdapter.FilterListInterface {
     private ShareActionProvider mShareActionProvider;
-    private DragSortListView mListView;
+    private ViewSwitcher mViewSwitcher;
+    private DragSortListView mListView, mObjectView;
+    private FilterListAdapter mFilterAdapter;
+    private ObjectListAdapter mObjectAdapter;
     private CanvasView mCanvasView;
     private RSFilterHelper mRSFilterHelper;
-    private FilterListAdapter mAdapter;
     private DialogFragment mDialog;
     private Menu mMenu;
 
@@ -59,11 +56,16 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
         }
 
+        mViewSwitcher = (ViewSwitcher) findViewById(R.id.activity_main_viewSwitcher);
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
+        mObjectView = (DragSortListView) findViewById(R.id.activity_main_listview2);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
-        mAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mListView.setAdapter(mAdapter);
+        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
+        mListView.setAdapter(mFilterAdapter);
+
+        mObjectAdapter = new ObjectListAdapter(this, new ArrayList<IObject>());
+        mObjectView.setAdapter(mObjectAdapter);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
@@ -74,8 +76,8 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
             public void remove(int item) {
-                mAdapter.remove(item);
-                mAdapter.notifyDataSetChanged();
+                mFilterAdapter.remove(item);
+                mFilterAdapter.notifyDataSetChanged();
             }
         });
 
@@ -83,7 +85,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void drop(int from, int to) {
 
-                mAdapter.reorder(from, to);
+                mFilterAdapter.reorder(from, to);
             }
         });
 
@@ -111,6 +113,8 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
                 mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
                 mCanvasView.invalidate();
+
+                mViewSwitcher.showNext();
                 return true;
             }
 
@@ -205,13 +209,13 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
              */
             case R.id.action_add_favorite: {
                 SavePresetDialog dialog = new SavePresetDialog();
-                dialog.setAdapter(mAdapter);
+                dialog.setAdapter(mFilterAdapter);
                 dialog.show(getFragmentManager(), "Save Preset");
                 return true;
             }
 
             case R.id.action_undo: {
-                mAdapter.undo();
+                mFilterAdapter.undo();
                 return true;
             }
 
@@ -235,7 +239,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             }
 
             case R.id.action_clear: {
-                mAdapter.clearFilters();
+                mFilterAdapter.clearFilters();
                 return true;
             }
         }
@@ -251,7 +255,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap, true);
-                    updateImage(mAdapter.getItems());
+                    updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
@@ -270,7 +274,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap, true);
-                    updateImage(mAdapter.getItems());
+                    updateImage(mFilterAdapter.getItems());
                 } catch (Exception e) {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
                 }
@@ -287,7 +291,17 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
      */
     public void addFilter(int i) {
         mDialog.dismiss();
-        mAdapter.add(i);
+        if(i == 9)
+            addObject(i);
+        mFilterAdapter.add(i);
+    }
+
+    /*
+     * PLACEHOLDER
+     */
+    public void addObject(int i) {
+        mDialog.dismiss();
+        mObjectAdapter.add(0);
     }
 
     /**
@@ -295,7 +309,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
      */
     public void setFilter(String fav_key) {
 
-    //    mAdapter.clearFilters();
+    //    mFilterAdapter.clearFilters();
         SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject favoritesObject = null;
@@ -370,8 +384,8 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                         break;
                 }
             }
-            mAdapter.setmItems(filterArray);
-            mAdapter.updateList();
+            mFilterAdapter.setmItems(filterArray);
+            mFilterAdapter.updateList();
             mDialog.dismiss();
         }
         catch (Exception e) {
