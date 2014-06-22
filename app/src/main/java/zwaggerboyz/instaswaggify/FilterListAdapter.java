@@ -139,7 +139,6 @@ public class FilterListAdapter extends BaseAdapter {
                 break;
         }
 
-
         /**
          * Adds listeners to seek bars. Updates seek bar value on stop track
          */
