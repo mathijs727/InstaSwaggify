@@ -59,6 +59,10 @@ public class FilterListAdapter extends BaseAdapter {
         return position;
     }
 
+    public void setmItems(List<IFilter> new_mItems) {
+        mItems = new_mItems;
+    }
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -273,7 +277,12 @@ public class FilterListAdapter extends BaseAdapter {
                 break;
             default:
                 break;
+
         }
+        updateList();
+    }
+
+    public void updateList() {
         notifyDataSetChanged();
         mListener.updateImage(mItems);
     }
@@ -341,13 +350,13 @@ public class FilterListAdapter extends BaseAdapter {
             for (IFilter filter:mItems) {
                 jSONObjectFilter = new JSONObject();
                 jSONObjectFilter.put("id", filter.getID());
-                jSONObjectFilter.put("numValues", filter.getNumValues());
                 for (int i = 0; i < filter.getNumValues(); i++) {
                     jSONObjectFilter.put("value" + i, filter.getValue(i));
                 }
 
                 /* add filter to favorite */
                 newFilterArray.put(jSONObjectFilter.toString());
+                Log.e("FilterListAdapter", "new filter: " + jSONObjectFilter.toString());
             }
 
             /* add new favorite to favorites list */

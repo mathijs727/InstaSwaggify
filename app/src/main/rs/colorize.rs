@@ -30,5 +30,6 @@ uchar4 __attribute__((kernel)) colorize(uchar4 in, uint32_t x, uint32_t y) {
     float4 f4 = rsUnpackColor8888(in);
     float3 f3 = {redValue, greenValue, blueValue};
     float3 result =  f3 + f4.rgb;
+    result = clamp(result, 0.f, 1.f);
     return rsPackColorTo8888(result);
 }

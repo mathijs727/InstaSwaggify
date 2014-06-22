@@ -13,6 +13,7 @@ public class ColorizeFilter extends AbstractFilterClass {
     ScriptC_colorize mScript;
 
     public ColorizeFilter() {
+        mID = FilterID.COLORIZE;
         mName = "colorize";
         mNumValues = 3;
 
