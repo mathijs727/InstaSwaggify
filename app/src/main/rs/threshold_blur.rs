@@ -24,12 +24,12 @@ int imageHeight;
 
 int radius;
 
-int drop;
+float drop;
 int threshold;
-uchar strength;
+float strength;
 
 /*
- RenderScript kernel that inverets the colors.
+ * RenderScript kernel that applies a threshold blur.
  */
 
 uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
@@ -38,41 +38,36 @@ uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
     int new_y, new_x;
     float4 neighbour;
     float4 out;
-    int done = 0;
+    int x_offset, y_offset;
     float diff, dist;
 
-    uchar4 empty = {255, 0, 0, 255};
+    drop = 1.5;
 
-    radius = 10;
-    drop = 2;
-    threshold = 500;
-    strength = 2;
-
+    /* Using the colors (un)packer functions has a different effect.
+     */
     out = convert_float4(in);
 
+    /* Here a loop is needed that iteratates from -radius to radius. But renderscript doesn't support
+     * negative values in a loop, hence the 2*radius.
+     */
+    for (x_offset = 0; x_offset <= 2*radius; x_offset++) {
+        new_x = x + x_offset - radius;
+        x_offset = abs(x_offset);
 
-    for (int x_offset = -radius; x_offset <= radius; x_offset++) {
-        new_x = x + x_offset;
+        if (new_x < 0 || new_x >= imageWidth)
+            continue;
 
-        for (int y_offset = -radius; y_offset <= radius; y_offset++) {
-            new_y = y + y_offset;
+        for (y_offset = 0; y_offset <= 2*radius - x_offset; y_offset++) {
+            int condition = 0;
 
-            rsDebug("---------------", 0);
-            rsDebug("new_y >= 0 ||", new_y >= 0);
-            rsDebug("new_x >= 0 ||", new_x >= 0);
-            rsDebug("new_x < imagewidth ||", x < imageWidth);
-            rsDebug("new_y < imageHeight ||", y < imageHeight);
-            rsDebug("x_offset + y_offset <= radius ||", x_offset + y_offset <= radius);
-
-            x_offset = abs(x_offset);
+            new_y = y + y_offset - radius;
             y_offset = abs(y_offset);
-            if (   new_y >= 0
-                && new_x >= 0
-                && new_x < imageWidth
-                && new_y < imageHeight
-                && x_offset + y_offset <= radius) {
 
-                done = 1;
+            if (   new_y >= 0
+                && new_y < imageHeight
+                && x_offset + y_offset <= 2 * radius
+                ) {
+
                 neighbour = convert_float4(rsGetElementAt_uchar4(input, (uint32_t)new_x, (uint32_t)new_y));
 
                 dist = max(x_offset, y_offset);
@@ -92,13 +87,6 @@ uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
 
     }
 
-    if (done) {
-        rsDebug("is done?", 1);
-        return convert_uchar4(out);
-    }
-    else {
-        rsDebug("is done?", 0);
-        return empty;
-    }
+    return convert_uchar4(out);
 }
 

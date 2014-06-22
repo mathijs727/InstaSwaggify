@@ -14,17 +14,17 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
     public ThresholdBlurFilter() {
         mID = FilterID.THRESHOLD;
         mName = "Threshold Blur";
-        mNumValues = 2;
+        mNumValues = 3;
 
         mLabels = new String[] {
                 "Radius",
                 "Threshold",
-                "Drop",
-                "Strength"
+                "Strength",
+                "Drop"
         };
         mValues = new int[] {
-            100,
-            10,
+            4,
+            50,
             5,
             5,
         };
@@ -45,7 +45,6 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
 
     @Override
     public void setInput(Allocation allocation) {
-        Log.i("Pevid", "allocation " + allocation);
         mScript.set_input(allocation);
     }
 
@@ -53,10 +52,9 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
     public void updateInternalValues() {
         mScript.set_imageHeight(imageHeight);
         mScript.set_imageWidth(imageWidth);
-/*        mScript.set_radius((long) normalizeValue(mValues[0], 0.f, 100));
-        mScript.set_threshold((int)normalizeValue(mValues[1], 0, 100));
-        mScript.set_drop((int)normalizeValue(mValues[2], 0, 100));
-        mScript.set_strength((short)normalizeValue(mValues[3], 0, 5));*/
+        mScript.set_radius((int) normalizeValue(mValues[0], 1.f, 30));
+        mScript.set_threshold((int)normalizeValue(mValues[1], 0, 500));
+        mScript.set_strength(5f - normalizeValue(mValues[2], 0, 4.9f));
     }
 
     @Override

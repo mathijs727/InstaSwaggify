@@ -268,6 +268,9 @@ public class FilterListAdapter extends BaseAdapter {
             case 8:
                 mItems.add(new ColorizeFilter());
                 break;
+            case 9:
+                mItems.add(new ThresholdBlurFilter());
+                break;
             default:
                 break;
         }
