@@ -393,5 +393,9 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             mShareActionProvider.setShareIntent(shareIntent);
         }
     }
+
+    public List<IFilter> getAdapterList () {
+        return mAdapter.getItems();
+    }
 }
 
