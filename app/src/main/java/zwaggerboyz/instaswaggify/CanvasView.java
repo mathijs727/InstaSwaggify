@@ -24,7 +24,6 @@ public class CanvasView extends View  {
     private double mImgScale = 1.0;
 
     public ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.F;
 
     private void finishConstructor() {
         //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
@@ -58,19 +57,14 @@ public class CanvasView extends View  {
         super.onDraw(canvas);
 
 
+        canvas.save();
         canvas.drawColor(R.color.background);
 
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
         for (CanvasDraggableItem overlay : mOverlays) {
-            canvas.save();
-            if (overlay == mSelected) {
-                canvas.scale(mScaleFactor, mScaleFactor);
-            }
             canvas.drawBitmap(overlay.getBitmap(), null, overlay.getRect(), null);
-            canvas.restore();
         }
-
     }
 
     @Override
@@ -213,10 +207,16 @@ public class CanvasView extends View  {
             extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
+            if(mSelected == null) {
+                return true;
+            }
+
+            mSelected.setScaleFactor(mSelected.getScaleFactor() * detector.getScaleFactor());
 
             // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            mSelected.setScaleFactor(Math.max(0.1f, Math.min(mSelected.getScaleFactor(), 10.0f)));
+
+            mSelected.resizeImage(mSelected.getScaleFactor());
 
             invalidate();
             return true;
