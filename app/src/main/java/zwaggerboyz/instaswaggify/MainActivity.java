@@ -12,14 +12,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
-import android.widget.ViewSwitcher;
-
-import com.mobeta.android.dslv.DragSortListView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,20 +30,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends Activity implements FilterListAdapter.FilterListInterface, FilterDialog.OnAddFilterListener {
+public class MainActivity extends FragmentActivity
+        implements FilterListAdapter.FilterListInterface, OverlayListAdapter.OverlayListInterface, FilterDialog.OnAddFilterListener {
     private ShareActionProvider mShareActionProvider;
-    private ViewSwitcher mViewSwitcher;
-    private DragSortListView mListView, mObjectView;
     private FilterListAdapter mFilterAdapter;
+    private OverlayListAdapter mOverlayAdapter;
     private CanvasView mCanvasView;
+    private ViewPager mViewPager;
     private RSFilterHelper mRSFilterHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
     private ExportDialog mExportDialog;
 
     private Uri mImageUri;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
-    private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 10495800;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
+    private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +55,12 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mViewSwitcher = (ViewSwitcher) findViewById(R.id.activity_main_viewSwitcher);
         mExportDialog = new ExportDialog();
-        mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
-        mObjectView = (DragSortListView) findViewById(R.id.activity_main_listview2);
+
+
+        mViewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
         mExportDialog.setCanvasView(mCanvasView);
-
-        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mListView.setAdapter(mFilterAdapter);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
@@ -70,36 +68,16 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data), true);
         mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
 
-        mListView.setRemoveListener(new DragSortListView.RemoveListener() {
-            @Override
-            public void remove(int item) {
-            mFilterAdapter.remove(item);
-            mFilterAdapter.notifyDataSetChanged();
-            }
-        });
+        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
+        mOverlayAdapter = new OverlayListAdapter(this, this, new ArrayList<CanvasDraggableItem>());
+        FragmentStatePagerAdapter pagerAdapter = new ListViewPagerAdapter(
+                getSupportFragmentManager(),
+                mFilterAdapter,
+                mOverlayAdapter);
+        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setAdapter(pagerAdapter);
 
-        mListView.setDropListener(new DragSortListView.DropListener() {
-            @Override
-            public void drop(int from, int to) {
-            mFilterAdapter.reorder(from, to);
-            }
-        });
-
-        mObjectView.setRemoveListener(new DragSortListView.RemoveListener() {
-            @Override
-            public void remove(int which) {
-            mFilterAdapter.remove(which);
-            }
-        });
-
-        mObjectView.setDropListener(new DragSortListView.DropListener() {
-            @Override
-            public void drop(int from, int to) {
-            mFilterAdapter.reorder(from, to);
-            }
-        });
-
-        /* plays a sound without blocking the app's execution. */
+        /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
         soundThread.start();
 
@@ -128,8 +106,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
                 mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
                 mCanvasView.invalidate();
-
-                mViewSwitcher.showNext();
                 return true;
             }
 
@@ -361,7 +337,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                         break;
                 }
             }
-            mFilterAdapter.setmItems(filterArray);
+            mFilterAdapter.setItems(filterArray);
             mFilterAdapter.updateList();
             mDialog.dismiss();
         }
@@ -378,6 +354,11 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     @Override
     public void updateImage(List<IFilter> filters) {
         mRSFilterHelper.generateBitmap(filters, this);
+    }
+
+    @Override
+    public void updateOverlays(List<CanvasDraggableItem> overlays) {
+        //TODO: update the overlays on the canvas
     }
 
     // TODO: is dit nog nodig?
