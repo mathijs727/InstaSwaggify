@@ -23,6 +23,8 @@ public class CanvasView extends View  {
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
 
+    private int xOffSet, yOffset;
+
     public ScaleGestureDetector mScaleDetector;
 
     private void finishConstructor() {
@@ -159,6 +161,7 @@ public class CanvasView extends View  {
         for (int i = length - 1; i >= 0; i--) {
             overlay = mOverlays.get(i);
             if (overlay.isWithinBounds(x, y)) {
+                overlay.calcOffsets(x, y);
                 mSelected = overlay;
                 return;
             }
@@ -183,6 +186,11 @@ public class CanvasView extends View  {
 
     public void onTouchUp (int x, int y) {
         mSelected = null;
+        xOffSet = yOffset = 0;
+    }
+
+    public void onPointerUp(int x, int y) {
+        mSelected.calcOffsets((int) mScaleDetector.getFocusX(), (int) mScaleDetector.getFocusY());
     }
 
     public void setBitmap (Bitmap bitmap) {
@@ -219,6 +227,7 @@ public class CanvasView extends View  {
 
             invalidate();
             return true;
+
         }
     }
 }
