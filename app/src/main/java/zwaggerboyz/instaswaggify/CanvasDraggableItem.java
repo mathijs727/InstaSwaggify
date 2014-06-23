@@ -10,6 +10,7 @@ public class CanvasDraggableItem {
     private Rect mRect;
     private int mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
+    private float mScaleFactor = 1.F;
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y) {
         mBitmap = bitmap;
@@ -35,10 +36,18 @@ public class CanvasDraggableItem {
     }
 
     public void resizeImage(double scale) {
-        mHalfWidth = (int) (mHalfWidth * scale);
-        mHalfHeight = (int) (mHalfHeight * scale);
+        mHalfWidth = (int) ((mBitmap.getWidth() * scale) / 2);
+        mHalfHeight = (int) ((mBitmap.getHeight() * scale) / 2);
 
         /* Make sure the rectangle gets resized */
         move(mRect.centerX(), mRect.centerY());
+    }
+
+    public float getScaleFactor() {
+        return mScaleFactor;
+    }
+
+    public void setScaleFactor(float scale) {
+        mScaleFactor = scale;
     }
 }
