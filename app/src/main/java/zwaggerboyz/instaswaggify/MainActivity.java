@@ -438,7 +438,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this,
-                    "Error occured while opening picture",
+                    "Error occurred while opening picture",
                     Toast.LENGTH_SHORT).show();
             Log.e("handleSendImage", "create bitmap failed: " + e);
         }
