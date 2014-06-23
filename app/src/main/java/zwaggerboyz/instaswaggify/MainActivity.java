@@ -73,36 +73,33 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mListView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
             public void remove(int item) {
-                mFilterAdapter.remove(item);
-                mFilterAdapter.notifyDataSetChanged();
+            mFilterAdapter.remove(item);
+            mFilterAdapter.notifyDataSetChanged();
             }
         });
 
         mListView.setDropListener(new DragSortListView.DropListener() {
             @Override
             public void drop(int from, int to) {
-
-                mFilterAdapter.reorder(from, to);
+            mFilterAdapter.reorder(from, to);
             }
         });
 
         mObjectView.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
             public void remove(int which) {
-
-                mFilterAdapter.remove(which);
+            mFilterAdapter.remove(which);
             }
         });
 
         mObjectView.setDropListener(new DragSortListView.DropListener() {
             @Override
             public void drop(int from, int to) {
-
-                mFilterAdapter.reorder(from, to);
+            mFilterAdapter.reorder(from, to);
             }
         });
 
-        /* plays a sound without blocking the app's execution */
+        /* plays a sound without blocking the app's execution. */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
         soundThread.start();
 
@@ -115,7 +112,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        /* Inflate the menu: add items to the action bar. */
         getMenuInflater().inflate(R.menu.main, menu);
         mMenu = menu;
         return true;
@@ -126,8 +123,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         int id = item.getItemId();
 
         switch(id) {
-
-            /* Settings. */
+            // TODO: hebben we settings wel nodig?
             case R.id.action_settings: {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
                 mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
@@ -137,22 +133,17 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 return true;
             }
 
-            /* Add filter. */
+            /* Adds a filter to the list. */
             case R.id.action_add_filter: {
-
-                /**
-                 * Handles stack for fragments
-                 */
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
                 if (prev != null)
                     fragmentTransaction.remove(prev);
 
                 fragmentTransaction.addToBackStack(null);
 
-                /**
-                 * Creates new filter dialog and shows it
-                 */
+                /* Show the filter-dialog. */
                 FilterDialog dialog = new FilterDialog(this, mFilterAdapter.getItems());
                 dialog.setOnAddFilterListener(this);
                 mDialog = dialog;
@@ -165,7 +156,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             case R.id.action_take_photo: {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            /* Create a folder to store the pictures if it does not exist yet. */
+                /* Create a folder to store the pictures if it does not exist yet. */
                 File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
                 if (imagesFolder.exists() == false) {
                     if (imagesFolder.mkdirs() == false) {
@@ -174,8 +165,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                     }
                 }
 
-            /* Get the current time and date to use in the filename. */
-
+                /* Get the current time and date to use in the filename. */
                 Date now = new Date();
                 SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
@@ -185,7 +175,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 File image = new File(imagesFolder, date + ".jpg");
                 mImageUri = Uri.fromFile(image);
 
-            /* The intent is started. */
+                /* The intent is started. */
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
                 startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
@@ -202,32 +192,19 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 return true;
             }
 
-            /**
-             * Select saved filter presets
-             */
             case R.id.action_favorites: {
-                /**
-                 * Handles stack for fragments
-                 */
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");
                 if (prev != null)
                     fragmentTransaction.remove(prev);
-
                 fragmentTransaction.addToBackStack(null);
 
-                /**
-                 * Creates new filter dialog and shows it
-                 */
                 mDialog = new FavoritesDialog();
                 mDialog.show(fragmentTransaction, "dialog");
 
                 return true;
             }
 
-            /**
-             * Save new preset
-             */
             case R.id.action_add_favorite: {
                 SavePresetDialog dialog = new SavePresetDialog();
                 dialog.setAdapter(mFilterAdapter);
@@ -252,14 +229,13 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             case R.id.action_share: {
                 mExportDialog.setShare(true);
                 mExportDialog.show(getFragmentManager(), "Share Dialog");
-/*                ShareDialog dialog = new ShareDialog();
+/*               ShareDialog dialog = new ShareDialog();
                 dialog.setCanvasView(mCanvasView);
                 dialog.setNotifySucces(false);
 
                 dialog.show(getFragmentManager(), "Share Dialog");*/
 
                 return true;
-
             }
 
             case R.id.action_clear: {
@@ -299,23 +275,20 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap, true);
                     updateImage(mFilterAdapter.getItems());
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     Log.e("onActivityResult", "create bitmap failed: " + e);
                 }
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
-    /**
-     * Sets the filter list as this preset
-     */
+    /* Sets the filter list as this preset. */
     public void setFilter(String fav_key) {
-
-    //    mFilterAdapter.clearFilters();
+        //mFilterAdapter.clearFilters();
         SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject favoritesObject = null;
@@ -327,7 +300,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         AbstractFilterClass.FilterID id;
 
         IFilter filter = null;
-
 
         try {
             favoritesObject = new JSONObject(favoritesString);
@@ -408,14 +380,11 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mRSFilterHelper.generateBitmap(filters, this);
     }
 
+    // TODO: is dit nog nodig?
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareIntent);
         }
-    }
-
-    public List<IFilter> getAdapterList () {
-        return mFilterAdapter.getItems();
     }
 
     void handleSendImage(Intent intent) {
