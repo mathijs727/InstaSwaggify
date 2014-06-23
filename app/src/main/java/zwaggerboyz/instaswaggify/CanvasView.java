@@ -189,6 +189,10 @@ public class CanvasView extends View  {
         xOffSet = yOffset = 0;
     }
 
+    public void onPointerUp(int x, int y) {
+        mSelected.calcOffsets((int) mScaleDetector.getFocusX(), (int) mScaleDetector.getFocusY());
+    }
+
     public void setBitmap (Bitmap bitmap) {
         mBitmap = bitmap;
 
@@ -223,6 +227,7 @@ public class CanvasView extends View  {
 
             invalidate();
             return true;
+
         }
     }
 }
