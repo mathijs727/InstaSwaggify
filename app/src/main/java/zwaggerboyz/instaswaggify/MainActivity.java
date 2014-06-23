@@ -50,12 +50,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final ArrayList<IFilter> items = new ArrayList<IFilter>();
-        for (int i = 0; i < 5; i++) {
-            items.add(new SaturationFilter());
-
-        }
-
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.activity_main_viewSwitcher);
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
         mObjectView = (DragSortListView) findViewById(R.id.activity_main_listview2);
@@ -77,7 +71,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void remove(int item) {
                 mFilterAdapter.remove(item);
-                mFilterAdapter.notifyDataSetChanged();
             }
         });
 
@@ -85,7 +78,23 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void drop(int from, int to) {
 
-                mFilterAdapter.reorder(from, to);
+                mObjectAdapter.reorder(from, to);
+            }
+        });
+
+        mObjectView.setRemoveListener(new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+
+                mObjectAdapter.remove(which);
+            }
+        });
+
+        mObjectView.setDropListener(new DragSortListView.DropListener() {
+            @Override
+            public void drop(int from, int to) {
+
+                mObjectAdapter.reorder(from, to);
             }
         });
 
@@ -409,7 +418,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     }
 
     public List<IFilter> getAdapterList () {
-        return mAdapter.getItems();
+        return mFilterAdapter.getItems();
     }
 }
 
