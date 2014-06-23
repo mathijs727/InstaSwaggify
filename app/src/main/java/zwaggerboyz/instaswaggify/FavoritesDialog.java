@@ -66,7 +66,7 @@ public class FavoritesDialog extends DialogFragment {
                             public void onClick(DialogInterface dialog, int id) {
                                 remove_favorite(favoritesTitle);
                                 listView.setAdapter(new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites()));
-                                if (getFavorites().length == 0) getDialog().setTitle("No favorites yet");
+                                if (getFavorites().length == 0) getDialog().setTitle("@string/preset_not_found");
                             }
                         }
                 );
