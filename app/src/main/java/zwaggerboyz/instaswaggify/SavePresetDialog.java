@@ -3,17 +3,18 @@ package zwaggerboyz.instaswaggify;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by zeta on 6/19/14.
@@ -30,31 +31,78 @@ public class SavePresetDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-
-        // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.save_preset_dialog, null);
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
+        /* Inflate and set the layout for the dialog. Pass null as the parent view because its going
+         * in the dialog layout. */
         builder .setView(view)
 
-                // Add action buttons
-                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        TextView presetNameField = (TextView)(view.findViewById(R.id.save_preset_name));
-                        adapter.add_favorite(presetNameField.getText().toString());
-                    }
-                })
+        /* Add buttons. */
+        .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+            TextView presetNameField = (TextView)(view.findViewById(R.id.save_preset_name));
+            addFavorite(presetNameField.getText().toString());
+            }
+        })
 
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        SavePresetDialog.this.getDialog().cancel();
-                    }
-                });
+        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            SavePresetDialog.this.getDialog().cancel();
+            }
+        });
 
         builder.setTitle(R.string.preset_dialog_title);
         return builder.create();
+    }
+
+    private void addFavorite(String favoritesTitle) {
+        /* parse current favorite list to JSONArray */
+        MainActivity mainActivity = ((MainActivity)getActivity());
+        SharedPreferences prefs = mainActivity.getPreferences(Context.MODE_PRIVATE);
+        String favoritesString = prefs.getString("Favorites", "");
+        JSONObject jsonObject = null;
+
+        try {
+            if (favoritesString.equals("")) {
+                jsonObject = new JSONObject();
+            }
+            else {
+                jsonObject = new JSONObject(favoritesString);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        /* create array of current filter states */
+        try {
+            JSONArray newFilterArray = new JSONArray();
+            JSONObject jSONObjectFilter;
+            for (IFilter filter : mainActivity.getAdapterItems()) {
+                jSONObjectFilter = new JSONObject();
+                jSONObjectFilter.put("id", filter.getID());
+                for (int i = 0; i < filter.getNumValues(); i++) {
+                    jSONObjectFilter.put("value" + i, filter.getValue(i));
+                }
+
+                /* add filter to favorite */
+                newFilterArray.put(jSONObjectFilter.toString());
+                Log.e("FilterListAdapter", "new filter: " + jSONObjectFilter.toString());
+            }
+
+            /* add new favorite to favorites list */
+            jsonObject.put(favoritesTitle, newFilterArray);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        /* favorites array to String */
+        favoritesString = jsonObject.toString();
+
+        /* add store favorites String sharedPreferences */
+        prefs.edit().putString("Favorites", favoritesString).commit();
     }
 }

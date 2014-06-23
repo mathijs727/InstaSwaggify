@@ -286,54 +286,7 @@ public class FilterListAdapter extends BaseAdapter {
         mListener.updateImage(mItems);
     }
 
-    public void add_favorite(String favoritesTitle) {
 
-        /* parse current favorite list to JSONArray */
-        SharedPreferences prefs = mActivity.getPreferences(Context.MODE_PRIVATE);
-        String favoritesString = prefs.getString("Favorites", "");
-        JSONObject jsonObject = null;
-
-        try {
-            if (favoritesString.equals("")) {
-                jsonObject = new JSONObject();
-            }
-            else {
-                jsonObject = new JSONObject(favoritesString);
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        /* create array of current filter states */
-        try {
-            JSONArray newFilterArray = new JSONArray();
-            JSONObject jSONObjectFilter;
-            for (IFilter filter:mItems) {
-                jSONObjectFilter = new JSONObject();
-                jSONObjectFilter.put("id", filter.getID());
-                for (int i = 0; i < filter.getNumValues(); i++) {
-                    jSONObjectFilter.put("value" + i, filter.getValue(i));
-                }
-
-                /* add filter to favorite */
-                newFilterArray.put(jSONObjectFilter.toString());
-                Log.e("FilterListAdapter", "new filter: " + jSONObjectFilter.toString());
-            }
-
-            /* add new favorite to favorites list */
-            jsonObject.put(favoritesTitle, newFilterArray);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        /* favorites array to String */
-        favoritesString = jsonObject.toString();
-
-        /* add store favorites String sharedPreferences */
-        prefs.edit().putString("Favorites", favoritesString).commit();
-    }
 }
 
 

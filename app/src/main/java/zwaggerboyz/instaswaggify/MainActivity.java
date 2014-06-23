@@ -414,5 +414,9 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mDialog.dismiss();
         mFilterAdapter.addItem(filter);
     }
+
+    public List<IFilter> getAdapterItems () {
+        return mFilterAdapter.getItems();
+    }
 }
 

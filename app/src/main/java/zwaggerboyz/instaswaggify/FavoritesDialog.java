@@ -34,9 +34,7 @@ public class FavoritesDialog extends DialogFragment {
             getDialog().setTitle("No favorites yet");
         }
 
-        /**
-         * Setting up ListView and the adapter
-         */
+        /* Setting up ListView and the adapter. */
         final View mView = inflater.inflate(R.layout.filterdialog, container, false);
         final ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
 
