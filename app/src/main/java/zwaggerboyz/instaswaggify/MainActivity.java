@@ -409,7 +409,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     }
 
     public List<IFilter> getAdapterList () {
-        return mAdapter.getItems();
+        return mFilterAdapter.getItems();
     }
 }
 
