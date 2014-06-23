@@ -91,17 +91,17 @@ public class CanvasView extends View  {
             left = centreX - (int)(mBitmap.getWidth() * imgYScale / 2.0);
             right = width - left;
 
-            Rect rect;
-            int cX, cY, nX, nY;
-            for (CanvasDraggableItem overlay : mOverlays) {
-                rect = overlay.getRect();
-                cX = rect.centerX() - mXOffset;
-                cY = rect.centerY() - mYOffset;
+            if (!newImage) {
+                Rect rect;
+                int cX, cY, nX, nY;
+                for (CanvasDraggableItem overlay : mOverlays) {
+                    rect = overlay.getRect();
+                    cX = rect.centerX() - mXOffset;
+                    cY = rect.centerY() - mYOffset;
 
-                nX = (int)(cX / mImgScale * imgYScale) + left;
-                nY = (int)(cY / mImgScale * imgYScale) + top;
+                    nX = (int) (cX / mImgScale * imgYScale) + left;
+                    nY = (int) (cY / mImgScale * imgYScale) + top;
 
-                if (!newImage) {
                     overlay.move(nX, nY);
                     overlay.resizeImage(imgYScale / mImgScale);
                 }
@@ -113,17 +113,16 @@ public class CanvasView extends View  {
             top = centreY - (int)(mBitmap.getHeight() * imgXScale / 2.0);
             bot = height - top;
 
-            Rect rect;
-            int cX, cY, nX, nY;
-            for (CanvasDraggableItem overlay : mOverlays) {
-                rect = overlay.getRect();
-                cX = rect.centerX() - mXOffset;
-                cY = rect.centerY() - mYOffset;
+            if (!newImage) {
+                Rect rect;
+                int cX, cY, nX, nY;
+                for (CanvasDraggableItem overlay : mOverlays) {
+                    rect = overlay.getRect();
+                    cX = rect.centerX() - mXOffset;
+                    cY = rect.centerY() - mYOffset;
 
-                nX = (int)(cX / mImgScale * imgXScale) + left;
-                nY = (int)(cY / mImgScale * imgXScale) + top;
-
-                if (!newImage) {
+                    nX = (int) (cX / mImgScale * imgXScale) + left;
+                    nY = (int) (cY / mImgScale * imgXScale) + top;
                     overlay.move(nX, nY);
                     overlay.resizeImage(imgXScale / mImgScale);
                 }

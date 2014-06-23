@@ -30,12 +30,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends Activity implements FilterListAdapter.FilterListInterface {
+public class MainActivity extends Activity implements FilterListAdapter.FilterListInterface, FilterDialog.OnAddFilterListener {
     private ShareActionProvider mShareActionProvider;
     private ViewSwitcher mViewSwitcher;
     private DragSortListView mListView, mObjectView;
     private FilterListAdapter mFilterAdapter;
-    private ObjectListAdapter mObjectAdapter;
     private CanvasView mCanvasView;
     private RSFilterHelper mRSFilterHelper;
     private DialogFragment mDialog;
@@ -65,9 +64,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
         mListView.setAdapter(mFilterAdapter);
 
-        mObjectAdapter = new ObjectListAdapter(this, new ArrayList<IObject>());
-        mObjectView.setAdapter(mObjectAdapter);
-
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
         mRSFilterHelper.setCanvasView(mCanvasView);
@@ -78,6 +74,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void remove(int item) {
                 mFilterAdapter.remove(item);
+                mFilterAdapter.notifyDataSetChanged();
             }
         });
 
@@ -85,7 +82,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void drop(int from, int to) {
 
-                mObjectAdapter.reorder(from, to);
+                mFilterAdapter.reorder(from, to);
             }
         });
 
@@ -93,7 +90,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void remove(int which) {
 
-                mObjectAdapter.remove(which);
+                mFilterAdapter.remove(which);
             }
         });
 
@@ -101,7 +98,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void drop(int from, int to) {
 
-                mObjectAdapter.reorder(from, to);
+                mFilterAdapter.reorder(from, to);
             }
         });
 
@@ -156,7 +153,9 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                 /**
                  * Creates new filter dialog and shows it
                  */
-                mDialog = new FilterDialog();
+                FilterDialog dialog = new FilterDialog(this, mFilterAdapter.getItems());
+                dialog.setOnAddFilterListener(this);
+                mDialog = dialog;
                 mDialog.show(fragmentTransaction, "dialog");
 
                 return true;
@@ -312,24 +311,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     }
 
     /**
-     * Adds a new filter to the list
-     */
-    public void addFilter(int i) {
-        mDialog.dismiss();
-        if(i == 9)
-            addObject(i);
-        mFilterAdapter.add(i);
-    }
-
-    /*
-     * PLACEHOLDER
-     */
-    public void addObject(int i) {
-        mDialog.dismiss();
-        mObjectAdapter.add(0);
-    }
-
-    /**
      * Sets the filter list as this preset
      */
     public void setFilter(String fav_key) {
@@ -457,6 +438,12 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
                     Toast.LENGTH_SHORT).show();
             Log.e("handleSendImage", "create bitmap failed: " + e);
         }
+    }
+
+    @Override
+    public void OnAddFilterListener(IFilter filter) {
+        mDialog.dismiss();
+        mFilterAdapter.addItem(filter);
     }
 }
 
