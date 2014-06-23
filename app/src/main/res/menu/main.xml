@@ -5,45 +5,52 @@
     <item android:id="@+id/action_take_photo"
         android:title="@string/action_take_photo"
         android:icon="@drawable/ic_action_camera"
-        android:orderInCategory="92"
+        android:orderInCategory="91"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_select_photo"
         android:title="@string/action_select_photo"
         android:icon="@drawable/ic_action_picture"
-        android:orderInCategory="93"
+        android:orderInCategory="92"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_add_filter"
         android:title="@string/action_add_filter"
         android:icon="@drawable/ic_action_new"
-        android:orderInCategory="94"
+        android:orderInCategory="93"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/action_favorites"
-          android:title="@string/action_favorites"
-          android:icon="@drawable/ic_action_important"
-          android:orderInCategory="95"
-          android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_share"
+        android:title="@string/action_share"
+        android:icon="@drawable/ic_action_share"
+        android:orderInCategory="94"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_undo"
+        android:title="@string/action_undo"
+        android:icon="@drawable/ic_action_undo"
+        android:orderInCategory="95"
+        android:enabled="false"
+        android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_clear"
-          android:title="@string/action_clear"
-          android:icon="@drawable/ic_action_discard"
-          android:orderInCategory="96"
-          android:showAsAction="never" />
+        android:title="@string/action_clear"
+        android:icon="@drawable/ic_action_discard"
+        android:orderInCategory="96"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/action_favorites"
+          android:title="@string/action_select_favorite"
+          android:icon="@drawable/ic_action_important"
+          android:orderInCategory="97"
+          android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_add_favorite"
           android:title="@string/action_add_favorite"
           android:icon="@drawable/ic_action_important"
-          android:orderInCategory="97"
-          android:showAsAction="never" />
-
-    <item android:id="@+id/action_undo"
-          android:title="@string/action_undo"
-          android:icon="@drawable/ic_action_undo"
           android:orderInCategory="98"
-          android:enabled="false"
-          android:showAsAction="ifRoom" />
+          android:showAsAction="never" />
 
     <item android:id="@+id/action_save_picture"
         android:title="@string/action_save_picture"
@@ -56,14 +63,6 @@
         android:icon="@drawable/ic_action_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
-
-    <item android:id="@+id/action_share"
-        android:title="@string/action_share"
-        android:icon="@drawable/ic_action_share"
-        android:orderInCategory="100"
-        android:actionProviderClass=
-            "android.widget.ShareActionProvider"
-        android:showAsAction="ifRoom" />
 
 />
 
