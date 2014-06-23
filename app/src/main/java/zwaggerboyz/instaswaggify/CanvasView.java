@@ -2,11 +2,11 @@ package zwaggerboyz.instaswaggify;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -23,6 +23,9 @@ public class CanvasView extends View  {
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
 
+    public ScaleGestureDetector mScaleDetector;
+    private float mScaleFactor = 1.F;
+
     private void finishConstructor() {
         //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
         //mOverlays.add(new CanvasDraggableItem(bitmap, 100, 100));
@@ -32,18 +35,21 @@ public class CanvasView extends View  {
     public CanvasView(Context context) {
         super(context);
         setOnTouchListener(new CanvasTouchListener(this));
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         finishConstructor();
     }
 
     public CanvasView(Context context, AttributeSet attributes) {
         super(context, attributes);
         setOnTouchListener(new CanvasTouchListener(this));
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         finishConstructor();
     }
 
     public CanvasView(Context context, AttributeSet attributes, int style) {
         super(context, attributes, style);
         setOnTouchListener(new CanvasTouchListener(this));
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         finishConstructor();
     }
 
@@ -51,13 +57,20 @@ public class CanvasView extends View  {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+
         canvas.drawColor(R.color.background);
 
-        canvas.drawBitmap(mBitmap, null, mBackgroundRect, null );
+        canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
         for (CanvasDraggableItem overlay : mOverlays) {
+            canvas.save();
+            if (overlay == mSelected) {
+                canvas.scale(mScaleFactor, mScaleFactor);
+            }
             canvas.drawBitmap(overlay.getBitmap(), null, overlay.getRect(), null);
+            canvas.restore();
         }
+
     }
 
     @Override
@@ -194,6 +207,20 @@ public class CanvasView extends View  {
 
     public void addDraggable (CanvasDraggableItem item) {
         mOverlays.add(item);
+    }
+
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+            invalidate();
+            return true;
+        }
     }
 }
 
