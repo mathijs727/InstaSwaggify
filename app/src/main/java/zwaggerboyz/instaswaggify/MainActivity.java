@@ -40,6 +40,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     private RSFilterHelper mRSFilterHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
+    private ExportDialog mExportDialog;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
@@ -57,9 +58,11 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
         }
 
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.activity_main_viewSwitcher);
+        mExportDialog = new ExportDialog();
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
         mObjectView = (DragSortListView) findViewById(R.id.activity_main_listview2);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
+        mExportDialog.setCanvasView(mCanvasView);
 
         mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
         mListView.setAdapter(mFilterAdapter);
@@ -220,19 +223,22 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             }
 
             case R.id.action_save_picture: {
-                ExportDialog exportDialog = new ExportDialog();
-                exportDialog.setmCanvasView(mCanvasView);
-                exportDialog.show(getFragmentManager(), "Export Dialog");
+                //ExportDialog exportDialog = new ExportDialog();
+                //exportDialog.setCanvasView(mCanvasView);
+                mExportDialog.setShare(false);
+                mExportDialog.show(getFragmentManager(), "Export Dialog");
                 return true;
 
             }
 
             case R.id.action_share: {
-                ShareDialog dialog = new ShareDialog();
-                dialog.setmCanvasView(mCanvasView);
+                mExportDialog.setShare(true);
+                mExportDialog.show(getFragmentManager(), "Share Dialog");
+/*                ShareDialog dialog = new ShareDialog();
+                dialog.setCanvasView(mCanvasView);
                 dialog.setNotifySucces(false);
 
-                dialog.show(getFragmentManager(), "Share Dialog");
+                dialog.show(getFragmentManager(), "Share Dialog");*/
 
                 return true;
 
@@ -409,7 +415,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     }
 
     public List<IFilter> getAdapterList () {
-        return mAdapter.getItems();
+        return mFilterAdapter.getItems();
     }
 }
 

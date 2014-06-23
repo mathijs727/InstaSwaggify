@@ -20,13 +20,6 @@ import java.util.List;
 public class FilterDialog extends DialogFragment {
     private String[] filters = {"Brightness", "Contrast", "Gaussian Blur", "Rotation", "Saturation", "Sepia", "Noise", "Invert Colors", "Colorize", "Placeholder Object"};
     private List<IFilter> mList;
-    
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        /* Get the list of filters from the MainActivity. */
-        mList = ((MainActivity)getActivity()).getAdapterList();
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -38,16 +31,21 @@ public class FilterDialog extends DialogFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, filters);
         listView.setAdapter(adapter);
 
+        mList = ((MainActivity)getActivity()).getAdapterList();
+
         for (IFilter filter : mList) {
             int index = filter.getID().getValue();
-            listView.getChildAt(index).setEnabled(false);
+            View child = listView.getChildAt(index);
+            Log.i("DUDE", "index: " + index + " child: " + child);
+            // child is null ????
+            //child.setEnabled(false);
         }
 
         /* List item listeners */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            ((MainActivity)getActivity()).addFilter(i);
+                ((MainActivity)getActivity()).addFilter(i);
             }
         });
 

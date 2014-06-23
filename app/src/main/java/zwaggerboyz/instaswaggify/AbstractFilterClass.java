@@ -13,7 +13,7 @@ import android.util.Log;
 public abstract class AbstractFilterClass implements IFilter {
 
     public enum FilterID {
-        BRIGHTNESS(0), CONTRAST(1), GAUSSIAN(2), ROTATION(3), SATURATION(4), SEPIA(5), NOISE(6), INVERT(7), COLORIZE(8);
+        BRIGHTNESS(0), CONTRAST(1), GAUSSIAN(2), ROTATION(3), SATURATION(4), SEPIA(5), NOISE(6), INVERT(7), COLORIZE(8), THRESHOLD(9);
 
         /* Every enum has an integer value that can be retrieved (for indexing etc). */
         private final int value;
