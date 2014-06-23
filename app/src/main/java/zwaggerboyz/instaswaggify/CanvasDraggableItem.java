@@ -2,6 +2,7 @@ package zwaggerboyz.instaswaggify;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  * Created by Peter on 19-6-2014.
@@ -11,6 +12,13 @@ public class CanvasDraggableItem {
     private int mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
+    private int xOffset, yOffset;
+
+    public void calcOffsets(int x, int y) {
+        this.xOffset = mRect.left + mHalfWidth - x;
+        this.yOffset = mRect.top + mHalfHeight - y;
+        Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
+    }
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y) {
         mBitmap = bitmap;
@@ -20,7 +28,7 @@ public class CanvasDraggableItem {
     }
 
     public void move (int x, int y) {
-        mRect.set(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
+        mRect.set(x - mHalfWidth + xOffset, y - mHalfHeight + yOffset, x + mHalfWidth + xOffset, y + mHalfHeight + yOffset);
     }
 
     public boolean isWithinBounds (int x, int y) {
@@ -36,11 +44,13 @@ public class CanvasDraggableItem {
     }
 
     public void resizeImage(double scale) {
+        Log.i("Pevid", "resize");
         mHalfWidth = (int) ((mBitmap.getWidth() * scale) / 2);
         mHalfHeight = (int) ((mBitmap.getHeight() * scale) / 2);
 
         /* Make sure the rectangle gets resized */
         move(mRect.centerX(), mRect.centerY());
+
     }
 
     public float getScaleFactor() {
