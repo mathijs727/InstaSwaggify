@@ -14,7 +14,7 @@ public class ColorizeFilter extends AbstractFilterClass {
 
     public ColorizeFilter() {
         mID = FilterID.COLORIZE;
-        mName = "colorize";
+        mName = "Colorize";
         mNumValues = 3;
 
         mLabels = new String[] {

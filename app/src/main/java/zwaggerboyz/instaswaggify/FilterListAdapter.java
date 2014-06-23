@@ -30,7 +30,6 @@ public class FilterListAdapter extends BaseAdapter {
     private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
     private int bufferLevel = 0;
     private FilterListInterface mListener;
-    private Activity mActivity;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView, label3TextView;
@@ -41,7 +40,6 @@ public class FilterListAdapter extends BaseAdapter {
         mInflater = activity.getLayoutInflater();
         mItems = items;
         mListener = listener;
-        mActivity = activity;
     }
 
     @Override
@@ -54,13 +52,13 @@ public class FilterListAdapter extends BaseAdapter {
         return mItems.get(position);
     }
 
+    public void setItems(List<IFilter> items) {
+        mItems = items;
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    public void setmItems(List<IFilter> new_mItems) {
-        mItems = new_mItems;
     }
 
     @Override
@@ -107,7 +105,6 @@ public class FilterListAdapter extends BaseAdapter {
                 viewHolder.label3TextView.setVisibility(View.GONE);
                 viewHolder.slider2Seekbar.setVisibility(View.GONE);
                 viewHolder.slider3Seekbar.setVisibility(View.GONE);
-
                 break;
             case 2:
                 viewHolder.label1TextView.setVisibility(View.VISIBLE);
@@ -261,11 +258,6 @@ public class FilterListAdapter extends BaseAdapter {
         }
     }
 
-    public interface FilterListInterface {
-        public void setUndoState(boolean state);
-        public void updateImage(List<IFilter> filters);
-    }
-
     /**
      * Undo last change. Only remembers last change.
      */
@@ -286,53 +278,9 @@ public class FilterListAdapter extends BaseAdapter {
         mListener.updateImage(mItems);
     }
 
-    public void add_favorite(String favoritesTitle) {
-
-        /* parse current favorite list to JSONArray */
-        SharedPreferences prefs = mActivity.getPreferences(Context.MODE_PRIVATE);
-        String favoritesString = prefs.getString("Favorites", "");
-        JSONObject jsonObject = null;
-
-        try {
-            if (favoritesString.equals("")) {
-                jsonObject = new JSONObject();
-            }
-            else {
-                jsonObject = new JSONObject(favoritesString);
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        /* create array of current filter states */
-        try {
-            JSONArray newFilterArray = new JSONArray();
-            JSONObject jSONObjectFilter;
-            for (IFilter filter:mItems) {
-                jSONObjectFilter = new JSONObject();
-                jSONObjectFilter.put("id", filter.getID());
-                for (int i = 0; i < filter.getNumValues(); i++) {
-                    jSONObjectFilter.put("value" + i, filter.getValue(i));
-                }
-
-                /* add filter to favorite */
-                newFilterArray.put(jSONObjectFilter.toString());
-                Log.e("FilterListAdapter", "new filter: " + jSONObjectFilter.toString());
-            }
-
-            /* add new favorite to favorites list */
-            jsonObject.put(favoritesTitle, newFilterArray);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        /* favorites array to String */
-        favoritesString = jsonObject.toString();
-
-        /* add store favorites String sharedPreferences */
-        prefs.edit().putString("Favorites", favoritesString).commit();
+    public interface FilterListInterface {
+        public void updateImage(List<IFilter> filters);
+        public void setUndoState(boolean undoState);
     }
 }
 

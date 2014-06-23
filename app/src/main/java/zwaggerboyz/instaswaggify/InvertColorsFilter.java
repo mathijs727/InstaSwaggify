@@ -12,7 +12,7 @@ public class InvertColorsFilter extends AbstractFilterClass {
 
     public InvertColorsFilter() {
         mID = FilterID.INVERT;
-        mName = "Invert";
+        mName = "Invert Colors";
         mNumValues = 0;
 
         mLabels = new String[] {
