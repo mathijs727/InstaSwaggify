@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -30,15 +32,20 @@ import java.util.Date;
 
 public class ExportDialog extends DialogFragment {
     private boolean notifySucces = true;
+    private boolean share = true;
     protected int quality = 60;
     CanvasView mCanvasView;
     protected Bitmap.CompressFormat compression= Bitmap.CompressFormat.JPEG;
+
+    public void setShare(Boolean shareEnabled) {
+        share = shareEnabled;
+    }
 
     public void setNotifySucces(boolean notify) {
         notifySucces = notify;
     }
 
-    public void setmCanvasView(CanvasView canvas){
+    public void setCanvasView(CanvasView canvas){
         mCanvasView = canvas;
     }
 
@@ -46,18 +53,14 @@ public class ExportDialog extends DialogFragment {
         this.quality = quality;
     }
 
-    protected void setCompression(int compressionId) {
-        if (compressionId == 0){
-            this.compression = Bitmap.CompressFormat.JPEG;
-        }
-        else {
-            this.compression = Bitmap.CompressFormat.PNG;
-        }
+    protected void setCompression(Bitmap.CompressFormat compression) {
+            this.compression = compression;
     }
 
     public void setListeners(View view) {
-        SeekBar qualitySlider = (SeekBar)(view.findViewById(R.id.picture_quality));
-        Spinner compressionSpinner = (Spinner)(view.findViewById(R.id.picture_compression));
+        final SeekBar qualitySlider = (SeekBar)(view.findViewById(R.id.picture_quality));
+        final Spinner compressionSpinner = (Spinner)(view.findViewById(R.id.picture_compression));
+        final TextView textView = (TextView) (view.findViewById(R.id.export_text_view));
 
         qualitySlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -76,12 +79,19 @@ public class ExportDialog extends DialogFragment {
             }
         });
 
-        qualitySlider.setProgress(60);
-
         compressionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int compressionId, long l) {
-                setCompression(compressionId);
+                if (compressionId == 0) {
+                    setCompression(Bitmap.CompressFormat.JPEG);
+                    qualitySlider.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    setCompression(Bitmap.CompressFormat.PNG);
+                    qualitySlider.setVisibility(View.INVISIBLE);
+                    textView.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -89,10 +99,36 @@ public class ExportDialog extends DialogFragment {
 
             }
         });
+
+        /* restore previous settings.
+         */
+        qualitySlider.setProgress(quality);
+        if (compression == Bitmap.CompressFormat.JPEG)
+            compressionSpinner.setSelection(0);
+        else
+            compressionSpinner.setSelection(1);
+
     }
 
     protected void acceptHandler() {
-        save_picture();
+        if (share) {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            Uri fileUri = save_picture();
+
+            if (fileUri == null)
+                return;
+
+            if (compression == Bitmap.CompressFormat.JPEG)
+                share.setType("image/jpeg");
+            else
+                share.setType("image/png");
+
+            share.putExtra(Intent.EXTRA_STREAM, fileUri);
+            startActivity(Intent.createChooser(share, "Share Image"));
+        }
+        else {
+            save_picture();
+        }
     }
 
     @Override
@@ -105,25 +141,34 @@ public class ExportDialog extends DialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder .setView(view)
+        builder.setView(view);
 
-                // Add action buttons
-                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        acceptHandler();
-                    }
-                })
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                ExportDialog.this.getDialog().cancel();
+            }
+        });
 
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ExportDialog.this.getDialog().cancel();
-                    }
-                });
+        if (share) {
+            builder.setPositiveButton(R.string.action_share, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    acceptHandler();
+                }
+            });
+            builder.setTitle(R.string.share_dialog_title);
+        }
+        else {
+            builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    acceptHandler();
+                }
+            });
+            builder.setTitle(R.string.export_dialog_title);
+        }
 
-        builder.setTitle(R.string.export_dialog_title);
         setListeners(view);
-
         return builder.create();
     }
 
@@ -236,7 +281,7 @@ public class ExportDialog extends DialogFragment {
                     }
             );
 
-            if(notifySucces)
+            if(!share)
                 Toast.makeText(getActivity(), "Picture successfully exported", Toast.LENGTH_SHORT).show();
 
         }
