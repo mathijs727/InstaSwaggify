@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,14 +20,10 @@ import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 
-import java.io.ByteArrayOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +37,7 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
     private FilterListAdapter mAdapter;
     private DialogFragment mDialog;
     private Menu mMenu;
+    private ExportDialog mExportDialog;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 27031996;
@@ -59,8 +54,10 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
         }
 
+        mExportDialog = new ExportDialog();
         mListView = (DragSortListView) findViewById(R.id.activity_main_listview);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
+        mExportDialog.setCanvasView(mCanvasView);
 
         mAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
         mListView.setAdapter(mAdapter);
@@ -216,19 +213,22 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             }
 
             case R.id.action_save_picture: {
-                ExportDialog exportDialog = new ExportDialog();
-                exportDialog.setmCanvasView(mCanvasView);
-                exportDialog.show(getFragmentManager(), "Export Dialog");
+                //ExportDialog exportDialog = new ExportDialog();
+                //exportDialog.setCanvasView(mCanvasView);
+                mExportDialog.setShare(false);
+                mExportDialog.show(getFragmentManager(), "Export Dialog");
                 return true;
 
             }
 
             case R.id.action_share: {
-                ShareDialog dialog = new ShareDialog();
-                dialog.setmCanvasView(mCanvasView);
+                mExportDialog.setShare(true);
+                mExportDialog.show(getFragmentManager(), "Share Dialog");
+/*                ShareDialog dialog = new ShareDialog();
+                dialog.setCanvasView(mCanvasView);
                 dialog.setNotifySucces(false);
 
-                dialog.show(getFragmentManager(), "Share Dialog");
+                dialog.show(getFragmentManager(), "Share Dialog");*/
 
                 return true;
 

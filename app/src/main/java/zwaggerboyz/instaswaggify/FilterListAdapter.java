@@ -275,6 +275,8 @@ public class FilterListAdapter extends BaseAdapter {
             case 9:
                 mItems.add(new ThresholdBlurFilter());
                 break;
+            case 10:
+                mItems.add(new LaughingMirrorFilter());
             default:
                 break;
 

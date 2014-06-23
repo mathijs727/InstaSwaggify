@@ -18,7 +18,7 @@
     <string name="cancel">Cancel</string>
     <string name="preset_hint">Preset Name</string>
     <string name="preset_dialog_title">Save Preset</string>
-    <string name="export_dialog_title">Export Dialog</string>
+    <string name="export_dialog_title">Export Picture</string>
     <string name="export_dialog_text">Export Quality</string>
     <string name="share_dialog_title">Share Picture</string>
     <string name="filter_dialog_title">Select Filter</string>
