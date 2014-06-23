@@ -239,45 +239,8 @@ public class FilterListAdapter extends BaseAdapter {
         }
     }
 
-    /* Adds a new item to the filter list */
-    public void add(int filter) {
-        updateBuffer();
-
-        switch (filter) {
-            case 0:
-                mItems.add(new BrightnessFilter());
-                break;
-            case 1:
-                mItems.add(new ContrastFilter());
-                break;
-            case 2:
-                mItems.add(new GaussianBlurFilter());
-                break;
-            case 3:
-                mItems.add(new RotationFilter());
-                break;
-            case 4:
-                mItems.add(new SaturationFilter());
-                break;
-            case 5:
-                mItems.add(new SepiaFilter());
-                break;
-            case 6:
-                mItems.add(new NoiseFilter());
-                break;
-            case 7:
-                mItems.add(new InvertColorsFilter());
-                break;
-            case 8:
-                mItems.add(new ColorizeFilter());
-                break;
-            case 9:
-                mItems.add(new ThresholdBlurFilter());
-                break;
-            default:
-                break;
-
-        }
+    public void addItem(IFilter filter) {
+        mItems.add(filter);
         updateList();
     }
 
