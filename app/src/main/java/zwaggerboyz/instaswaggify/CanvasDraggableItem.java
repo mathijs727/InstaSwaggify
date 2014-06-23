@@ -44,7 +44,7 @@ public class CanvasDraggableItem {
     }
 
     public void resizeImage(double scale) {
-        Log.i("Pevid", "resize");
+        //Log.i("Pevid", "resize");
         mHalfWidth = (int) ((mBitmap.getWidth() * scale) / 2);
         mHalfHeight = (int) ((mBitmap.getHeight() * scale) / 2);
 

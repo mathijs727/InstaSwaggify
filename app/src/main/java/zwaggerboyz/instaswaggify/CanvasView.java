@@ -22,7 +22,6 @@ public class CanvasView extends View  {
     private CanvasDraggableItem mSelected = null;
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
-
     private int xOffSet, yOffset;
 
     public ScaleGestureDetector mScaleDetector;
@@ -190,7 +189,14 @@ public class CanvasView extends View  {
     }
 
     public void onPointerUp(int x, int y) {
-        mSelected.calcOffsets((int) mScaleDetector.getFocusX(), (int) mScaleDetector.getFocusY());
+        if (mSelected != null)
+            mSelected.calcOffsets((int)mScaleDetector.getFocusX(), (int)mScaleDetector.getFocusY());
+    }
+
+    public void switchPointer(int x, int y) {
+        if (mSelected != null) {
+            mSelected.calcOffsets(x, y);
+        }
     }
 
     public void setBitmap (Bitmap bitmap) {
