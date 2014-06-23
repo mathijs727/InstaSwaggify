@@ -29,7 +29,6 @@ public class FilterListAdapter extends BaseAdapter {
     private List<IFilter> mItems;
     private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
     private int bufferLevel = 0;
-    private Activity mActivity;
     private FilterListInterface mListener;
 
     private class ViewHolder {
@@ -41,7 +40,6 @@ public class FilterListAdapter extends BaseAdapter {
         mInflater = activity.getLayoutInflater();
         mItems = items;
         mListener = listener;
-        mActivity = activity;
     }
 
     @Override
@@ -107,7 +105,6 @@ public class FilterListAdapter extends BaseAdapter {
                 viewHolder.label3TextView.setVisibility(View.GONE);
                 viewHolder.slider2Seekbar.setVisibility(View.GONE);
                 viewHolder.slider3Seekbar.setVisibility(View.GONE);
-
                 break;
             case 2:
                 viewHolder.label1TextView.setVisibility(View.VISIBLE);

@@ -27,6 +27,15 @@ public class ListViewPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
+    public CharSequence getPageTitle(int position) {
+        if (position == 0) {
+            return "Filters";
+        } else {
+            return "Overlays";
+        }
+    }
+
+    @Override
     public Fragment getItem(int position) {
         if (position == 0) {
             FilterListFragment fragment = new FilterListFragment();

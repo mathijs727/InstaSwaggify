@@ -36,7 +36,6 @@ public class MainActivity extends FragmentActivity
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
     private CanvasView mCanvasView;
-    private ViewPager mViewPager;
     private RSFilterHelper mRSFilterHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
@@ -57,9 +56,10 @@ public class MainActivity extends FragmentActivity
 
         mExportDialog = new ExportDialog();
 
-
-        mViewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout)findViewById(R.id.activity_main_tabs);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
+
         mExportDialog.setCanvasView(mCanvasView);
 
         mRSFilterHelper = new RSFilterHelper();
@@ -74,8 +74,9 @@ public class MainActivity extends FragmentActivity
                 getSupportFragmentManager(),
                 mFilterAdapter,
                 mOverlayAdapter);
-        mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(1);
+        viewPager.setAdapter(pagerAdapter);
+        slidingTabLayout.setViewPager(viewPager);
 
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
