@@ -12,7 +12,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 /**
- * Created by Peter on 19-6-2014.
+ * Created by Swaggenegger on 19-6-2014.
  */
 
 public class CanvasView extends View  {
