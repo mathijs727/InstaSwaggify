@@ -29,8 +29,8 @@ public class FilterListAdapter extends BaseAdapter {
     private List<IFilter> mItems;
     private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
     private int bufferLevel = 0;
-    private FilterListInterface mListener;
     private Activity mActivity;
+    private FilterListInterface mListener;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView, label3TextView;
@@ -54,13 +54,13 @@ public class FilterListAdapter extends BaseAdapter {
         return mItems.get(position);
     }
 
+    public void setItems(List<IFilter> items) {
+        mItems = items;
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    public void setmItems(List<IFilter> new_mItems) {
-        mItems = new_mItems;
     }
 
     @Override
@@ -261,11 +261,6 @@ public class FilterListAdapter extends BaseAdapter {
         }
     }
 
-    public interface FilterListInterface {
-        public void setUndoState(boolean state);
-        public void updateImage(List<IFilter> filters);
-    }
-
     /**
      * Undo last change. Only remembers last change.
      */
@@ -286,7 +281,10 @@ public class FilterListAdapter extends BaseAdapter {
         mListener.updateImage(mItems);
     }
 
-
+    public interface FilterListInterface {
+        public void updateImage(List<IFilter> filters);
+        public void setUndoState(boolean undoState);
+    }
 }
 
 
