@@ -48,14 +48,12 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final ArrayList<IFilter> items = new ArrayList<IFilter>();
-        for (int i = 0; i < 5; i++) {
-            items.add(new SaturationFilter());
-
-        }
 
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.activity_main_viewSwitcher);
         mExportDialog = new ExportDialog();
@@ -80,7 +78,6 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void remove(int item) {
                 mFilterAdapter.remove(item);
-                mFilterAdapter.notifyDataSetChanged();
             }
         });
 
@@ -88,13 +85,35 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
             @Override
             public void drop(int from, int to) {
 
-                mFilterAdapter.reorder(from, to);
+                mObjectAdapter.reorder(from, to);
+            }
+        });
+
+        mObjectView.setRemoveListener(new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+
+                mObjectAdapter.remove(which);
+            }
+        });
+
+        mObjectView.setDropListener(new DragSortListView.DropListener() {
+            @Override
+            public void drop(int from, int to) {
+
+                mObjectAdapter.reorder(from, to);
             }
         });
 
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
         soundThread.start();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                handleSendImage(intent);
+            }
+        }
     }
 
     @Override
@@ -416,6 +435,28 @@ public class MainActivity extends Activity implements FilterListAdapter.FilterLi
 
     public List<IFilter> getAdapterList () {
         return mFilterAdapter.getItems();
+    }
+
+    void handleSendImage(Intent intent) {
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+        if (imageUri == null)
+            return;
+
+        try {
+            /* The image is converted to a bitmap and send to the FilterHelper object. */
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+
+            mRSFilterHelper.setBitmap(bitmap, true);
+            updateImage(mFilterAdapter.getItems());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this,
+                    "Error occurred while opening picture",
+                    Toast.LENGTH_SHORT).show();
+            Log.e("handleSendImage", "create bitmap failed: " + e);
+        }
     }
 }
 

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -52,6 +51,8 @@ public class ObjectListAdapter extends BaseAdapter {
         final IObject item = getItem(position);
         viewHolder.nameTextView.setText(item.getName());
 
+        viewHolder.thumbnailImageView.setImageBitmap(item.getThumbnail());
+
         return convertView;
     }
 
@@ -78,6 +79,26 @@ public class ObjectListAdapter extends BaseAdapter {
                 break;
             default:
                 break;
+        }
+    }
+
+    /* Removes item at index from filter list */
+    public void remove(int index) {
+
+        mItems.remove(mItems.get(index));
+
+//        mListener.updateImage(mItems);
+        notifyDataSetChanged();
+    }
+
+    public void reorder(int from, int to) {
+        if (from != to) {
+
+            IObject element = mItems.remove(from);
+            mItems.add(to, element);
+
+            notifyDataSetChanged();
+//            mListener.updateImage(mItems);
         }
     }
 }
