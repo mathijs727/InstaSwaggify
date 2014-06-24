@@ -74,7 +74,7 @@ public class RSFilterHelper {
                     mBitmapIn.getHeight(), mBitmapIn.getConfig());
         }
 
-        //Allocate buffers
+        /* Allocate buffers */
         mInAllocation = Allocation.createFromBitmap(mRS, mBitmapIn);
         mOutAllocations = new Allocation[NUM_BITMAPS];
         for (int i = 0; i < NUM_BITMAPS; ++i) {
