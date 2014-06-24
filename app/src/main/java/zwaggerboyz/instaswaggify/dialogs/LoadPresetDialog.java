@@ -22,8 +22,8 @@ import zwaggerboyz.instaswaggify.MainActivity;
 import zwaggerboyz.instaswaggify.PresetsHelper;
 import zwaggerboyz.instaswaggify.R;
 
-// TODO don't show "Load preset" button if there are no presets
-// TODO: NIET VERGETEN
+// TODO don't show "Load preset" button if there are no presets, also update this, when last
+// TODO         preset is deleted from list
 
 /*
  * APP:     InstaSwaggify
