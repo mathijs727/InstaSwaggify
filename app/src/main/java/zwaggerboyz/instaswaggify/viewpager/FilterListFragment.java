@@ -10,9 +10,16 @@ import com.mobeta.android.dslv.DragSortListView;
 
 import zwaggerboyz.instaswaggify.R;
 
-/**
- * Created by Mathijs on 23/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    FilterListFragment.java
+ * TODO:    ik weet niet wat dit doet
  */
+
 public class FilterListFragment extends android.support.v4.app.Fragment {
     private DragSortListView mListView;
     private FilterListAdapter mAdapter;

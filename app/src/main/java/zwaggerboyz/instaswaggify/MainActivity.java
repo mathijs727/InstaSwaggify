@@ -49,6 +49,16 @@ import zwaggerboyz.instaswaggify.viewpager.ListViewPagerAdapter;
 import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
 import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
 
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    MainActivity.java
+ * This file contains the main-activity for the app.
+ */
+
 public class MainActivity extends FragmentActivity
         implements FilterListAdapter.FilterListInterface, OverlayListAdapter.OverlayListInterface, FilterDialog.OnAddFilterListener {
     private ShareActionProvider mShareActionProvider;

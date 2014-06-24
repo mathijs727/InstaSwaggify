@@ -9,8 +9,15 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /*
- * This class plays a sound on a separate thread
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    MainActivity.java
+ * This file contains a thread to play sounds without blocking the app.
  */
+
 public class SoundThread extends Thread {
 
     MediaPlayer audioFile;

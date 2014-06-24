@@ -4,8 +4,14 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by Peter on 19-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    CanvasTouchListener.java
+ * This file contains a listener for touch-events on the canvas.
  */
 
 public class CanvasTouchListener implements View.OnTouchListener {

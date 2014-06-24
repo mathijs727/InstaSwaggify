@@ -14,8 +14,14 @@ import java.util.List;
 import zwaggerboyz.instaswaggify.R;
 import zwaggerboyz.instaswaggify.filters.IFilter;
 
-/**
- * Created by Mathijs on 16/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    FilterListAdapter.java
+ * This file contains the adapter to change the list of currently selected filters.
  */
 
 public class FilterListAdapter extends BaseAdapter {

@@ -13,9 +13,16 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
 
 import static java.lang.Thread.sleep;
 
-/**
- * Created by Mathijs on 17/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    RSFilterHelper.java
+ * This file contains a helper-class to apply the selected filter on the image.
  */
+
 public class RSFilterHelper {
     private final int NUM_BITMAPS = 3;
     private int mTimesProcessed = 0;
