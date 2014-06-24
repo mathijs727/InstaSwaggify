@@ -21,6 +21,8 @@ public class CanvasDraggableItem {
     private int xOffset, yOffset;
     private String mName;
 
+    private static final int DEFAULT_SIZE = 150;
+
     public void calcOffsets(int x, int y) {
         this.xOffset = mRect.left + mHalfWidth - x;
         this.yOffset = mRect.top + mHalfHeight - y;
@@ -28,8 +30,15 @@ public class CanvasDraggableItem {
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y, String name) {
         mBitmap = bitmap;
-        mHalfWidth = bitmap.getWidth() / 2;
-        mHalfHeight = bitmap.getHeight() / 2;
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            mHalfWidth = DEFAULT_SIZE;
+            mHalfHeight = (int)((bitmap.getHeight() / (double)bitmap.getWidth()) * DEFAULT_SIZE);
+        } else {
+            mHalfHeight = DEFAULT_SIZE;
+            mHalfWidth = (int)((bitmap.getWidth() / (double)bitmap.getHeight()) * DEFAULT_SIZE);
+        }
+
         mRect = new Rect(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
         mName = name;
     }

@@ -312,7 +312,6 @@ public class MainActivity extends FragmentActivity
     @Override
     public void OnAddOverlayListener(String resourceName) {
         mDialog.dismiss();
-
         int resourceId = getResources().getIdentifier(resourceName.toLowerCase().replaceAll(" ", ""), "drawable", getPackageName());
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
         CanvasDraggableItem overlay = new CanvasDraggableItem(bitmap,
