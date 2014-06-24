@@ -29,7 +29,6 @@ public abstract class AbstractFilterClass implements IFilter {
     protected int mNumValues;
     protected int imageHeight;
     protected int imageWidth;
-
     protected RenderScript mRS;
 
     public String getName() {

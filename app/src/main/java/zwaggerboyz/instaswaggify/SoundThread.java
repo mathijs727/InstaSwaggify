@@ -14,7 +14,6 @@ import android.media.MediaPlayer;
  */
 
 public class SoundThread extends Thread {
-
     MediaPlayer audioFile;
 
     public SoundThread (Context context, int resourceID) {
