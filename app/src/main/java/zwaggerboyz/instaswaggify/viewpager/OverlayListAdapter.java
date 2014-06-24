@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import zwaggerboyz.instaswaggify.CanvasDraggableItem;
+import zwaggerboyz.instaswaggify.CanvasView;
+import zwaggerboyz.instaswaggify.R;
 
 /*
  * APP:     InstaSwaggify
@@ -23,16 +25,16 @@ import zwaggerboyz.instaswaggify.CanvasDraggableItem;
 
 public class OverlayListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
+    private CanvasView mCanvasView;
     private List<CanvasDraggableItem> mItems;
-    private OverlayListInterface mListener;
 
     private class ViewHolder {
         TextView titleTextView;
     }
 
-    public OverlayListAdapter(Activity activity, OverlayListInterface listener, List<CanvasDraggableItem> items) {
+    public OverlayListAdapter(Activity activity, CanvasView canvasView, List<CanvasDraggableItem> items) {
         mInflater = activity.getLayoutInflater();
-        mListener = listener;
+        mCanvasView = canvasView;
         mItems = items;
     }
 
@@ -60,15 +62,15 @@ public class OverlayListAdapter extends BaseAdapter {
     public View getView(int parent, View convertView, ViewGroup position) {
         final ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = mInflater.inflate(android.R.layout.simple_list_item_1, position);
+            convertView = mInflater.inflate(R.layout.list_item_overlay, null);
             viewHolder = new ViewHolder();
-            viewHolder.titleTextView = (TextView)convertView.findViewById(android.R.id.text1);
+            viewHolder.titleTextView = (TextView)convertView.findViewById(R.id.list_item_overlay_title);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        viewHolder.titleTextView.setText("Overlay " + position);
+        viewHolder.titleTextView.setText("Overlay " + parent);
 
         return convertView;
     }
@@ -80,8 +82,7 @@ public class OverlayListAdapter extends BaseAdapter {
     /* Removes item at index from filter list */
     public void remove(int index) {
         mItems.remove(mItems.get(index));
-
-        mListener.updateOverlays(mItems);
+        mCanvasView.invalidate();
         notifyDataSetChanged();
     }
 
@@ -90,28 +91,19 @@ public class OverlayListAdapter extends BaseAdapter {
             CanvasDraggableItem element = mItems.remove(from);
             mItems.add(to, element);
 
+            mCanvasView.invalidate();
             notifyDataSetChanged();
-            mListener.updateOverlays(mItems);
         }
     }
 
     public void addItem(CanvasDraggableItem overlay) {
         mItems.add(overlay);
-        updateList();
+        mCanvasView.invalidate();
+        notifyDataSetChanged();
     }
 
     public void updateList() {
         notifyDataSetChanged();
-        mListener.updateOverlays(mItems);
-    }
-
-    public void clearOverlays() {
-        mItems.clear();
-        notifyDataSetChanged();
-        mListener.updateOverlays(mItems);
-    }
-
-    public interface OverlayListInterface {
-        public void updateOverlays(List<CanvasDraggableItem> overlays);
+        //mCanvasView.setOverlays(mItems);
     }
 }
