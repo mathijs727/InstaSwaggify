@@ -24,6 +24,7 @@ public class CanvasTouchListener implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         mCanvasView.mScaleDetector.onTouchEvent(event);
+        mCanvasView.mMultiTouch.onTouch(v, event);
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 mPointer1 = event.getPointerId(0);

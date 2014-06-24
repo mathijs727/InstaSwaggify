@@ -24,6 +24,7 @@ public class CanvasView extends View  {
     private double mImgScale = 1.0;
     private int xOffSet, yOffset;
 
+    public MultiTouchGesture mMultiTouch;
     public ScaleGestureDetector mScaleDetector;
 
     private void finishConstructor() {
@@ -36,6 +37,7 @@ public class CanvasView extends View  {
         super(context);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        mMultiTouch = new MultiTouchGesture();
         finishConstructor();
     }
 
@@ -43,6 +45,7 @@ public class CanvasView extends View  {
         super(context, attributes);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        mMultiTouch = new MultiTouchGesture();
         finishConstructor();
     }
 
@@ -50,6 +53,7 @@ public class CanvasView extends View  {
         super(context, attributes, style);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        mMultiTouch = new MultiTouchGesture();
         finishConstructor();
     }
 

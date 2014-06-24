@@ -19,6 +19,7 @@ public class MultiTouchGesture implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent ev) {
+        Log.v("MultiTouch", "OnTouch");
         final int action = ev.getAction();
 
         switch (action & MotionEvent.ACTION_MASK) {
