@@ -21,9 +21,10 @@ import java.util.Iterator;
 import zwaggerboyz.instaswaggify.MainActivity;
 import zwaggerboyz.instaswaggify.R;
 
-//TODO: MAAK DEZE FILE NAAR LoadPresetDialog
+// TODO: MAAK DEZE FILE NAAR LoadPresetDialog
 // TODO don't show "Load preset" button if there are no presets
-//TODO: NIET VERGETEN
+// TODO: adjust function names to camelCase
+// TODO: NIET VERGETEN
 
 /*
  * APP:     InstaSwaggify
@@ -70,7 +71,7 @@ public class FavoritesDialog extends DialogFragment {
                 builder1.setPositiveButton("Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            remove_favorite(favoritesTitle);
+                            removeFavorite(favoritesTitle);
                             listView.setAdapter(new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites()));
                         }
                     }
@@ -125,7 +126,7 @@ public class FavoritesDialog extends DialogFragment {
     }
 
     /* remove favorite from sharedPreferences */
-    public void remove_favorite(String keyToRemove) {
+    public void removeFavorite(String keyToRemove) {
 
         /* read favorites from SharedPreferences and parse them to JSONObject*/
         SharedPreferences prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
