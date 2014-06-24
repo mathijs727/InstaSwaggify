@@ -32,9 +32,9 @@ public class CanvasDraggableItem {
 
     public Matrix getMatrix() {
         rotMatrix.reset();
+        rotMatrix.postRotate(-mAngle, mHalfWidth, mHalfHeight);
+        rotMatrix.postScale(mScaleFactor, mScaleFactor, mHalfWidth, mHalfWidth);
         rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
-        rotMatrix.postRotate(-mAngle, oldX + mHalfWidth - xOffset, oldY + mHalfHeight - yOffset);
-        rotMatrix.postScale(mScaleFactor, mScaleFactor, oldX + mHalfWidth - xOffset, oldY + mHalfWidth - yOffset);
 
         return rotMatrix;
     }
@@ -47,10 +47,6 @@ public class CanvasDraggableItem {
     }
 
     public void calcOffsets(int x, int y) {
-        //this.xOffset = mRotatedRect.left + mRotatedRect.width() - x;
-        //this.yOffset = mRotatedRect.top + mRotatedRect.height() - y;
-        //this.xOffset = x - originalRectF.left;
-        //this.yOffset = y - originalRectF.top ;
         rotMatrix.reset();
         rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
         rotMatrix.mapRect(temp, originalRectF);
