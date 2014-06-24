@@ -1,6 +1,5 @@
 package zwaggerboyz.instaswaggify;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -29,6 +28,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import zwaggerboyz.instaswaggify.filters.AbstractFilterClass;
+import zwaggerboyz.instaswaggify.filters.BrightnessFilter;
+import zwaggerboyz.instaswaggify.filters.ColorizeFilter;
+import zwaggerboyz.instaswaggify.filters.ContrastFilter;
+import zwaggerboyz.instaswaggify.filters.GaussianBlurFilter;
+import zwaggerboyz.instaswaggify.filters.IFilter;
+import zwaggerboyz.instaswaggify.filters.InvertColorsFilter;
+import zwaggerboyz.instaswaggify.filters.NoiseFilter;
+import zwaggerboyz.instaswaggify.filters.RotationFilter;
+import zwaggerboyz.instaswaggify.filters.SaturationFilter;
+import zwaggerboyz.instaswaggify.filters.SepiaFilter;
 
 public class MainActivity extends FragmentActivity
         implements FilterListAdapter.FilterListInterface, OverlayListAdapter.OverlayListInterface, FilterDialog.OnAddFilterListener {

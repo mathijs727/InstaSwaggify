@@ -1,23 +1,27 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
-/**
- * Created by Matthijs on 20-6-2014.
- */
-public class InvertColorsFilter extends AbstractFilterClass {
-    ScriptC_invert_colors mScript;
+import zwaggerboyz.instaswaggify.ScriptC_saturation;
 
-    public InvertColorsFilter() {
-        mID = FilterID.INVERT;
-        mName = "Invert Colors";
-        mNumValues = 0;
+/**
+ * Created by Mathijs on 17/06/14.
+ */
+public class SaturationFilter extends AbstractFilterClass {
+    ScriptC_saturation mScript;
+
+    public SaturationFilter() {
+        mID = FilterID.SATURATION;
+        mName = "Saturation";
+        mNumValues = 1;
 
         mLabels = new String[] {
+                "amount"
         };
         mValues = new int[] {
+            50
         };
     }
 
@@ -25,7 +29,7 @@ public class InvertColorsFilter extends AbstractFilterClass {
     public void setRS(RenderScript rs) {
         if (mRS != rs) {
             mRS = rs;
-            mScript = new ScriptC_invert_colors(mRS);
+            mScript = new ScriptC_saturation(mRS);
         }
     }
 
@@ -34,15 +38,17 @@ public class InvertColorsFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
+        mScript.set_saturationValue(normalizeValue(mValues[0], 0.f, 2.f));
     }
 
     @Override
     public Script.KernelID getKernelId() {
-        return mScript.getKernelID_invert();
+        return mScript.getKernelID_saturation();
     }
 
     @Override
     public Script.FieldID getFieldId() {
         return null;
     }
+
 }

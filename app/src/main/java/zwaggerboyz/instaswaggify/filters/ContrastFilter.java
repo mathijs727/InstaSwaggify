@@ -1,8 +1,10 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+
+import zwaggerboyz.instaswaggify.ScriptC_contrast;
 
 /**
  * Created by Matthijs on 18-6-2014.

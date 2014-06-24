@@ -1,9 +1,10 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
-import android.util.Log;
+
+import zwaggerboyz.instaswaggify.ScriptC_threshold_blur;
 
 /**
  * Created by Mathijs on 17/06/14.

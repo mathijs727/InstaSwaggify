@@ -1,27 +1,25 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
-import java.util.logging.Filter;
+import zwaggerboyz.instaswaggify.ScriptC_invert_colors;
 
 /**
- * Created by Matthijs on 18-6-2014.
+ * Created by Matthijs on 20-6-2014.
  */
-public class BrightnessFilter extends AbstractFilterClass {
-    ScriptC_brightness mScript;
+public class InvertColorsFilter extends AbstractFilterClass {
+    ScriptC_invert_colors mScript;
 
-    public BrightnessFilter() {
-        mID = FilterID.BRIGHTNESS;
-        mName = "Brightness";
-        mNumValues = 1;
+    public InvertColorsFilter() {
+        mID = FilterID.INVERT;
+        mName = "Invert Colors";
+        mNumValues = 0;
 
         mLabels = new String[] {
-                "brightness"
         };
         mValues = new int[] {
-                33
         };
     }
 
@@ -29,7 +27,7 @@ public class BrightnessFilter extends AbstractFilterClass {
     public void setRS(RenderScript rs) {
         if (mRS != rs) {
             mRS = rs;
-            mScript = new ScriptC_brightness(mRS);
+            mScript = new ScriptC_invert_colors(mRS);
         }
     }
 
@@ -38,12 +36,11 @@ public class BrightnessFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_brightnessValue(normalizeValue(mValues[0], 0.5f, 2.f));
     }
 
     @Override
     public Script.KernelID getKernelId() {
-        return mScript.getKernelID_brightness();
+        return mScript.getKernelID_invert();
     }
 
     @Override

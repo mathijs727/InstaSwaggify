@@ -1,8 +1,10 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+
+import zwaggerboyz.instaswaggify.ScriptC_sepia;
 
 /**
  * Created by Matthijs on 17-6-2014.

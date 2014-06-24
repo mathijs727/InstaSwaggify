@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import zwaggerboyz.instaswaggify.filters.IFilter;
+
 /**
  * Created by zeta on 6/19/14.
  */
