@@ -19,17 +19,19 @@ public class CanvasDraggableItem {
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
     private int xOffset, yOffset;
+    private String mName;
 
     public void calcOffsets(int x, int y) {
         this.xOffset = mRect.left + mHalfWidth - x;
         this.yOffset = mRect.top + mHalfHeight - y;
     }
 
-    public CanvasDraggableItem (Bitmap bitmap, int x, int y) {
+    public CanvasDraggableItem (Bitmap bitmap, int x, int y, String name) {
         mBitmap = bitmap;
         mHalfWidth = bitmap.getWidth() / 2;
         mHalfHeight = bitmap.getHeight() / 2;
         mRect = new Rect(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
+        mName = name;
     }
 
     public void move (int x, int y) {
