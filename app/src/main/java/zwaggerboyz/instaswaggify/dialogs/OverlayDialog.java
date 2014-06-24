@@ -23,24 +23,24 @@ import zwaggerboyz.instaswaggify.R;
 public class OverlayDialog extends DialogFragment {
     private static final String[] mAllOverlays =
             {
-                    "instaswag",
-                    "instaweed",
-                    "instajoint",
+                    "InstaSwag",
+                    "InstaWeed",
+                    "InstaJoint",
 
-                    "instabling",
-                    "instabling2",
-                    "instamoney",
-                    "instacrown",
+                    "InstaBling",
+                    "InstaBling2",
+                    "InstaMoney",
+                    "InstaCrown",
 
-                    "instadoge",
-                    "instadealwithit",
-                    "instafedora",
-                    "instanoscope",
+                    "InstaDoge",
+                    "InstaDealWithIt",
+                    "InstaFedora",
+                    "InstaNoScope",
 
-                    "instabeard",
-                    "instabeard2",
-                    "instamoustache",
-                    "instagourmet",
+                    "InstaBeard",
+                    "InstaBeard2",
+                    "InstaMoustache",
+                    "InstaGourmet",
             };
     private OnAddOverlayListener mListener = null;
     ArrayAdapter<String> mAdapter;
