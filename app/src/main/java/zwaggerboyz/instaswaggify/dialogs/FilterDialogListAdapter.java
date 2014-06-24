@@ -5,8 +5,15 @@ import android.content.res.Resources;
 import android.widget.ArrayAdapter;
 
 /**
- * Created by Mathijs on 23/06/14.
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE: FilterDialogListAdapter.java
+ * //TODO wat doet deze klasse
  */
+
 public class FilterDialogListAdapter extends ArrayAdapter<CharSequence> {
     private Boolean[] mEnabled;
 

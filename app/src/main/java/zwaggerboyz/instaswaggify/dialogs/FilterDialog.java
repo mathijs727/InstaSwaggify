@@ -89,6 +89,7 @@ public class FilterDialog extends DialogFragment {
                         if (mAllFilters[id] == mAdapter.getItem(listId))
                             break;
 
+                    /* add selected filter to list */
                     switch (id) {
                         case 0:
                             filter = new BrightnessFilter();

@@ -63,7 +63,6 @@ public class CanvasView extends View  {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
         canvas.save();
         canvas.drawColor(R.color.background);
 

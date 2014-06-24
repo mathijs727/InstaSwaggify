@@ -28,7 +28,7 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
  * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
  *          Arne Zismer
  *
- * FILE:    SavePreset.java
+ * FILE:    SavePresetDialog.java
  * This file contains the dialog that is shown when saving a preset.
  */
 
