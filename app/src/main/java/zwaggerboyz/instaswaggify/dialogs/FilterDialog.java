@@ -1,4 +1,4 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.dialogs;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import zwaggerboyz.instaswaggify.R;
 import zwaggerboyz.instaswaggify.filters.BrightnessFilter;
 import zwaggerboyz.instaswaggify.filters.ColorizeFilter;
 import zwaggerboyz.instaswaggify.filters.ContrastFilter;

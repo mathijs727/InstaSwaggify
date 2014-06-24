@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
+import zwaggerboyz.instaswaggify.dialogs.FavoritesDialog;
+import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
+import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
 import zwaggerboyz.instaswaggify.filters.AbstractFilterClass;
 import zwaggerboyz.instaswaggify.filters.BrightnessFilter;
 import zwaggerboyz.instaswaggify.filters.ColorizeFilter;
@@ -40,6 +44,10 @@ import zwaggerboyz.instaswaggify.filters.NoiseFilter;
 import zwaggerboyz.instaswaggify.filters.RotationFilter;
 import zwaggerboyz.instaswaggify.filters.SaturationFilter;
 import zwaggerboyz.instaswaggify.filters.SepiaFilter;
+import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
+import zwaggerboyz.instaswaggify.viewpager.ListViewPagerAdapter;
+import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
+import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
 
 public class MainActivity extends FragmentActivity
         implements FilterListAdapter.FilterListInterface, OverlayListAdapter.OverlayListInterface, FilterDialog.OnAddFilterListener {

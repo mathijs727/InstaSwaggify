@@ -1,12 +1,8 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.dialogs;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Mathijs on 23/06/14.

@@ -1,4 +1,4 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
+import zwaggerboyz.instaswaggify.MainActivity;
+import zwaggerboyz.instaswaggify.R;
 import zwaggerboyz.instaswaggify.filters.IFilter;
 
 /**

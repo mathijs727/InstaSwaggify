@@ -1,4 +1,4 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.viewpager;
 
 import android.content.Context;
 import android.graphics.Typeface;
