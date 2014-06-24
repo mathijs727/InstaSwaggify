@@ -11,8 +11,14 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-/**
- * Created by Swaggenegger on 19-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    CanvasView.java
+ * This file contains the canvas-view that draw the bitmap and overlays.
  */
 
 public class CanvasView extends View  {

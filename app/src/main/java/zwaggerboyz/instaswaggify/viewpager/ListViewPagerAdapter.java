@@ -4,9 +4,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-/**
- * Created by Mathijs on 23/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    ListViewPager.java
+ * TODO:    ik weet niet wat dit doet
  */
+
 public class ListViewPagerAdapter extends FragmentStatePagerAdapter {
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;

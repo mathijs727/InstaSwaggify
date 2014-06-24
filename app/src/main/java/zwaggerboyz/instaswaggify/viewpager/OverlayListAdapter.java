@@ -11,9 +11,16 @@ import java.util.List;
 
 import zwaggerboyz.instaswaggify.CanvasDraggableItem;
 
-/**
- * Created by Mathijs on 23/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    OverlayListAdapter.java
+ * This file contains the adapter to change the list of currently selected overlays.
  */
+
 public class OverlayListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<CanvasDraggableItem> mItems;

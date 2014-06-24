@@ -4,9 +4,16 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.util.Log;
 
-/**
- * Created by Peter on 19-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    CanvasDraggableItem.java
+ * This file contains an overlay with its bitmap and position on the canvas.
  */
+
 public class CanvasDraggableItem {
     private Rect mRect;
     private int mHalfWidth, mHalfHeight;
