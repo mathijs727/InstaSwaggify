@@ -389,11 +389,6 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(filters, this);
     }
 
-    @Override
-    public void updateOverlays(List<CanvasDraggableItem> overlays) {
-        //TODO: update the overlays on the canvas
-    }
-
     void handleSendImage(Intent intent) {
         Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
