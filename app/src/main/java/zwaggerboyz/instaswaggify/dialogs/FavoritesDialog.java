@@ -25,6 +25,7 @@ import zwaggerboyz.instaswaggify.MainActivity;
 import zwaggerboyz.instaswaggify.R;
 
 //TODO: MAAK DEZE FILE NAAR LoadPresetDialog
+// TODO don't show "Load preset" button if there are no presets
 //TODO: NIET VERGETEN
 
 /*
@@ -38,7 +39,6 @@ import zwaggerboyz.instaswaggify.R;
  */
 
 
-// TODO don't show "Load preset" button if there are no presets
 
 public class FavoritesDialog extends DialogFragment {
     @Override
@@ -75,7 +75,6 @@ public class FavoritesDialog extends DialogFragment {
                         public void onClick(DialogInterface dialog, int id) {
                             remove_favorite(favoritesTitle);
                             listView.setAdapter(new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites()));
-                            if (getFavorites().length == 0) getDialog().setTitle("@string/presets_empty");
                         }
                     }
                 );
@@ -130,7 +129,8 @@ public class FavoritesDialog extends DialogFragment {
 
     /* remove favorite from sharedPreferences */
     public void remove_favorite(String keyToRemove) {
-        /* read favorites from SharedPreferences and parsen them to JSONObject*/
+
+        /* read favorites from SharedPreferences and parse them to JSONObject*/
         SharedPreferences prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject favorites = null;

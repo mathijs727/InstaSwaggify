@@ -197,7 +197,7 @@ public class ExportDialog extends DialogFragment {
         }
 
         if(compression == Bitmap.CompressFormat.JPEG) {
-            extension = ".jpg";
+            extension = ".jpeg";
         }
         else {
             extension = ".png";
