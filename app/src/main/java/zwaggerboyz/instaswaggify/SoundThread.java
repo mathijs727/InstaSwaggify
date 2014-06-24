@@ -24,7 +24,7 @@ public class SoundThread extends Thread {
 
     public void run() {
         audioFile.start();
-        while(audioFile.isPlaying());
+        while (audioFile.isPlaying());
         audioFile.release();
     }
 }

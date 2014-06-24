@@ -2,7 +2,6 @@ package zwaggerboyz.instaswaggify;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.util.Log;
 
 /*
  * APP:     InstaSwaggify
@@ -24,7 +23,6 @@ public class CanvasDraggableItem {
     public void calcOffsets(int x, int y) {
         this.xOffset = mRect.left + mHalfWidth - x;
         this.yOffset = mRect.top + mHalfHeight - y;
-        Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
     }
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y) {
@@ -51,7 +49,6 @@ public class CanvasDraggableItem {
     }
 
     public void resizeImage(double scale) {
-        //Log.i("Pevid", "resize");
         mHalfWidth = (int) ((mBitmap.getWidth() * scale) / 2);
         mHalfHeight = (int) ((mBitmap.getHeight() * scale) / 2);
 
