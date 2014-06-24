@@ -66,4 +66,8 @@ public class CanvasDraggableItem {
     public void setScaleFactor(float scale) {
         mScaleFactor = scale;
     }
+
+    public String getName() {
+        return mName;
+    }
 }
