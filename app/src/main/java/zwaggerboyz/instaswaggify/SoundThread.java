@@ -2,11 +2,6 @@ package zwaggerboyz.instaswaggify;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.util.Log;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /*
  * APP:     InstaSwaggify
