@@ -54,6 +54,8 @@ public class FilterListAdapter extends BaseAdapter {
 
     public void setItems(List<IFilter> items) {
         mItems = items;
+        notifyDataSetChanged();
+        mListener.updateImage(mItems);
     }
 
     @Override

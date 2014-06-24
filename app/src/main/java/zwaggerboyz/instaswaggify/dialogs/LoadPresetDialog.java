@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import zwaggerboyz.instaswaggify.MainActivity;
+import zwaggerboyz.instaswaggify.PresetsHelper;
 import zwaggerboyz.instaswaggify.R;
 
 // TODO don't show "Load preset" button if there are no presets
@@ -35,112 +36,66 @@ import zwaggerboyz.instaswaggify.R;
  */
 
 public class LoadPresetDialog extends DialogFragment {
+    private PresetsHelper mPresetsHelper;
+    private OnLoadPresetListener mListener;
+
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        if (getFavorites().length > 0) {
-            getDialog().setTitle(R.string.filter_dialog_title);
-        }
+        getDialog().setTitle(R.string.filter_dialog_title);
 
         /* Setting up ListView and the adapter. */
-        final View mView = inflater.inflate(R.layout.filterdialog, container, false);
-        final ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
+        final View mView = inflater.inflate(R.layout.dialog_list, container, false);
+        final ListView listView = (ListView) mView.findViewById(R.id.dialog_list_listview);
 
-        /* show favorites if available */
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());
+        mPresetsHelper = new PresetsHelper(getActivity());
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                mView.getContext(),
+                android.R.layout.simple_list_item_1,
+                mPresetsHelper.getPresets());
         listView.setAdapter(adapter);
 
         /* Set the onClickListener for the dialog. */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((MainActivity)getActivity()).setFilter(adapterView.getItemAtPosition(i).toString());
+            public void onItemClick(AdapterView<?> adapterView, View view, int id, long l) {
+                mListener.OnLoadPresetListener(id);
             }
         });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(final AdapterView<?> adapterView, View view, int i, long l) {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                final String favoritesTitle = adapterView.getItemAtPosition(i).toString();
-                builder1.setMessage("Delete " + adapterView.getItemAtPosition(i) + "?");
-                builder1.setCancelable(true);
-                builder1.setPositiveButton("Yes",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            removeFavorite(favoritesTitle);
-                            listView.setAdapter(new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites()));
+            public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int presetId, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Delete " + adapter.getItem(presetId) + "?");
+                builder.setCancelable(true);
+                builder.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                adapter.remove(adapter.getItem(presetId));
+                                mPresetsHelper.removePreset(presetId);
+                            }
                         }
-                    }
                 );
-                builder1.setNegativeButton("No",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
+                builder.setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
                         }
-                    }
                 );
 
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
+                AlertDialog alert = builder.create();
+                alert.show();
                 return false;
             }
         });
         return mView;
     }
 
-     /* Fetches saved favorites */
-    private String[] getFavorites() {
-
-        /* read favorites from SharedPreferences and parsen them to JSONObject*/
-        SharedPreferences prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String favoritesString = prefs.getString("Favorites", "");
-        JSONObject favoritesObject = null;
-        ArrayList<String> keys = new ArrayList<String>();
-
-        if (!favoritesString.equals("")) {
-            try {
-                /* fill array with keys */
-                favoritesObject = new JSONObject(favoritesString);
-                Iterator<?> iterate = favoritesObject.keys();
-                while(iterate.hasNext()) {
-                    String test  = (String)iterate.next();
-                    keys.add(test);
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            return new String[0];
-        }
-
-        /* return keys */
-        String [] favorites = new String[keys.size()];
-        keys.toArray(favorites);
-        return favorites;
+    public void setOnLoadPresetListener(OnLoadPresetListener listener) {
+        mListener = listener;
     }
-
-    /* remove favorite from sharedPreferences */
-    public void removeFavorite(String keyToRemove) {
-
-        /* read favorites from SharedPreferences and parse them to JSONObject*/
-        SharedPreferences prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String favoritesString = prefs.getString("Favorites", "");
-        JSONObject favorites = null;
-
-        if (!favoritesString.equals("")) {
-
-            /* remove key here */
-            try {
-                favorites = new JSONObject(favoritesString);
-                favorites.remove(keyToRemove);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        favoritesString = favorites.toString();
-        prefs.edit().putString("Favorites", favoritesString).commit();
+    public interface OnLoadPresetListener {
+        public void OnLoadPresetListener(int index);
     }
 }

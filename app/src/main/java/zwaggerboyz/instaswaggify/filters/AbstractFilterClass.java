@@ -19,7 +19,16 @@ import android.renderscript.Script;
 public abstract class AbstractFilterClass implements IFilter {
 
     public enum FilterID {
-        BRIGHTNESS, CONTRAST, GAUSSIAN, ROTATION, SATURATION, SEPIA, NOISE, INVERT, COLORIZE, THRESHOLD;
+        BRIGHTNESS,
+        CONTRAST,
+        GAUSSIAN,
+        ROTATION,
+        SATURATION,
+        SEPIA,
+        NOISE,
+        INVERT,
+        COLORIZE,
+        THRESHOLD
     }
 
     protected FilterID mID;
