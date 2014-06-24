@@ -1,9 +1,8 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,6 +24,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import zwaggerboyz.instaswaggify.CanvasView;
+import zwaggerboyz.instaswaggify.R;
 
 /**
  * Created by zeta on 6/19/14.

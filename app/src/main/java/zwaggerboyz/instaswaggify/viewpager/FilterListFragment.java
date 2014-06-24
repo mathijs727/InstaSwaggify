@@ -1,7 +1,6 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.viewpager;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.mobeta.android.dslv.DragSortListView;
 
-import java.util.ArrayList;
+import zwaggerboyz.instaswaggify.R;
 
 /**
  * Created by Mathijs on 23/06/14.

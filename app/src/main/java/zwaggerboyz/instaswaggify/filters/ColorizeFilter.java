@@ -1,10 +1,10 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
-import java.util.logging.Filter;
+import zwaggerboyz.instaswaggify.ScriptC_colorize;
 
 /**
  * Created by Matthijs on 18-6-2014.

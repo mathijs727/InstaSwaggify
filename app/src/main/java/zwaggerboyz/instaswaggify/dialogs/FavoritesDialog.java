@@ -1,4 +1,4 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,6 +20,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import zwaggerboyz.instaswaggify.MainActivity;
+import zwaggerboyz.instaswaggify.R;
 
 /**
  * Created by scoud on 19-6-14.

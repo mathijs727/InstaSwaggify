@@ -11,10 +11,17 @@
         android:layout_height="match_parent"
         android:layout_toLeftOf="@+id/activity_main_viewPager"/>
 
+    <zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout
+        android:id="@+id/activity_main_tabs"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/activity_main_viewPager"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/activity_main_tabs"/>
 </RelativeLayout>

@@ -1,9 +1,6 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.viewpager;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import zwaggerboyz.instaswaggify.R;
+import zwaggerboyz.instaswaggify.filters.IFilter;
 
 /**
  * Created by Mathijs on 16/06/14.
@@ -29,7 +23,6 @@ public class FilterListAdapter extends BaseAdapter {
     private List<IFilter> mItems;
     private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
     private int bufferLevel = 0;
-    private Activity mActivity;
     private FilterListInterface mListener;
 
     private class ViewHolder {
@@ -41,7 +34,6 @@ public class FilterListAdapter extends BaseAdapter {
         mInflater = activity.getLayoutInflater();
         mItems = items;
         mListener = listener;
-        mActivity = activity;
     }
 
     @Override
@@ -107,7 +99,6 @@ public class FilterListAdapter extends BaseAdapter {
                 viewHolder.label3TextView.setVisibility(View.GONE);
                 viewHolder.slider2Seekbar.setVisibility(View.GONE);
                 viewHolder.slider3Seekbar.setVisibility(View.GONE);
-
                 break;
             case 2:
                 viewHolder.label1TextView.setVisibility(View.VISIBLE);

@@ -1,26 +1,27 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
-import android.util.Log;
+
+import zwaggerboyz.instaswaggify.ScriptC_brightness;
 
 /**
- * Created by Mathijs on 17/06/14.
+ * Created by Matthijs on 18-6-2014.
  */
-public class SaturationFilter extends AbstractFilterClass {
-    ScriptC_saturation mScript;
+public class BrightnessFilter extends AbstractFilterClass {
+    ScriptC_brightness mScript;
 
-    public SaturationFilter() {
-        mID = FilterID.SATURATION;
-        mName = "Saturation";
+    public BrightnessFilter() {
+        mID = FilterID.BRIGHTNESS;
+        mName = "Brightness";
         mNumValues = 1;
 
         mLabels = new String[] {
-                "amount"
+                "brightness"
         };
         mValues = new int[] {
-            50
+                33
         };
     }
 
@@ -28,7 +29,7 @@ public class SaturationFilter extends AbstractFilterClass {
     public void setRS(RenderScript rs) {
         if (mRS != rs) {
             mRS = rs;
-            mScript = new ScriptC_saturation(mRS);
+            mScript = new ScriptC_brightness(mRS);
         }
     }
 
@@ -37,17 +38,16 @@ public class SaturationFilter extends AbstractFilterClass {
 
     @Override
     public void updateInternalValues() {
-        mScript.set_saturationValue(normalizeValue(mValues[0], 0.f, 2.f));
+        mScript.set_brightnessValue(normalizeValue(mValues[0], 0.5f, 2.f));
     }
 
     @Override
     public Script.KernelID getKernelId() {
-        return mScript.getKernelID_saturation();
+        return mScript.getKernelID_brightness();
     }
 
     @Override
     public Script.FieldID getFieldId() {
         return null;
     }
-
 }

@@ -1,8 +1,10 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+
+import zwaggerboyz.instaswaggify.ScriptC_noise;
 
 /**
  * Created by Matthijs on 20-6-2014.

@@ -1,6 +1,5 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.viewpager;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -24,6 +23,15 @@ public class ListViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return 2;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        if (position == 0) {
+            return "Filters";
+        } else {
+            return "Overlays";
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package zwaggerboyz.instaswaggify;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -30,13 +29,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
+import zwaggerboyz.instaswaggify.dialogs.FavoritesDialog;
+import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
+import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
+import zwaggerboyz.instaswaggify.filters.AbstractFilterClass;
+import zwaggerboyz.instaswaggify.filters.BrightnessFilter;
+import zwaggerboyz.instaswaggify.filters.ColorizeFilter;
+import zwaggerboyz.instaswaggify.filters.ContrastFilter;
+import zwaggerboyz.instaswaggify.filters.GaussianBlurFilter;
+import zwaggerboyz.instaswaggify.filters.IFilter;
+import zwaggerboyz.instaswaggify.filters.InvertColorsFilter;
+import zwaggerboyz.instaswaggify.filters.NoiseFilter;
+import zwaggerboyz.instaswaggify.filters.RotationFilter;
+import zwaggerboyz.instaswaggify.filters.SaturationFilter;
+import zwaggerboyz.instaswaggify.filters.SepiaFilter;
+import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
+import zwaggerboyz.instaswaggify.viewpager.ListViewPagerAdapter;
+import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
+import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
+
 public class MainActivity extends FragmentActivity
         implements FilterListAdapter.FilterListInterface, OverlayListAdapter.OverlayListInterface, FilterDialog.OnAddFilterListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
     private CanvasView mCanvasView;
-    private ViewPager mViewPager;
     private RSFilterHelper mRSFilterHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
@@ -57,9 +75,10 @@ public class MainActivity extends FragmentActivity
 
         mExportDialog = new ExportDialog();
 
-
-        mViewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout)findViewById(R.id.activity_main_tabs);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
+
         mExportDialog.setCanvasView(mCanvasView);
 
         mRSFilterHelper = new RSFilterHelper();
@@ -74,8 +93,9 @@ public class MainActivity extends FragmentActivity
                 getSupportFragmentManager(),
                 mFilterAdapter,
                 mOverlayAdapter);
-        mViewPager.setOffscreenPageLimit(1);
-        mViewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(1);
+        viewPager.setAdapter(pagerAdapter);
+        slidingTabLayout.setViewPager(viewPager);
 
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);

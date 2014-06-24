@@ -1,4 +1,4 @@
-package zwaggerboyz.instaswaggify;
+package zwaggerboyz.instaswaggify.filters;
 
 import android.renderscript.Allocation;
 import android.renderscript.Element;
