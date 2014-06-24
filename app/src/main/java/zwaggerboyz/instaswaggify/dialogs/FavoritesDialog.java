@@ -24,9 +24,19 @@ import java.util.Iterator;
 import zwaggerboyz.instaswaggify.MainActivity;
 import zwaggerboyz.instaswaggify.R;
 
-/**
- * Created by scoud on 19-6-14.
+//TODO: MAAK DEZE FILE NAAR LoadPresetDialog
+//TODO: NIET VERGETEN
+
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    FavoritesDialog.java
+ * This file contains the dialog that is shown when loading a preset.
  */
+
 public class FavoritesDialog extends DialogFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {

@@ -21,9 +21,17 @@ import zwaggerboyz.instaswaggify.MainActivity;
 import zwaggerboyz.instaswaggify.R;
 import zwaggerboyz.instaswaggify.filters.IFilter;
 
-/**
- * Created by zeta on 6/19/14.
+
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    SavePreset.java
+ * This file contains the dialog that is shown when saving a preset.
  */
+
 
 public class SavePresetDialog extends DialogFragment {
     FilterListAdapter adapter;
