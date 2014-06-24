@@ -26,8 +26,8 @@ public class SepiaFilter extends AbstractFilterClass {
         mNumValues = 2;
 
         mLabels = new String[] {
-                "Intensity",
-                "Depth"
+                "intensity",
+                "depth"
         };
         mValues = new int[] {
                 10,

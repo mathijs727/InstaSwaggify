@@ -28,8 +28,14 @@ import java.util.Date;
 import zwaggerboyz.instaswaggify.CanvasView;
 import zwaggerboyz.instaswaggify.R;
 
-/**
- * Created by zeta on 6/19/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    ExportDialog.java
+ * This file contains the dialog that is shown
  */
 
 public class ExportDialog extends DialogFragment {

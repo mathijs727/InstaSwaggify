@@ -26,7 +26,7 @@ public class NoiseFilter extends AbstractFilterClass {
         mID = FilterID.NOISE;
 
         mLabels = new String[] {
-                "noise"
+                "intensity"
         };
         mValues = new int[] {
                 20

@@ -26,7 +26,7 @@ public class BrightnessFilter extends AbstractFilterClass {
         mNumValues = 1;
 
         mLabels = new String[] {
-                "brightness"
+                "intensity"
         };
         mValues = new int[] {
                 33

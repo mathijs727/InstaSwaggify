@@ -25,10 +25,10 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
         mNumValues = 3;
 
         mLabels = new String[] {
-                "Radius",
-                "Threshold",
-                "Strength",
-                "Drop"
+                "radius",
+                "threshold",
+                "strength",
+                "drop"
         };
         mValues = new int[] {
             4,

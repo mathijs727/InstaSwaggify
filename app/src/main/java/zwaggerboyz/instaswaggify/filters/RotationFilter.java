@@ -26,7 +26,7 @@ public class RotationFilter extends AbstractFilterClass {
         mNumValues = 1;
 
         mLabels = new String[] {
-                "Angle"
+                "angle"
         };
         mValues = new int[] {
                 0
