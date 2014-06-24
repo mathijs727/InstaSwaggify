@@ -258,6 +258,7 @@ public class ExportDialog extends DialogFragment {
         catch (Exception e) {
             errorToast.show();
             e.printStackTrace();
+            //todo: histogram??
             Log.e("Error opening histogram output stream", e.toString());
             return null;
 
