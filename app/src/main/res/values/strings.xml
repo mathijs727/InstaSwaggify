@@ -25,7 +25,7 @@
     <string name="export_dialog_text">Select quality</string>
     <string name="share_dialog_title">Share Photo</string>
     <string name="filter_dialog_title">Select Filter</string>
-    <string name="overlay_dialog_title">Select Dialog</string>
+    <string name="overlay_dialog_title">Select Overlay</string>
 
     <string name="compression_prompt">Choose a compression</string>
 
