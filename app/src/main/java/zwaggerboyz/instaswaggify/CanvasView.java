@@ -83,10 +83,17 @@ public class CanvasView extends View  {
         paint.setColor(Color.RED);
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
+        canvas.drawRect(95, 95, 105, 105, paint);
 
         for (CanvasDraggableItem overlay : mOverlays) {
             canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
             canvas.drawRect(overlay.getRect(), paint);
+            paint.setColor(Color.GREEN);
+            canvas.drawRect(overlay.getRect().left + overlay.xOffset - 5,
+                            overlay.getRect().top + overlay.yOffset - 5,
+                            overlay.getRect().left + overlay.xOffset + 5,
+                            overlay.getRect().top + overlay.yOffset + 5 , paint);
+            paint.setColor(Color.RED);
         }
     }
 
@@ -212,13 +219,13 @@ public class CanvasView extends View  {
     }
 
     public void onPointerUp(int x, int y) {
-        if (mSelected != null)
-            mSelected.calcOffsets((int)mScaleDetector.getFocusX(), (int)mScaleDetector.getFocusY());
+//        if (mSelected != null)
+//            mSelected.calcOffsets((int)mScaleDetector.getFocusX(), (int)mScaleDetector.getFocusY());
     }
 
     public void switchPointer(int x, int y) {
         if (mSelected != null) {
-            mSelected.calcOffsets(x, y);
+//            mSelected.calcOffsets(x, y);
         }
     }
 

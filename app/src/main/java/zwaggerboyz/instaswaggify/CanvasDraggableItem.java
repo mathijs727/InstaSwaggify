@@ -16,7 +16,7 @@ public class CanvasDraggableItem {
     private int mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
-    private float xOffset, yOffset;
+    public float xOffset, yOffset;
     public float mAngle;
     private float oldScale;
     private Matrix rotMatrix = new Matrix();
@@ -42,8 +42,8 @@ public class CanvasDraggableItem {
     }
 
     public void calcOffsets(int x, int y) {
-        this.xOffset = mRotatedRect.left + mRotatedRect.width() - x;
-        this.yOffset = mRotatedRect.top + mRotatedRect.height() - y;
+        this.xOffset = x - mRotatedRect.left;
+        this.yOffset = y - mRotatedRect.top;
         Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
     }
 
@@ -55,7 +55,7 @@ public class CanvasDraggableItem {
         originalRectF = new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight());
         mRotatedRect = new RectF();
 
-        rotMatrix.preTranslate(100 - mHalfWidth, 100 -mHalfHeight);
+        rotMatrix.preTranslate(100, 100);
         rotMatrix.mapRect(mRotatedRect, originalRectF);
 
         oldX = 100;
