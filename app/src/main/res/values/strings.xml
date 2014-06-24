@@ -34,8 +34,4 @@
         <item>PNG</item>
     </string-array>
 
-    <string-array name="share_options">
-        <item>Email</item>
-    </string-array>
-
 </resources>
