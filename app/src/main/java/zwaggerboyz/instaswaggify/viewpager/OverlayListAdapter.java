@@ -59,7 +59,7 @@ public class OverlayListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int parent, View convertView, ViewGroup position) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_item_overlay, null);
@@ -70,7 +70,7 @@ public class OverlayListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        viewHolder.titleTextView.setText("Overlay " + parent);
+        viewHolder.titleTextView.setText(getItem(position).getName());
 
         return convertView;
     }
