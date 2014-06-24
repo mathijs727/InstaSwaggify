@@ -14,10 +14,28 @@ import zwaggerboyz.instaswaggify.R;
 /**
  * Created by Mathijs on 24/06/14.
  */
+
 public class OverlayDialog extends DialogFragment {
     private static final String[] mAllOverlays =
             {
-                    "Dollar"
+                    "InstaSwag",
+                    "InstaWeed",
+                    "InstaJoint",
+
+                    "InstaBling",
+                    "InstaBling2",
+                    "InstaMoney",
+                    "InstaCrown",
+
+                    "InstaDoge",
+                    "InstaDealWithIt",
+                    "InstaFedora",
+                    "InstaNoScope",
+
+                    "InstaBeard",
+                    "InstaBeard2",
+                    "InstaMoustache",
+                    "InstaGourmet",
             };
     private OnAddOverlayListener mListener = null;
     ArrayAdapter<String> mAdapter;
@@ -41,11 +59,7 @@ public class OverlayDialog extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int listId, long l) {
                 if (mListener != null) {
-                    switch (listId) {
-                        case 0:
-                            mListener.OnAddOverlayListener(R.drawable.swag);
-                            break;
-                    }
+                    mListener.OnAddOverlayListener(mAllOverlays[listId]);
                 }
             }
         });
@@ -56,6 +70,6 @@ public class OverlayDialog extends DialogFragment {
         mListener = listener;
     }
     public interface OnAddOverlayListener {
-        public void OnAddOverlayListener(int resourceId);
+        public void OnAddOverlayListener(String resourceName);
     }
 }
