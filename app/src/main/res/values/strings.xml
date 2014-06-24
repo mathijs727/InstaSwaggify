@@ -22,6 +22,10 @@
     <string name="preset_empty">No presets found</string>
     <string name="preset_dialog_title">Save Preset</string>
     <string name="export_dialog_title">Export Photo</string>
+    <string name="export_dialog_title">Save Photo</string>
+    <string name="export_dialog_text">Select quality</string>
+    <string name="share_dialog_title">Share Photo</string>
+    <string name="filter_dialog_title">Select Filter</string>
 
 
     <!-- Strings for exporting and sharing picture -->
