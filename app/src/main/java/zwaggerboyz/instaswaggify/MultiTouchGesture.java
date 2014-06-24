@@ -82,10 +82,16 @@ public class MultiTouchGesture implements View.OnTouchListener {
                     else
                         deltaAngle = 1;
 
-                    double num = oldX * oldX + oldY * oldY + newX * newX + newY * newY;
-                    double dem = Math.sqrt(oldX * oldX + oldY * oldY) * Math.sqrt(newX * newX + newY * newY);
 
-                    deltaAngle *= Math.acos(num / dem);
+                    double num = oldX * newX + oldY * newY;
+                    double dem = Math.sqrt(oldX * oldX + oldY * oldY) * Math.sqrt(newX * newX + newY * newY);
+                    double ratio = Math.min(1, Math.max(-1, num / dem));
+
+                    Log.i("Pevid", "num " + num + " dem " + dem);
+                    Log.i("Pevid", "num / dem " + num / dem);
+                    Log.i("Pevid", "acos " + Math.acos(num / dem));
+
+                    deltaAngle *= Math.acos(ratio);
 
                     Log.i("MultiTouch", "deltaAngle: " + deltaAngle);
 
