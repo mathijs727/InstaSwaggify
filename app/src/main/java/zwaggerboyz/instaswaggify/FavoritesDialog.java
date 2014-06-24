@@ -42,14 +42,10 @@ public class FavoritesDialog extends DialogFragment {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites());
         listView.setAdapter(adapter);
 
-        /**
-         * List item listeners
-         */
+        /* Set the onClickListener for the dialog. */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
                 ((MainActivity)getActivity()).setFilter(adapterView.getItemAtPosition(i).toString());
             }
         });
@@ -62,20 +58,20 @@ public class FavoritesDialog extends DialogFragment {
                 builder1.setMessage("Delete " + adapterView.getItemAtPosition(i) + "?");
                 builder1.setCancelable(true);
                 builder1.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                remove_favorite(favoritesTitle);
-                                listView.setAdapter(new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites()));
-                                if (getFavorites().length == 0) getDialog().setTitle("@string/preset_not_found");
-                            }
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            remove_favorite(favoritesTitle);
+                            listView.setAdapter(new ArrayAdapter<String>(mView.getContext(), android.R.layout.simple_list_item_1, getFavorites()));
+                            if (getFavorites().length == 0) getDialog().setTitle("@string/preset_not_found");
                         }
+                    }
                 );
                 builder1.setNegativeButton("No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
                         }
+                    }
                 );
 
                 AlertDialog alert11 = builder1.create();
@@ -104,7 +100,6 @@ public class FavoritesDialog extends DialogFragment {
                     String test  = (String)iterate.next();
                     keys.add(test);
                 }
-
             }
             catch (Exception e) {
                 e.printStackTrace();
