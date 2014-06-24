@@ -10,7 +10,6 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -230,7 +229,6 @@ public class ExportDialog extends DialogFragment {
 
             if (folder.exists() == false) {
                 if (folder.mkdirs() == false) {
-                    Log.i("Take Photo", "no directory created");
                     errorToast.show();
                     return null;
                 }
@@ -239,7 +237,6 @@ public class ExportDialog extends DialogFragment {
             folder = new File(folder, "Swaggified pictures");
             if (folder.exists() == false) {
                 if (folder.mkdirs() == false) {
-                    Log.i("Take Photo", "no directory created");
                     errorToast.show();
                     return null;
                 }
@@ -254,8 +251,6 @@ public class ExportDialog extends DialogFragment {
                 Toast.makeText(getActivity(),
                         "File Already exists",
                         Toast.LENGTH_SHORT).show();
-
-                Log.i("Pevid", "create file failed");
                 return null;
             }
 
@@ -266,8 +261,6 @@ public class ExportDialog extends DialogFragment {
         catch (Exception e) {
             errorToast.show();
             e.printStackTrace();
-            //todo: histogram??
-            Log.e("Error opening histogram output stream", e.toString());
             return null;
 
         }
@@ -283,10 +276,7 @@ public class ExportDialog extends DialogFragment {
                     new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
 
-                        public void onScanCompleted(String path, Uri uri) {
-                            Log.i("ExternalStorage", "Scanned " + path + ":");
-                            Log.i("ExternalStorage", "-> uri=" + uri);
-                        }
+                        public void onScanCompleted(String path, Uri uri) {}
                     }
             );
 
@@ -302,7 +292,6 @@ public class ExportDialog extends DialogFragment {
                     Toast.LENGTH_SHORT).show();
 
             e.printStackTrace();
-            Log.e("Error writing histogram picture", e.toString());
         }
 
         finally {
