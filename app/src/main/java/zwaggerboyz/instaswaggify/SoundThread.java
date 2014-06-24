@@ -19,7 +19,6 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 
 public class SoundThread extends Thread {
-
     MediaPlayer audioFile;
 
     public SoundThread (Context context, int resourceID) {

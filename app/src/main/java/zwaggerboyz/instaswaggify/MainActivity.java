@@ -120,6 +120,7 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         /* Inflate the menu: add items to the action bar. */
         getMenuInflater().inflate(R.menu.main, menu);
         mMenu = menu;
@@ -131,7 +132,7 @@ public class MainActivity extends FragmentActivity
         int id = item.getItemId();
 
         switch(id) {
-            // TODO: hebben we settings wel nodig?
+            // TODO: hebben we settings wel nodig? Geluid uitzetten?
             case R.id.action_settings: {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
                 mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));

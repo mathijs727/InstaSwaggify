@@ -171,7 +171,8 @@ public class RSFilterHelper {
 
         void updateView(Integer result) {
             if (result != -1) {
-                // Request UI update
+
+                /* Request UI update */
                 mCanvasView.setBitmap(mBitmapsOut[result]);
                 mCanvasView.invalidate();
             }

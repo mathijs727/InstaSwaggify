@@ -21,7 +21,6 @@ import zwaggerboyz.instaswaggify.MainActivity;
 import zwaggerboyz.instaswaggify.R;
 import zwaggerboyz.instaswaggify.filters.IFilter;
 
-
 /*
  * APP:     InstaSwaggify
  * DATE:    June 2014
@@ -31,7 +30,6 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
  * FILE:    SavePresetDialog.java
  * This file contains the dialog that is shown when saving a preset.
  */
-
 
 public class SavePresetDialog extends DialogFragment {
     FilterListAdapter adapter;
