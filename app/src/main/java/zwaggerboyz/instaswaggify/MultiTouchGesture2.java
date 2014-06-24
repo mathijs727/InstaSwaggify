@@ -8,7 +8,7 @@ import android.view.View;
  * Created by zeta on 6/23/14.
  */
 
-public class MultiTouchGesture implements View.OnTouchListener {
+public class MultiTouchGesture2 implements View.OnTouchListener {
     private int mPointer1 = INVALID_POINTER_ID;
     private int mPointer2 = INVALID_POINTER_ID;
     float first_x, first_y;
