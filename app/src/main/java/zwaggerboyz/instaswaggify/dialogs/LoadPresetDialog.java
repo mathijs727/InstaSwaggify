@@ -21,9 +21,7 @@ import java.util.Iterator;
 import zwaggerboyz.instaswaggify.MainActivity;
 import zwaggerboyz.instaswaggify.R;
 
-// TODO: MAAK DEZE FILE NAAR LoadPresetDialog
 // TODO don't show "Load preset" button if there are no presets
-// TODO: adjust function names to camelCase
 // TODO: NIET VERGETEN
 
 /*
@@ -36,9 +34,7 @@ import zwaggerboyz.instaswaggify.R;
  * This file contains the dialog that is shown when loading a preset.
  */
 
-
-
-public class FavoritesDialog extends DialogFragment {
+public class LoadPresetDialog extends DialogFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (getFavorites().length > 0) {
