@@ -35,7 +35,14 @@ public class OverlayDialog extends DialogFragment {
                     "InstaDoge",
                     "InstaDealWithIt",
                     "InstaFedora",
+                    "InstaCap",
+
+                    "InstaAchievement",
                     "InstaNoScope",
+                    "InstaHitmarker",
+                    "InstaPlus100",
+                    "InstaDoritos",
+                    "InstaDew",
 
                     "InstaBeard",
                     "InstaBeard2",
