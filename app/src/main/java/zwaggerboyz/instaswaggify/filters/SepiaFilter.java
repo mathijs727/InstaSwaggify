@@ -6,9 +6,17 @@ import android.renderscript.Script;
 
 import zwaggerboyz.instaswaggify.ScriptC_sepia;
 
-/**
- * Created by Matthijs on 17-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    SepiaFilter.java
+ * This file contains the sepia-filter. It links to the required RenderScript-object and
+ * stores the values of the sliders.
  */
+
 public class SepiaFilter extends AbstractFilterClass {
     ScriptC_sepia mScript;
 

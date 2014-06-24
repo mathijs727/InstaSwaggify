@@ -5,10 +5,17 @@ import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
 import zwaggerboyz.instaswaggify.ScriptC_threshold_blur;
-
-/**
- * Created by Mathijs on 17/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    ThresholdBlurFilter.java
+ * This file contains the threshold-filter. It links to the required RenderScript-object and
+ * stores the values of the sliders.
  */
+
 public class ThresholdBlurFilter extends AbstractFilterClass {
     ScriptC_threshold_blur mScript;
 
