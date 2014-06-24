@@ -26,11 +26,13 @@ public class OverlayDialog extends DialogFragment {
                     "InstaSwag",
                     "InstaWeed",
                     "InstaJoint",
+                    "InstaSnoop",
 
                     "InstaBling",
                     "InstaBling2",
                     "InstaMoney",
                     "InstaCrown",
+                    "InstaNova",
 
                     "InstaDoge",
                     "InstaDealWithIt",
@@ -43,6 +45,7 @@ public class OverlayDialog extends DialogFragment {
                     "InstaPlus100",
                     "InstaDoritos",
                     "InstaDew",
+                    "InstaMLG",
 
                     "InstaBeard",
                     "InstaBeard2",
