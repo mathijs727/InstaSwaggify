@@ -5,8 +5,15 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
-/**
- * Created by Mathijs on 16/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    AbstractFilterClass.java
+ * This file contains the abstract class used to implement the different filters. It contains a
+ * number of variables with getter- and setter-functions.
  */
 
 public abstract class AbstractFilterClass implements IFilter {

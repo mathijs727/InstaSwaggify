@@ -6,9 +6,17 @@ import android.renderscript.Script;
 
 import zwaggerboyz.instaswaggify.ScriptC_colorize;
 
-/**
- * Created by Matthijs on 18-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    ColorizeFilter.java
+ * This file contains the colorize-filter. It links to the required RenderScript-object and stores
+ * the values of the sliders.
  */
+
 public class ColorizeFilter extends AbstractFilterClass {
     ScriptC_colorize mScript;
 

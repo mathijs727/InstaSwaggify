@@ -6,9 +6,17 @@ import android.renderscript.Script;
 
 import zwaggerboyz.instaswaggify.ScriptC_saturation;
 
-/**
- * Created by Mathijs on 17/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    SaturationFilter.java
+ * This file contains the saturation-filter. It links to the required RenderScript-object and
+ * stores the values of the slider.
  */
+
 public class SaturationFilter extends AbstractFilterClass {
     ScriptC_saturation mScript;
 

@@ -6,9 +6,17 @@ import android.renderscript.RenderScript;
 import android.renderscript.Script;
 import android.renderscript.ScriptIntrinsicBlur;
 
-/**
- * Created by Mathijs on 19/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    GuassianBlurFilter.java
+ * This file contains the gaussian-blur-filter. It links to the required RenderScript-object and
+ * stores the values of the slider.
  */
+
 public class GaussianBlurFilter extends AbstractFilterClass {
     ScriptIntrinsicBlur mScript;
 

@@ -6,9 +6,17 @@ import android.renderscript.Script;
 
 import zwaggerboyz.instaswaggify.ScriptC_noise;
 
-/**
- * Created by Matthijs on 20-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    NoiseFilter.java
+ * This file contains the noise-filter. It links to the required RenderScript-object and
+ * stores the values of the slider.
  */
+
 public class NoiseFilter extends AbstractFilterClass {
     ScriptC_noise mScript;
 

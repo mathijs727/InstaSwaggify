@@ -6,9 +6,16 @@ import android.renderscript.Script;
 
 import zwaggerboyz.instaswaggify.ScriptC_invert_colors;
 
-/**
- * Created by Matthijs on 20-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    InverColorsFilter.java
+ * This file contains the invert-colors-filter. It links to the required RenderScript-object.
  */
+
 public class InvertColorsFilter extends AbstractFilterClass {
     ScriptC_invert_colors mScript;
 

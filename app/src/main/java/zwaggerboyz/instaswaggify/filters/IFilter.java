@@ -5,8 +5,14 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
 
-/**
- * Created by Mathijs on 17/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    IFILTER.java
+ * This file contains interface for the filter-classes.
  */
 
 public interface IFilter {
