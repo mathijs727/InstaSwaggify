@@ -274,8 +274,8 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void clearFilters() {
-        updateBuffer();
         mItems.clear();
+        updateBuffer();
         notifyDataSetChanged();
         mListener.updateImage(mItems);
     }
