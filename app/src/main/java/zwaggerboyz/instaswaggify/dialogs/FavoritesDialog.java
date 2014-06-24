@@ -37,14 +37,14 @@ import zwaggerboyz.instaswaggify.R;
  * This file contains the dialog that is shown when loading a preset.
  */
 
+
+// TODO don't show "Load preset" button if there are no presets
+
 public class FavoritesDialog extends DialogFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (getFavorites().length > 0) {
-            getDialog().setTitle("Select preset");
-        }
-        else {
-            getDialog().setTitle("@string/presets_empty");
+            getDialog().setTitle(R.string.filter_dialog_title);
         }
 
         /* Setting up ListView and the adapter. */
