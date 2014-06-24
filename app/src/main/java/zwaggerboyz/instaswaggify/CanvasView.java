@@ -56,6 +56,9 @@ public class CanvasView extends View  {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        this.setDrawingCacheEnabled(false);
+        this.setDrawingCacheEnabled(true);
+
         super.onDraw(canvas);
 
         canvas.save();
