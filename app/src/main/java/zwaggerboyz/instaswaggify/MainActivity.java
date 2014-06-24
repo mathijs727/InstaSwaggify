@@ -290,11 +290,9 @@ public class MainActivity extends FragmentActivity
         JSONObject favoritesObject = null;
         JSONObject jsonFilter = null;
         JSONArray favortiesArray = null;
-        int numValues, value0, value1, value2;
         String filterId = "";
         List<IFilter> filterArray = new ArrayList<IFilter>();
         AbstractFilterClass.FilterID id;
-
         IFilter filter = null;
 
         try {
