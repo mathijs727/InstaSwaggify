@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-/**
+/*
  * This class plays a sound on a separate thread
  */
 public class SoundThread extends Thread {
