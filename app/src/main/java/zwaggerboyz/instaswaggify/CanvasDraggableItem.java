@@ -1,7 +1,9 @@
 package zwaggerboyz.instaswaggify;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 /**
@@ -9,10 +11,26 @@ import android.util.Log;
  */
 public class CanvasDraggableItem {
     private Rect mRect;
+    private RectF mRotatedRect;
     private int mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
     private int xOffset, yOffset;
+    private float mAngle;
+    private Matrix rotMatrix = new Matrix();
+
+    public void addmAngle(float deltaAngle) {
+        mAngle += deltaAngle;
+        rotMatrix.setRotate(mAngle,mHalfWidth, mHalfHeight);
+        rotMatrix.mapRect(mRotatedRect);
+    }
+    public Matrix getMatrix() {
+        return rotMatrix;
+    }
+
+    public RectF getmRotatedRect() {
+        return mRotatedRect;
+    }
 
     public void calcOffsets(int x, int y) {
         this.xOffset = mRect.left + mHalfWidth - x;
@@ -25,6 +43,8 @@ public class CanvasDraggableItem {
         mHalfWidth = bitmap.getWidth() / 2;
         mHalfHeight = bitmap.getHeight() / 2;
         mRect = new Rect(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
+        mRotatedRect = new RectF(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
+
     }
 
     public void move (int x, int y) {
@@ -43,13 +63,17 @@ public class CanvasDraggableItem {
         return mBitmap;
     }
 
+    public Bitmap getRotatedBitmap() {
+        return mBitmap;
+    }
+
     public void resizeImage(double scale) {
         //Log.i("Pevid", "resize");
         mHalfWidth = (int) ((mBitmap.getWidth() * scale) / 2);
         mHalfHeight = (int) ((mBitmap.getHeight() * scale) / 2);
 
         /* Make sure the rectangle gets resized */
-        move(mRect.centerX(), mRect.centerY());
+        move((int)mRect.centerX(), (int)mRect.centerY());
 
     }
 

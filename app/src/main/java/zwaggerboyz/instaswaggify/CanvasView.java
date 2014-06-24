@@ -3,7 +3,9 @@ package zwaggerboyz.instaswaggify;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -63,6 +65,9 @@ public class CanvasView extends View  {
         mRotationGesture = new RotationGestureDetector(new RotationGestureDetector.OnRotationGestureListener() {
             @Override
             public boolean OnRotation(RotationGestureDetector rotationDetector) {
+                if (mSelected != null)
+                    mSelected.addmAngle(rotationDetector.getAngle());
+
                 mRotation += -(Math.toRadians(rotationDetector.getAngle()) * 100);
                 return false;
             }
@@ -73,13 +78,13 @@ public class CanvasView extends View  {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.rotate(mRotation, canvas.getWidth() / 2, canvas.getHeight() / 2);
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
-
         for (CanvasDraggableItem overlay : mOverlays) {
-            canvas.drawBitmap(overlay.getBitmap(), null, overlay.getRect(), null);
+            //matrix.setRotate(mRotation,source.getWidth()/2,source.getHeight()/2)
+            canvas.drawBitmap(overlay.getBitmap(), null, overlay.getmRotatedRect(), null);
+            //canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
         }
     }
 
@@ -110,8 +115,8 @@ public class CanvasView extends View  {
                 int cX, cY, nX, nY;
                 for (CanvasDraggableItem overlay : mOverlays) {
                     rect = overlay.getRect();
-                    cX = rect.centerX() - mXOffset;
-                    cY = rect.centerY() - mYOffset;
+                    cX = (int)(rect.centerX() - mXOffset);
+                    cY = (int)(rect.centerY() - mYOffset);
 
                     nX = (int) (cX / mImgScale * imgYScale) + left;
                     nY = (int) (cY / mImgScale * imgYScale) + top;
@@ -132,8 +137,8 @@ public class CanvasView extends View  {
                 int cX, cY, nX, nY;
                 for (CanvasDraggableItem overlay : mOverlays) {
                     rect = overlay.getRect();
-                    cX = rect.centerX() - mXOffset;
-                    cY = rect.centerY() - mYOffset;
+                    cX = (int)(rect.centerX() - mXOffset);
+                    cY = (int)(rect.centerY() - mYOffset);
 
                     nX = (int) (cX / mImgScale * imgXScale) + left;
                     nY = (int) (cY / mImgScale * imgXScale) + top;
@@ -147,8 +152,8 @@ public class CanvasView extends View  {
         if (newImage) {
             int x, y;
             for (CanvasDraggableItem overlay : mOverlays) {
-                x = overlay.getRect().centerX();
-                y = overlay.getRect().centerY();
+                x = (int)overlay.getRect().centerX();
+                y = (int)overlay.getRect().centerY();
 
                 if (x < left)
                     x = left;
@@ -185,6 +190,7 @@ public class CanvasView extends View  {
     }
 
     public void onTouchMove (int x, int y) {
+        Log.i("mselected ","" +mSelected);
         if (x < mXOffset ||
             x > (getWidth() - mXOffset) ||
             y < mYOffset ||
