@@ -64,8 +64,8 @@ public class OverlayDialog extends DialogFragment {
         getDialog().setTitle(R.string.overlay_dialog_title);
 
         /* Setting up ListView and the adapter */
-        View mView = inflater.inflate(R.layout.filterdialog, container, false);
-        ListView listView = (ListView) mView.findViewById(R.id.filter_dialog_list);
+        View mView = inflater.inflate(R.layout.dialog_list, container, false);
+        ListView listView = (ListView) mView.findViewById(R.id.dialog_list_listview);
 
         listView.setAdapter(mAdapter);
 

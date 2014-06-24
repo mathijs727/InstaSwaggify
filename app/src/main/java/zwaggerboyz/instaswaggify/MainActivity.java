@@ -33,11 +33,6 @@ import zwaggerboyz.instaswaggify.dialogs.LoadPresetDialog;
 import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
 import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
 import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
-import zwaggerboyz.instaswaggify.filters.AbstractFilterClass;
-import zwaggerboyz.instaswaggify.filters.BrightnessFilter;
-import zwaggerboyz.instaswaggify.filters.ColorizeFilter;
-import zwaggerboyz.instaswaggify.filters.ContrastFilter;
-import zwaggerboyz.instaswaggify.filters.GaussianBlurFilter;
 import zwaggerboyz.instaswaggify.filters.IFilter;
 import zwaggerboyz.instaswaggify.filters.InvertColorsFilter;
 import zwaggerboyz.instaswaggify.filters.NoiseFilter;
@@ -70,6 +65,7 @@ public class MainActivity extends FragmentActivity
     private CanvasView mCanvasView;
     private ViewPager mViewPager;
     private RSFilterHelper mRSFilterHelper;
+    private PresetsHelper mPresetsHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
     private ExportDialog mExportDialog;
@@ -94,6 +90,8 @@ public class MainActivity extends FragmentActivity
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
         mExportDialog.setCanvasView(mCanvasView);
+
+        mPresetsHelper = new PresetsHelper(this);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
@@ -214,22 +212,12 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_favorites: {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null)
-                    fragmentTransaction.remove(prev);
-                fragmentTransaction.addToBackStack(null);
-
-                mDialog = new LoadPresetDialog();
-                mDialog.show(fragmentTransaction, "dialog");
-
+                mPresetsHelper.loadPreset(this, mFilterAdapter);
                 return true;
             }
 
             case R.id.action_add_favorite: {
-                SavePresetDialog dialog = new SavePresetDialog();
-                dialog.setAdapter(mFilterAdapter);
-                dialog.show(getFragmentManager(), "Save Preset");
+                mPresetsHelper.savePreset(this, mFilterAdapter.getItems());
                 return true;
             }
 
@@ -271,6 +259,7 @@ public class MainActivity extends FragmentActivity
                     updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             else if (resultCode != RESULT_CANCELED) {
@@ -289,98 +278,12 @@ public class MainActivity extends FragmentActivity
                     updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    /* Sets the filter list as this preset. */
-    public void setFilter(String fav_key) {
-        SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
-        String favoritesString = prefs.getString("Favorites", "");
-        JSONObject favoritesObject = null;
-        JSONObject jsonFilter = null;
-        JSONArray favoritesArray = null;
-        String filterId = "";
-        List<IFilter> filterArray = new ArrayList<IFilter>();
-        AbstractFilterClass.FilterID id;
-        IFilter filter = null;
-
-        try {
-            favoritesObject = new JSONObject(favoritesString);
-            favoritesArray = favoritesObject.getJSONArray(fav_key);
-
-            for (int i = 0; i < favoritesArray.length(); i++) {
-                jsonFilter = new JSONObject(favoritesArray.get(i).toString());
-                filterId = jsonFilter.getString("id");
-                id = AbstractFilterClass.FilterID.valueOf(filterId);
-
-                /* create according filter and add to filter list */
-                switch (id) {
-                    case BRIGHTNESS:
-                        filter = new BrightnessFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case CONTRAST:
-                        filter = new ContrastFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case GAUSSIAN:
-                        filter = new GaussianBlurFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case ROTATION:
-                        filter = new RotationFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case SATURATION:
-                        filter = new SaturationFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case SEPIA:
-                        filter = new SepiaFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filter.setValue(1, jsonFilter.getInt("value1"));
-                        filterArray.add(filter);
-                        break;
-                    case NOISE:
-                        filter = new NoiseFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case INVERT:
-                        filter = new InvertColorsFilter();
-                        filterArray.add(filter);
-                        break;
-                    case COLORIZE:
-                        filter = new ColorizeFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filter.setValue(1, jsonFilter.getInt("value1"));
-                        filter.setValue(2, jsonFilter.getInt("value2"));
-                        filterArray.add(filter);
-                        break;
-                    case THRESHOLD:
-                        filter = new ThresholdBlurFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filter.setValue(1, jsonFilter.getInt("value1"));
-                        filter.setValue(2, jsonFilter.getInt("value2"));
-                        filterArray.add(filter);
-                }
-            }
-            mFilterAdapter.setItems(filterArray);
-            mFilterAdapter.updateList();
-            mDialog.dismiss();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -418,10 +321,9 @@ public class MainActivity extends FragmentActivity
     @Override
     public void OnAddOverlayListener(String resourceName) {
         mDialog.dismiss();
-        int resourceId = getResources().getIdentifier(resourceName.toLowerCase(), "drawable", getPackageName());
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
         CanvasDraggableItem overlay = new CanvasDraggableItem(bitmap, mCanvasView.getWidth() / 2, mCanvasView.getHeight() / 2, resourceName);
-        mOverlayAdapter.addItem(overlay);
+        mOverlayAdapter.addItem(overlay);*/
     }
 
     @Override
