@@ -3,7 +3,9 @@ package zwaggerboyz.instaswaggify;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -77,14 +79,14 @@ public class CanvasView extends View  {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
         for (CanvasDraggableItem overlay : mOverlays) {
-            //matrix.setRotate(mRotation,source.getWidth()/2,source.getHeight()/2)
-            canvas.drawBitmap(overlay.getBitmap(), null, overlay.getmRotatedRect(), null);
-            //canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
+            canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
+            canvas.drawRect(overlay.getRect(), paint);
         }
     }
 
@@ -111,7 +113,7 @@ public class CanvasView extends View  {
             right = width - left;
 
             if (!newImage) {
-                Rect rect;
+                RectF rect;
                 int cX, cY, nX, nY;
                 for (CanvasDraggableItem overlay : mOverlays) {
                     rect = overlay.getRect();
@@ -133,7 +135,7 @@ public class CanvasView extends View  {
             bot = height - top;
 
             if (!newImage) {
-                Rect rect;
+                RectF rect;
                 int cX, cY, nX, nY;
                 for (CanvasDraggableItem overlay : mOverlays) {
                     rect = overlay.getRect();

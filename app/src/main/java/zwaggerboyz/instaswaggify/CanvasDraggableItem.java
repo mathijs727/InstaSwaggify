@@ -12,19 +12,28 @@ import android.util.Log;
 public class CanvasDraggableItem {
     private Rect mRect;
     private RectF mRotatedRect;
+    private RectF originalRectF;
     private int mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
     private int xOffset, yOffset;
-    private float mAngle;
+    public float mAngle;
+    private float oldScale;
     private Matrix rotMatrix = new Matrix();
+
+    private int oldX, oldY;
 
     public void addmAngle(float deltaAngle) {
         mAngle += deltaAngle;
-        rotMatrix.setRotate(mAngle,mHalfWidth, mHalfHeight);
-        rotMatrix.mapRect(mRotatedRect);
+        Log.i("Pevid", "angle "+mAngle);
     }
+
     public Matrix getMatrix() {
+        rotMatrix.reset();
+        rotMatrix.setTranslate(oldX, oldY);
+        rotMatrix.preScale(-mScaleFactor, -mScaleFactor);
+        rotMatrix.preRotate(mAngle, mHalfWidth, mHalfHeight);
+
         return rotMatrix;
     }
 
@@ -43,20 +52,29 @@ public class CanvasDraggableItem {
         mHalfWidth = bitmap.getWidth() / 2;
         mHalfHeight = bitmap.getHeight() / 2;
         mRect = new Rect(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
-        mRotatedRect = new RectF(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
+        originalRectF = new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        mRotatedRect = new RectF();
+
+        rotMatrix.preTranslate(100 - mHalfWidth, 100 -mHalfHeight);
+        rotMatrix.mapRect(mRotatedRect, originalRectF);
+        oldX = oldY = 100;
+        oldScale = 1F;
 
     }
 
     public void move (int x, int y) {
-        mRect.set(x - mHalfWidth + xOffset, y - mHalfHeight + yOffset, x + mHalfWidth + xOffset, y + mHalfHeight + yOffset);
+        Log.i("Pevid", "scale " + mScaleFactor + " angle " + mAngle);
+        oldX = x;
+        oldY = y;
+        getMatrix().mapRect(mRotatedRect, originalRectF);
     }
 
     public boolean isWithinBounds (int x, int y) {
-        return mRect.contains(x,  y);
+        return mRotatedRect.contains(x,  y);
     }
 
-    public Rect getRect() {
-        return mRect;
+    public RectF getRect() {
+        return mRotatedRect;
     }
 
     public Bitmap getBitmap() {
@@ -68,13 +86,9 @@ public class CanvasDraggableItem {
     }
 
     public void resizeImage(double scale) {
-        //Log.i("Pevid", "resize");
-        mHalfWidth = (int) ((mBitmap.getWidth() * scale) / 2);
-        mHalfHeight = (int) ((mBitmap.getHeight() * scale) / 2);
-
-        /* Make sure the rectangle gets resized */
-        move((int)mRect.centerX(), (int)mRect.centerY());
-
+        mScaleFactor = (float)scale;
+        getMatrix().mapRect(mRotatedRect, originalRectF);
+        oldScale = mScaleFactor;
     }
 
     public float getScaleFactor() {
