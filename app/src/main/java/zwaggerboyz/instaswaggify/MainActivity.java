@@ -135,15 +135,6 @@ public class MainActivity extends FragmentActivity
         int id = item.getItemId();
 
         switch(id) {
-            //TODO: hebben we settings wel nodig?
-            case R.id.action_settings: {
-                //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
-                //mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
-                //mOverlayAdapter.addItem(new CanvasDraggableItem(bitmap,));
-                //mCanvasView.invalidate();
-                return true;
-            }
-
             /* Adds a filter to the list. */
             case R.id.action_add: {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -155,10 +146,6 @@ public class MainActivity extends FragmentActivity
                 fragmentTransaction.addToBackStack(null);
 
                 /* Show the filter-dialog. */
-                /*FilterDialog dialog = new FilterDialog(this, mFilterAdapter.getItems());
-                dialog.setOnAddFilterListener(this);
-                mDialog = dialog;
-                mDialog.show(fragmentTransaction, "dialog");*/
                 DialogFragment dialog = null;
                 int curItem = mViewPager.getCurrentItem();
                 if (curItem == ListViewPagerAdapter.PAGE_FILTERS) {
@@ -325,9 +312,14 @@ public class MainActivity extends FragmentActivity
     @Override
     public void OnAddOverlayListener(String resourceName) {
         mDialog.dismiss();
-        /*Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
-        CanvasDraggableItem overlay = new CanvasDraggableItem(bitmap, mCanvasView.getWidth() / 2, mCanvasView.getHeight() / 2, resourceName);
-        mOverlayAdapter.addItem(overlay);*/
+
+        int resourceId = getResources().getIdentifier(resourceName.toLowerCase().replaceAll(" ", ""), "drawable", getPackageName());
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+        CanvasDraggableItem overlay = new CanvasDraggableItem(bitmap,
+                mCanvasView.getWidth() / 2,
+                mCanvasView.getHeight() / 2,
+                resourceName);
+        mOverlayAdapter.addItem(overlay);
     }
 
     @Override
