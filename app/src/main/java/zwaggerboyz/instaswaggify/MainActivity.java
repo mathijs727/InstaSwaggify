@@ -44,6 +44,7 @@ import zwaggerboyz.instaswaggify.filters.NoiseFilter;
 import zwaggerboyz.instaswaggify.filters.RotationFilter;
 import zwaggerboyz.instaswaggify.filters.SaturationFilter;
 import zwaggerboyz.instaswaggify.filters.SepiaFilter;
+import zwaggerboyz.instaswaggify.filters.ThresholdBlurFilter;
 import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
 import zwaggerboyz.instaswaggify.viewpager.ListViewPagerAdapter;
 import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
@@ -366,6 +367,12 @@ public class MainActivity extends FragmentActivity
                         filter.setValue(2, jsonFilter.getInt("value2"));
                         filterArray.add(filter);
                         break;
+                    case THRESHOLD:
+                        filter = new ThresholdBlurFilter();
+                        filter.setValue(0, jsonFilter.getInt("value0"));
+                        filter.setValue(1, jsonFilter.getInt("value1"));
+                        filter.setValue(2, jsonFilter.getInt("value2"));
+                        filterArray.add(filter);
                 }
             }
             mFilterAdapter.setItems(filterArray);

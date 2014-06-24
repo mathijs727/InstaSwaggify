@@ -24,6 +24,7 @@ import zwaggerboyz.instaswaggify.filters.NoiseFilter;
 import zwaggerboyz.instaswaggify.filters.RotationFilter;
 import zwaggerboyz.instaswaggify.filters.SaturationFilter;
 import zwaggerboyz.instaswaggify.filters.SepiaFilter;
+import zwaggerboyz.instaswaggify.filters.ThresholdBlurFilter;
 
 /*
  * APP:     InstaSwaggify
@@ -46,7 +47,8 @@ public class FilterDialog extends DialogFragment {
                     "Sepia",
                     "Noise",
                     "Invert Colors",
-                    "Colorize"
+                    "Colorize",
+                    "Threshold"
             };
     private OnAddFilterListener mListener = null;
     ArrayAdapter<String> mAdapter;
@@ -113,6 +115,9 @@ public class FilterDialog extends DialogFragment {
                             break;
                         case 8:
                             filter = new ColorizeFilter();
+                            break;
+                        case 9:
+                            filter = new ThresholdBlurFilter();
                             break;
                     }
                     mListener.OnAddFilterListener(filter);
