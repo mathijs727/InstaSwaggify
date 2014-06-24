@@ -25,9 +25,16 @@ import zwaggerboyz.instaswaggify.filters.RotationFilter;
 import zwaggerboyz.instaswaggify.filters.SaturationFilter;
 import zwaggerboyz.instaswaggify.filters.SepiaFilter;
 
-/**
- * Created by scoud on 18-6-14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    FilterDialog.java
+ * This file contains the dialog that is shown selecting a new filter.
  */
+
 public class FilterDialog extends DialogFragment {
     private static final String[] mAllFilters =
             {

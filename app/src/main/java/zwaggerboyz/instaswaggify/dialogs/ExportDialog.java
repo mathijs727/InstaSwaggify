@@ -35,7 +35,7 @@ import zwaggerboyz.instaswaggify.R;
  *          Arne Zismer
  *
  * FILE:    ExportDialog.java
- * This file contains the dialog that is shown
+ * This file contains the dialog that is shown when exporting a photo.
  */
 
 public class ExportDialog extends DialogFragment {
