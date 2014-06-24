@@ -105,7 +105,18 @@ public class MainActivity extends FragmentActivity
             // TODO: hebben we settings wel nodig?
             case R.id.action_settings: {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
-                mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
+                CanvasDraggableItem a  = new CanvasDraggableItem(bitmap, 100, 100);
+                CanvasDraggableItem b  = new CanvasDraggableItem(bitmap, 100, 100);
+
+                a.resizeImage(2);
+                a.resizeImage(4);
+                a.move(232*2, 689);
+                b.resizeImage(1.01);
+                b.move(232*2, 689);
+
+                mCanvasView.addDraggable(a);
+                mCanvasView.addDraggable(b);
+
                 mCanvasView.invalidate();
                 return true;
             }

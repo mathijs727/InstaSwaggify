@@ -10,40 +10,54 @@ import android.util.Log;
  * Created by Peter on 19-6-2014.
  */
 public class CanvasDraggableItem {
-    private Rect mRect;
     private RectF mRotatedRect;
-    private RectF originalRectF;
-    private int mHalfWidth, mHalfHeight;
+    private RectF originalRectF, temp;
+    private float mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
-    private float xOffset, yOffset;
+    public float xOffset, yOffset;
     public float mAngle;
-    private float oldScale;
     private Matrix rotMatrix = new Matrix();
 
     private float oldX, oldY;
 
     public void addmAngle(float deltaAngle) {
         mAngle += deltaAngle;
-        Log.i("Pevid", "angle "+mAngle);
+        Log.i("Pevid", "angle " + mAngle);
+    }
+
+    public void resetOffset() {
+        xOffset = yOffset = 0;
     }
 
     public Matrix getMatrix() {
         rotMatrix.reset();
-        rotMatrix.setTranslate(oldX + xOffset, oldY + yOffset);
-        rotMatrix.preScale(-mScaleFactor, -mScaleFactor);
-        rotMatrix.preRotate(mAngle, mHalfWidth, mHalfHeight);
+        rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
+        rotMatrix.postRotate(-mAngle, oldX + mHalfWidth - xOffset, oldY + mHalfHeight - yOffset);
+        rotMatrix.postScale(mScaleFactor, mScaleFactor, oldX + mHalfWidth - xOffset, oldY + mHalfWidth - yOffset);
 
         return rotMatrix;
     }
 
-    public RectF getmRotatedRect() {
-        return mRotatedRect;
+    public Matrix getMatrix2() {
+        rotMatrix.reset();
+        rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
+        return rotMatrix;
+
     }
 
     public void calcOffsets(int x, int y) {
-        this.xOffset = mRotatedRect.left + mRotatedRect.width() - x;
-        this.yOffset = mRotatedRect.top + mRotatedRect.height() - y;
+        //this.xOffset = mRotatedRect.left + mRotatedRect.width() - x;
+        //this.yOffset = mRotatedRect.top + mRotatedRect.height() - y;
+        //this.xOffset = x - originalRectF.left;
+        //this.yOffset = y - originalRectF.top ;
+        rotMatrix.reset();
+        rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
+        rotMatrix.mapRect(temp, originalRectF);
+
+        this.xOffset = x - temp.left;
+        this.yOffset = y - temp.top ;
+
         Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
     }
 
@@ -51,16 +65,15 @@ public class CanvasDraggableItem {
         mBitmap = bitmap;
         mHalfWidth = bitmap.getWidth() / 2;
         mHalfHeight = bitmap.getHeight() / 2;
-        mRect = new Rect(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
         originalRectF = new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        mRotatedRect = new RectF();
+        mRotatedRect = new RectF(originalRectF);
+        temp = new RectF();
 
-        rotMatrix.preTranslate(100 - mHalfWidth, 100 -mHalfHeight);
-        rotMatrix.mapRect(mRotatedRect, originalRectF);
+        oldX = 0;
+        oldY = 0;
+        mAngle = 0;
 
-        oldX = 100;
-        oldY = 100;
-        oldScale = 1F;
+        move(x, y);
     }
 
     public void move (int x, int y) {
@@ -89,7 +102,11 @@ public class CanvasDraggableItem {
     public void resizeImage(double scale) {
         mScaleFactor = (float)scale;
         getMatrix().mapRect(mRotatedRect, originalRectF);
-        oldScale = mScaleFactor;
+        //mHalfWidth = mRotatedRect.width() / 2;
+        //mHalfHeight = mRotatedRect.height() / 2;
+        Log.i("Pevid", "mHalfWidth " + mHalfWidth);
+        Log.i("Pevid", "mHalfHeight " + mHalfHeight);
+        calcOffsets((int)oldX, (int)oldY);
     }
 
     public float getScaleFactor() {

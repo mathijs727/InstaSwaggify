@@ -63,30 +63,31 @@ public class CanvasView extends View  {
         finishConstructor();
     }
 
-    private void setRotationGesture() {
-        mRotationGesture = new RotationGestureDetector(new RotationGestureDetector.OnRotationGestureListener() {
-            @Override
-            public boolean OnRotation(RotationGestureDetector rotationDetector) {
-                if (mSelected != null)
-                    mSelected.addmAngle(rotationDetector.getAngle());
-
-                mRotation += -(Math.toRadians(rotationDetector.getAngle()) * 100);
-                return false;
-            }
-        });
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Paint paint = new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.argb(100, 255, 0, 0));
+        Paint red = new Paint();
+        red.setColor(Color.RED);
+        Paint green = new Paint();
+        green.setColor(Color.GREEN);
+
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
         for (CanvasDraggableItem overlay : mOverlays) {
             canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
+            canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix2(), null);
             canvas.drawRect(overlay.getRect(), paint);
+            canvas.drawRect(overlay.getRect().left - 5, overlay.getRect().top -5, overlay.getRect().left + 5, overlay.getRect().top + 5, red);
+            canvas.drawRect(overlay.getRect().left + overlay.xOffset- 5,
+                            overlay.getRect().top + overlay.yOffset-5,
+                            overlay.getRect().left + overlay.xOffset + 5,
+                            overlay.getRect().top +overlay.yOffset+ 5,
+                            green);
+
         }
     }
 
@@ -192,7 +193,6 @@ public class CanvasView extends View  {
     }
 
     public void onTouchMove (int x, int y) {
-        Log.i("mselected ","" +mSelected);
         if (x < mXOffset ||
             x > (getWidth() - mXOffset) ||
             y < mYOffset ||
@@ -258,6 +258,19 @@ public class CanvasView extends View  {
             return true;
 
         }
+    }
+
+    private void setRotationGesture() {
+        mRotationGesture = new RotationGestureDetector(new RotationGestureDetector.OnRotationGestureListener() {
+            @Override
+            public boolean OnRotation(RotationGestureDetector rotationDetector) {
+                if (mSelected != null)
+                    mSelected.addmAngle(rotationDetector.getAngle());
+
+                mRotation += (Math.toRadians(rotationDetector.getAngle()) * 100);
+                return false;
+            }
+        });
     }
 }
 
