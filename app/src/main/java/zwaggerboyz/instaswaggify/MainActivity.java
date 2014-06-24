@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
-import zwaggerboyz.instaswaggify.dialogs.FavoritesDialog;
+import zwaggerboyz.instaswaggify.dialogs.LoadPresetDialog;
 import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
 import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
 import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
@@ -220,7 +220,7 @@ public class MainActivity extends FragmentActivity
                     fragmentTransaction.remove(prev);
                 fragmentTransaction.addToBackStack(null);
 
-                mDialog = new FavoritesDialog();
+                mDialog = new LoadPresetDialog();
                 mDialog.show(fragmentTransaction, "dialog");
 
                 return true;
