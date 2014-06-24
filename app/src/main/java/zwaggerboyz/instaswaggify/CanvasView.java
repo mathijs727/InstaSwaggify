@@ -9,6 +9,9 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
 
 /*
  * APP:     InstaSwaggify
@@ -23,7 +26,7 @@ import java.util.ArrayList;
 public class CanvasView extends View  {
     private Bitmap mBitmap;
     private Rect mBackgroundRect = new Rect();
-    private ArrayList<CanvasDraggableItem> mOverlays = new ArrayList<CanvasDraggableItem>();
+    private List<CanvasDraggableItem> mOverlays;
     private CanvasDraggableItem mSelected = null;
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
@@ -192,6 +195,10 @@ public class CanvasView extends View  {
         }
     }
 
+    public void setOverlays(List<CanvasDraggableItem> overlays) {
+        mOverlays = overlays;
+    }
+
     public void setBitmap (Bitmap bitmap) {
         mBitmap = bitmap;
 
@@ -202,10 +209,6 @@ public class CanvasView extends View  {
 
     public Bitmap getBitmap () {
         return mBitmap;
-    }
-
-    public void addDraggable (CanvasDraggableItem item) {
-        mOverlays.add(item);
     }
 
     private class ScaleListener

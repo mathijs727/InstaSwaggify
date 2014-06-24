@@ -18,6 +18,9 @@ public class ListViewPagerAdapter extends FragmentStatePagerAdapter {
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
 
+    public static final int PAGE_FILTERS = 0;
+    public static final int PAGE_OVERLAYS = 1;
+
     public ListViewPagerAdapter(FragmentManager fm,
                                 FilterListAdapter filterAdapter,
                                 OverlayListAdapter overlayAdapter) {
@@ -34,23 +37,25 @@ public class ListViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == 0) {
+        if (position == PAGE_FILTERS) {
             return "Filters";
-        } else {
+        } else if (position == PAGE_OVERLAYS) {
             return "Overlays";
         }
+        return "";
     }
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
+        if (position == PAGE_FILTERS) {
             FilterListFragment fragment = new FilterListFragment();
             fragment.setAdapter(mFilterAdapter);
             return fragment;
-        } else {
+        } else if (position == PAGE_OVERLAYS) {
             OverlayListFragment fragment = new OverlayListFragment();
             fragment.setAdapter(mOverlayAdapter);
             return fragment;
         }
+        return null;
     }
 }
