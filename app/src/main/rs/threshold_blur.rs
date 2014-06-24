@@ -1,17 +1,11 @@
 /*
- * Copyright (C) 2014 The Android Open Source Project
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * FILE:    brightness.rs
+ * This is the renderscript that adds the threshold blur to images.
  */
 
 #pragma version(1)
@@ -27,10 +21,6 @@ int radius;
 float drop;
 int threshold;
 float strength;
-
-/*
- * RenderScript kernel that applies a threshold blur.
- */
 
 uchar4 __attribute__((kernel)) threshold_blur(uint32_t x, uint32_t y) {
     uchar4 in = rsGetElementAt_uchar4(input, x, y);
