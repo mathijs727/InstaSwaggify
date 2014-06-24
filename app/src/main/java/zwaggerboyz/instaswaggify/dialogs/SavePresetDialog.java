@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -102,7 +101,6 @@ public class SavePresetDialog extends DialogFragment {
 
                 /* add filter to favorite */
                 newFilterArray.put(jSONObjectFilter.toString());
-                Log.e("FilterListAdapter", "new filter: " + jSONObjectFilter.toString());
             }
 
             /* add new favorite to favorites list */
