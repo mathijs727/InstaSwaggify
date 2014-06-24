@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
@@ -31,35 +30,25 @@ public class CanvasView extends View  {
     private CanvasDraggableItem mSelected = null;
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
-    private int xOffSet, yOffset;
 
     public ScaleGestureDetector mScaleDetector;
-
-    private void finishConstructor() {
-        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
-        //mOverlays.add(new CanvasDraggableItem(bitmap, 100, 100));
-        //mOverlays.add(new CanvasDraggableItem(bitmap, 200, 100));
-    }
 
     public CanvasView(Context context) {
         super(context);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        finishConstructor();
     }
 
     public CanvasView(Context context, AttributeSet attributes) {
         super(context, attributes);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        finishConstructor();
     }
 
     public CanvasView(Context context, AttributeSet attributes, int style) {
         super(context, attributes, style);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        finishConstructor();
     }
 
     @Override
@@ -193,7 +182,6 @@ public class CanvasView extends View  {
 
     public void onTouchUp (int x, int y) {
         mSelected = null;
-        xOffSet = yOffset = 0;
     }
 
     public void onPointerUp(int x, int y) {
@@ -217,7 +205,6 @@ public class CanvasView extends View  {
         if (getWidth() != 0) {
             recalculateSize(getWidth(), getHeight(), true);
         }
-        Log.v("CanvasView", "Canvas width: " + getWidth());
     }
 
     public Bitmap getBitmap () {
@@ -234,7 +221,7 @@ public class CanvasView extends View  {
 
             mSelected.setScaleFactor(mSelected.getScaleFactor() * detector.getScaleFactor());
 
-            // Don't let the object get too small or too large.
+            /* Don't let the object get too small or too large. */
             mSelected.setScaleFactor(Math.max(0.1f, Math.min(mSelected.getScaleFactor(), 10.0f)));
 
             mSelected.resizeImage(mSelected.getScaleFactor());

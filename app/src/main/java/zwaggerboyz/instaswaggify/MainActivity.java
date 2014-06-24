@@ -1,6 +1,5 @@
 package zwaggerboyz.instaswaggify;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
@@ -185,7 +182,6 @@ public class MainActivity extends FragmentActivity
                 File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
                 if (imagesFolder.exists() == false) {
                     if (imagesFolder.mkdirs() == false) {
-                        Log.i("Take Photo", "no directory created");
                         return true;
                     }
                 }
@@ -195,7 +191,6 @@ public class MainActivity extends FragmentActivity
                 SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
                 String date = simpleFormat.format(now);
-                Log.i("FILENAME", date + ".jpg");
 
                 File image = new File(imagesFolder, date + ".jpg");
                 mImageUri = Uri.fromFile(image);
@@ -243,8 +238,6 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_save_picture: {
-                //ExportDialog exportDialog = new ExportDialog();
-                //exportDialog.setCanvasView(mCanvasView);
                 mExportDialog.setShare(false);
                 mExportDialog.show(getFragmentManager(), "Export Dialog");
                 return true;
@@ -254,12 +247,6 @@ public class MainActivity extends FragmentActivity
             case R.id.action_share: {
                 mExportDialog.setShare(true);
                 mExportDialog.show(getFragmentManager(), "Share Dialog");
-/*               ShareDialog dialog = new ShareDialog();
-                dialog.setCanvasView(mCanvasView);
-                dialog.setNotifySucces(false);
-
-                dialog.show(getFragmentManager(), "Share Dialog");*/
-
                 return true;
             }
 
@@ -283,7 +270,6 @@ public class MainActivity extends FragmentActivity
                     updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
-                    Log.e("onActivityResult", "create bitmap failed: " + e);
                 }
             }
             else if (resultCode != RESULT_CANCELED) {
@@ -302,7 +288,6 @@ public class MainActivity extends FragmentActivity
                     updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
-                    Log.e("onActivityResult", "create bitmap failed: " + e);
                 }
             }
             else if (resultCode != RESULT_CANCELED) {
@@ -313,12 +298,11 @@ public class MainActivity extends FragmentActivity
 
     /* Sets the filter list as this preset. */
     public void setFilter(String fav_key) {
-        //mFilterAdapter.clearFilters();
         SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject favoritesObject = null;
         JSONObject jsonFilter = null;
-        JSONArray favortiesArray = null;
+        JSONArray favoritesArray = null;
         String filterId = "";
         List<IFilter> filterArray = new ArrayList<IFilter>();
         AbstractFilterClass.FilterID id;
@@ -326,10 +310,10 @@ public class MainActivity extends FragmentActivity
 
         try {
             favoritesObject = new JSONObject(favoritesString);
-            favortiesArray = favoritesObject.getJSONArray(fav_key);
+            favoritesArray = favoritesObject.getJSONArray(fav_key);
 
-            for (int i = 0; i < favortiesArray.length(); i++) {
-                jsonFilter = new JSONObject(favortiesArray.get(i).toString());
+            for (int i = 0; i < favoritesArray.length(); i++) {
+                jsonFilter = new JSONObject(favoritesArray.get(i).toString());
                 filterId = jsonFilter.getString("id");
                 id = AbstractFilterClass.FilterID.valueOf(filterId);
 
@@ -403,15 +387,8 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(filters, this);
     }
 
-    // TODO: is dit nog nodig?
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
-    }
-
     void handleSendImage(Intent intent) {
-        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
         if (imageUri == null)
             return;
@@ -428,7 +405,6 @@ public class MainActivity extends FragmentActivity
             Toast.makeText(this,
                     "Error occurred while opening picture",
                     Toast.LENGTH_SHORT).show();
-            Log.e("handleSendImage", "create bitmap failed: " + e);
         }
     }
 

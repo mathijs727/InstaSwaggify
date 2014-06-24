@@ -11,8 +11,6 @@ import java.util.List;
 
 import zwaggerboyz.instaswaggify.filters.IFilter;
 
-import static java.lang.Thread.sleep;
-
 /*
  * APP:     InstaSwaggify
  * DATE:    June 2014
@@ -171,7 +169,7 @@ public class RSFilterHelper {
 
         void updateView(Integer result) {
             if (result != -1) {
-                // Request UI update
+                /* Request UI update */
                 mCanvasView.setBitmap(mBitmapsOut[result]);
                 mCanvasView.invalidate();
             }

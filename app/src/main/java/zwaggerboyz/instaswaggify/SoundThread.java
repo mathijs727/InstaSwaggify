@@ -2,11 +2,6 @@ package zwaggerboyz.instaswaggify;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.util.Log;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 /*
  * APP:     InstaSwaggify
@@ -19,7 +14,6 @@ import java.util.concurrent.LinkedBlockingDeque;
  */
 
 public class SoundThread extends Thread {
-
     MediaPlayer audioFile;
 
     public SoundThread (Context context, int resourceID) {
@@ -30,7 +24,7 @@ public class SoundThread extends Thread {
 
     public void run() {
         audioFile.start();
-        while(audioFile.isPlaying());
+        while (audioFile.isPlaying());
         audioFile.release();
     }
 }

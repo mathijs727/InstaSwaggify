@@ -42,8 +42,7 @@ public class InvertColorsFilter extends AbstractFilterClass {
     public void setInput(Allocation allocation) { }
 
     @Override
-    public void updateInternalValues() {
-    }
+    public void updateInternalValues() { }
 
     @Override
     public Script.KernelID getKernelId() {

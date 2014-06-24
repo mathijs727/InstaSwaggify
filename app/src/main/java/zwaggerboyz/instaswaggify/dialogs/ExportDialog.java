@@ -38,7 +38,6 @@ import zwaggerboyz.instaswaggify.R;
  */
 
 public class ExportDialog extends DialogFragment {
-    private boolean notifySucces = true;
     private boolean share = true;
     protected int quality = 60;
     CanvasView mCanvasView;
@@ -46,10 +45,6 @@ public class ExportDialog extends DialogFragment {
 
     public void setShare(Boolean shareEnabled) {
         share = shareEnabled;
-    }
-
-    public void setNotifySucces(boolean notify) {
-        notifySucces = notify;
     }
 
     public void setCanvasView(CanvasView canvas){
@@ -204,7 +199,6 @@ public class ExportDialog extends DialogFragment {
         }
 
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            externalIsAvailable = false;
             Toast.makeText(getActivity(),
                     "No SD-card available",
                     Toast.LENGTH_SHORT).show();
@@ -249,8 +243,8 @@ public class ExportDialog extends DialogFragment {
 
             else {
                 Toast.makeText(getActivity(),
-                        "File Already exists",
-                        Toast.LENGTH_SHORT).show();
+                "File Already exists",
+                Toast.LENGTH_SHORT).show();
                 return null;
             }
 
@@ -276,7 +270,8 @@ public class ExportDialog extends DialogFragment {
                     new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
 
-                        public void onScanCompleted(String path, Uri uri) {}
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
                     }
             );
 

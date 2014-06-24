@@ -19,18 +19,7 @@ import android.renderscript.Script;
 public abstract class AbstractFilterClass implements IFilter {
 
     public enum FilterID {
-        BRIGHTNESS(0), CONTRAST(1), GAUSSIAN(2), ROTATION(3), SATURATION(4), SEPIA(5), NOISE(6), INVERT(7), COLORIZE(8), THRESHOLD(9);
-
-        /* Every enum has an integer value that can be retrieved (for indexing etc). */
-        private final int value;
-        private FilterID(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
+        BRIGHTNESS, CONTRAST, GAUSSIAN, ROTATION, SATURATION, SEPIA, NOISE, INVERT, COLORIZE, THRESHOLD;
     }
 
     protected FilterID mID;
@@ -40,7 +29,6 @@ public abstract class AbstractFilterClass implements IFilter {
     protected int mNumValues;
     protected int imageHeight;
     protected int imageWidth;
-
     protected RenderScript mRS;
 
     public String getName() {
