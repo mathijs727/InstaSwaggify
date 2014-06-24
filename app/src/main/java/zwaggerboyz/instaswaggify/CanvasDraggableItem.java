@@ -16,12 +16,12 @@ public class CanvasDraggableItem {
     private int mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
-    private int xOffset, yOffset;
+    private float xOffset, yOffset;
     public float mAngle;
     private float oldScale;
     private Matrix rotMatrix = new Matrix();
 
-    private int oldX, oldY;
+    private float oldX, oldY;
 
     public void addmAngle(float deltaAngle) {
         mAngle += deltaAngle;
@@ -30,7 +30,7 @@ public class CanvasDraggableItem {
 
     public Matrix getMatrix() {
         rotMatrix.reset();
-        rotMatrix.setTranslate(oldX, oldY);
+        rotMatrix.setTranslate(oldX + xOffset, oldY + yOffset);
         rotMatrix.preScale(-mScaleFactor, -mScaleFactor);
         rotMatrix.preRotate(mAngle, mHalfWidth, mHalfHeight);
 
@@ -42,8 +42,8 @@ public class CanvasDraggableItem {
     }
 
     public void calcOffsets(int x, int y) {
-        this.xOffset = mRect.left + mHalfWidth - x;
-        this.yOffset = mRect.top + mHalfHeight - y;
+        this.xOffset = mRotatedRect.left + mRotatedRect.width() - x;
+        this.yOffset = mRotatedRect.top + mRotatedRect.height() - y;
         Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
     }
 
@@ -57,9 +57,10 @@ public class CanvasDraggableItem {
 
         rotMatrix.preTranslate(100 - mHalfWidth, 100 -mHalfHeight);
         rotMatrix.mapRect(mRotatedRect, originalRectF);
-        oldX = oldY = 100;
-        oldScale = 1F;
 
+        oldX = 100;
+        oldY = 100;
+        oldScale = 1F;
     }
 
     public void move (int x, int y) {

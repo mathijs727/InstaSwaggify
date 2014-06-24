@@ -33,7 +33,7 @@ public class CanvasTouchListener implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_MOVE: {
-                //Log.i("Pevid", "move");
+                Log.i("Pevid", "move");
                 int pointerIndex = event.getActionIndex();
                 mCanvasView.onTouchMove((int) event.getX(pointerIndex), (int) event.getY(pointerIndex));
 
