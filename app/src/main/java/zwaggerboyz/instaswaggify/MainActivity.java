@@ -261,6 +261,8 @@ public class MainActivity extends FragmentActivity
                 catch (Exception e) {
                     e.printStackTrace();
                 }
+                mOverlayAdapter.clearOverlays();
+                mFilterAdapter.clearFilters();
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not capture image", Toast.LENGTH_SHORT).show();
@@ -280,6 +282,8 @@ public class MainActivity extends FragmentActivity
                 catch (Exception e) {
                     e.printStackTrace();
                 }
+                mOverlayAdapter.clearOverlays();
+                mFilterAdapter.clearFilters();
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
