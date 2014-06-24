@@ -304,7 +304,7 @@ public class MainActivity extends FragmentActivity
         String favoritesString = prefs.getString("Favorites", "");
         JSONObject favoritesObject = null;
         JSONObject jsonFilter = null;
-        JSONArray favortiesArray = null;
+        JSONArray favoritesArray = null;
         String filterId = "";
         List<IFilter> filterArray = new ArrayList<IFilter>();
         AbstractFilterClass.FilterID id;
@@ -312,10 +312,10 @@ public class MainActivity extends FragmentActivity
 
         try {
             favoritesObject = new JSONObject(favoritesString);
-            favortiesArray = favoritesObject.getJSONArray(fav_key);
+            favoritesArray = favoritesObject.getJSONArray(fav_key);
 
-            for (int i = 0; i < favortiesArray.length(); i++) {
-                jsonFilter = new JSONObject(favortiesArray.get(i).toString());
+            for (int i = 0; i < favoritesArray.length(); i++) {
+                jsonFilter = new JSONObject(favoritesArray.get(i).toString());
                 filterId = jsonFilter.getString("id");
                 id = AbstractFilterClass.FilterID.valueOf(filterId);
 
