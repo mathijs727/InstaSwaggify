@@ -64,10 +64,6 @@ public class FilterDialog extends DialogFragment {
         mAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, filterNames);
     }
 
-    public void setOnAddFilterListener(OnAddFilterListener listener) {
-        mListener = listener;
-    }
-
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         getDialog().setTitle(R.string.filter_dialog_title);
@@ -126,6 +122,9 @@ public class FilterDialog extends DialogFragment {
         return mView;
     }
 
+    public void setOnAddFilterListener(OnAddFilterListener listener) {
+        mListener = listener;
+    }
     public interface OnAddFilterListener {
         public void OnAddFilterListener(IFilter filter);
     }

@@ -1,5 +1,6 @@
 package zwaggerboyz.instaswaggify;
 
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,6 +34,7 @@ import java.util.List;
 import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
 import zwaggerboyz.instaswaggify.dialogs.FavoritesDialog;
 import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
+import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
 import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
 import zwaggerboyz.instaswaggify.filters.AbstractFilterClass;
 import zwaggerboyz.instaswaggify.filters.BrightnessFilter;
@@ -60,11 +63,14 @@ import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
  */
 
 public class MainActivity extends FragmentActivity
-        implements FilterListAdapter.FilterListInterface, OverlayListAdapter.OverlayListInterface, FilterDialog.OnAddFilterListener {
+        implements FilterListAdapter.FilterListInterface,
+                   FilterDialog.OnAddFilterListener,
+                   OverlayDialog.OnAddOverlayListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
     private CanvasView mCanvasView;
+    private ViewPager mViewPager;
     private RSFilterHelper mRSFilterHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
@@ -86,7 +92,7 @@ public class MainActivity extends FragmentActivity
         mExportDialog = new ExportDialog();
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout)findViewById(R.id.activity_main_tabs);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
+        mViewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
         mExportDialog.setCanvasView(mCanvasView);
@@ -97,15 +103,17 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data), true);
         mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
 
+        List<CanvasDraggableItem> overlays = new ArrayList<CanvasDraggableItem>();
         mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mOverlayAdapter = new OverlayListAdapter(this, this, new ArrayList<CanvasDraggableItem>());
+        mOverlayAdapter = new OverlayListAdapter(this, mCanvasView, overlays);
+        mCanvasView.setOverlays(overlays);
         FragmentStatePagerAdapter pagerAdapter = new ListViewPagerAdapter(
                 getSupportFragmentManager(),
                 mFilterAdapter,
                 mOverlayAdapter);
-        viewPager.setOffscreenPageLimit(1);
-        viewPager.setAdapter(pagerAdapter);
-        slidingTabLayout.setViewPager(viewPager);
+        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setAdapter(pagerAdapter);
+        slidingTabLayout.setViewPager(mViewPager);
 
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
@@ -120,7 +128,6 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         /* Inflate the menu: add items to the action bar. */
         getMenuInflater().inflate(R.menu.main, menu);
         mMenu = menu;
@@ -132,16 +139,17 @@ public class MainActivity extends FragmentActivity
         int id = item.getItemId();
 
         switch(id) {
-            // TODO: hebben we settings wel nodig? Geluid uitzetten?
+            //TODO: hebben we settings wel nodig?
             case R.id.action_settings: {
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
-                mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
-                mCanvasView.invalidate();
+                //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
+                //mCanvasView.addDraggable(new CanvasDraggableItem(bitmap, 100, 100));
+                //mOverlayAdapter.addItem(new CanvasDraggableItem(bitmap,));
+                //mCanvasView.invalidate();
                 return true;
             }
 
             /* Adds a filter to the list. */
-            case R.id.action_add_filter: {
+            case R.id.action_add: {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
@@ -151,11 +159,21 @@ public class MainActivity extends FragmentActivity
                 fragmentTransaction.addToBackStack(null);
 
                 /* Show the filter-dialog. */
-                FilterDialog dialog = new FilterDialog(this, mFilterAdapter.getItems());
+                /*FilterDialog dialog = new FilterDialog(this, mFilterAdapter.getItems());
                 dialog.setOnAddFilterListener(this);
                 mDialog = dialog;
+                mDialog.show(fragmentTransaction, "dialog");*/
+                DialogFragment dialog = null;
+                int curItem = mViewPager.getCurrentItem();
+                if (curItem == ListViewPagerAdapter.PAGE_FILTERS) {
+                    dialog = new FilterDialog(this, mFilterAdapter.getItems());
+                    ((FilterDialog)dialog).setOnAddFilterListener(this);
+                } else if (curItem == ListViewPagerAdapter.PAGE_OVERLAYS) {
+                    dialog = new OverlayDialog(this);
+                    ((OverlayDialog)dialog).setOnAddOverlayListener(this);
+                }
+                mDialog = dialog;
                 mDialog.show(fragmentTransaction, "dialog");
-
                 return true;
             }
 
@@ -385,11 +403,6 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(filters, this);
     }
 
-    @Override
-    public void updateOverlays(List<CanvasDraggableItem> overlays) {
-        //TODO: update the overlays on the canvas
-    }
-
     // TODO: is dit nog nodig?
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
@@ -420,6 +433,14 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
+    public void OnAddOverlayListener(int resourceId) {
+        mDialog.dismiss();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+        CanvasDraggableItem overlay = new CanvasDraggableItem(bitmap, mCanvasView.getWidth() / 2, mCanvasView.getHeight() / 2);
+        mOverlayAdapter.addItem(overlay);
+    }
+
+    @Override
     public void OnAddFilterListener(IFilter filter) {
         mDialog.dismiss();
         mFilterAdapter.addItem(filter);
@@ -429,4 +450,3 @@ public class MainActivity extends FragmentActivity
         return mFilterAdapter.getItems();
     }
 }
-
