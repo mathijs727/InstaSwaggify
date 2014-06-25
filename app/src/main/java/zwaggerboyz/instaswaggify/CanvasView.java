@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
@@ -63,7 +61,6 @@ public class CanvasView extends View  {
         finishConstructor();
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -79,7 +76,6 @@ public class CanvasView extends View  {
 
         for (CanvasDraggableItem overlay : mOverlays) {
             canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
-            canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix2(), null);
             canvas.drawRect(overlay.getRect(), paint);
             canvas.drawRect(overlay.getRect().left - 5, overlay.getRect().top -5, overlay.getRect().left + 5, overlay.getRect().top + 5, red);
             canvas.drawRect(overlay.getRect().left + overlay.xOffset- 5,
@@ -87,7 +83,6 @@ public class CanvasView extends View  {
                             overlay.getRect().left + overlay.xOffset + 5,
                             overlay.getRect().top +overlay.yOffset+ 5,
                             green);
-
         }
     }
 
@@ -207,8 +202,10 @@ public class CanvasView extends View  {
     }
 
     public void onTouchUp (int x, int y) {
-        mSelected = null;
-        xOffSet = yOffset = 0;
+        if (mSelected != null) {
+            mSelected.resetOffset();
+            mSelected = null;
+        }
     }
 
     public void onPointerUp(int x, int y) {
@@ -251,8 +248,7 @@ public class CanvasView extends View  {
 
             // Don't let the object get too small or too large.
             mSelected.setScaleFactor(Math.max(0.1f, Math.min(mSelected.getScaleFactor(), 10.0f)));
-
-            mSelected.resizeImage(mSelected.getScaleFactor());
+            mSelected.setScaleFactor(mSelected.getScaleFactor());
 
             invalidate();
             return true;
@@ -265,7 +261,7 @@ public class CanvasView extends View  {
             @Override
             public boolean OnRotation(RotationGestureDetector rotationDetector) {
                 if (mSelected != null)
-                    mSelected.addmAngle(rotationDetector.getAngle());
+                    mSelected.rotate(rotationDetector.getAngle());
 
                 mRotation += (Math.toRadians(rotationDetector.getAngle()) * 100);
                 return false;

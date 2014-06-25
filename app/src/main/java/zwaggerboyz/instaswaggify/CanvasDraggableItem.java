@@ -2,7 +2,6 @@ package zwaggerboyz.instaswaggify;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
@@ -10,20 +9,19 @@ import android.util.Log;
  * Created by Peter on 19-6-2014.
  */
 public class CanvasDraggableItem {
-    private RectF mRotatedRect;
-    private RectF originalRectF, temp;
+    private RectF mRect;
+    private RectF originalRectF;
     private float mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
     public float xOffset, yOffset;
     public float mAngle;
-    private Matrix rotMatrix = new Matrix();
+    private Matrix matrix = new Matrix();
 
-    private float oldX, oldY;
+    private float centerX, centerY;
 
-    public void addmAngle(float deltaAngle) {
+    public void rotate(float deltaAngle) {
         mAngle += deltaAngle;
-        Log.i("Pevid", "angle " + mAngle);
     }
 
     public void resetOffset() {
@@ -31,30 +29,19 @@ public class CanvasDraggableItem {
     }
 
     public Matrix getMatrix() {
-        rotMatrix.reset();
-        rotMatrix.postRotate(-mAngle, mHalfWidth, mHalfHeight);
-        rotMatrix.postScale(mScaleFactor, mScaleFactor, mHalfWidth, mHalfWidth);
-        rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
+        matrix.reset();
+        matrix.postTranslate(-mHalfWidth, -mHalfHeight);
+        matrix.postRotate(-mAngle, 0, 0);
+        matrix.postScale(mScaleFactor, mScaleFactor, 0, 0);
+        matrix.postTranslate(centerX - xOffset, centerY - yOffset);
 
-        return rotMatrix;
+        return matrix;
     }
 
-    public Matrix getMatrix2() {
-        rotMatrix.reset();
-        rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
-        return rotMatrix;
-
-    }
 
     public void calcOffsets(int x, int y) {
-        rotMatrix.reset();
-        rotMatrix.postTranslate(oldX - xOffset, oldY - yOffset);
-        rotMatrix.mapRect(temp, originalRectF);
-
-        this.xOffset = x - temp.left;
-        this.yOffset = y - temp.top ;
-
-        Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
+        this.xOffset = x - mRect.centerX();
+        this.yOffset = y - mRect.centerY();
     }
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y) {
@@ -62,54 +49,46 @@ public class CanvasDraggableItem {
         mHalfWidth = bitmap.getWidth() / 2;
         mHalfHeight = bitmap.getHeight() / 2;
         originalRectF = new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        mRotatedRect = new RectF(originalRectF);
-        temp = new RectF();
+        mRect = new RectF(originalRectF);
 
-        oldX = 0;
-        oldY = 0;
+        centerX = 0;
+        centerY = 0;
         mAngle = 0;
 
         move(x, y);
     }
 
     public void move (int x, int y) {
-        Log.i("Pevid", "scale " + mScaleFactor + " angle " + mAngle);
-        oldX = x;
-        oldY = y;
-        getMatrix().mapRect(mRotatedRect, originalRectF);
+        centerX = x;
+        centerY = y;
+        getMatrix().mapRect(mRect, originalRectF);
     }
 
     public boolean isWithinBounds (int x, int y) {
-        return mRotatedRect.contains(x,  y);
+        return mRect.contains(x,  y);
     }
 
     public RectF getRect() {
-        return mRotatedRect;
+        return mRect;
     }
 
     public Bitmap getBitmap() {
         return mBitmap;
     }
 
-    public Bitmap getRotatedBitmap() {
-        return mBitmap;
+    public void resizeImage(double scale) {
+        mScaleFactor *= (float)scale;
+        getMatrix().mapRect(mRect, originalRectF);
+        calcOffsets((int) centerX, (int) centerY);
     }
 
-    public void resizeImage(double scale) {
+    public void setScaleFactor(double scale) {
         mScaleFactor = (float)scale;
-        getMatrix().mapRect(mRotatedRect, originalRectF);
-        //mHalfWidth = mRotatedRect.width() / 2;
-        //mHalfHeight = mRotatedRect.height() / 2;
-        Log.i("Pevid", "mHalfWidth " + mHalfWidth);
-        Log.i("Pevid", "mHalfHeight " + mHalfHeight);
-        calcOffsets((int)oldX, (int)oldY);
+        getMatrix().mapRect(mRect, originalRectF);
+        calcOffsets((int) centerX, (int) centerY);
     }
 
     public float getScaleFactor() {
         return mScaleFactor;
-    }
-
-    public void setScaleFactor(float scale) {
-        mScaleFactor = scale;
-    }
+     }
 }

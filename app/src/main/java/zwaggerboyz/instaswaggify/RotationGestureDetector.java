@@ -1,5 +1,6 @@
 package zwaggerboyz.instaswaggify;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -34,6 +35,9 @@ public class RotationGestureDetector {
                 mAngle = 0;
                 firstTouch = true;
                 break;
+
+            case MotionEvent.ACTION_POINTER_2_DOWN:
+            case MotionEvent.ACTION_POINTER_3_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
                 fX = event.getX();
                 fY = event.getY();
@@ -43,8 +47,10 @@ public class RotationGestureDetector {
                 mAngle = 0;
                 firstTouch = true;
                 break;
-            case MotionEvent.ACTION_MOVE:
 
+            case MotionEvent.ACTION_MOVE:
+                if (event.getPointerCount() < 2)
+                    return false;
                 if(ptrID1 != INVALID_POINTER_ID && ptrID2 != INVALID_POINTER_ID){
                     float nfX, nfY, nsX, nsY;
                     nsX = event.getX(event.findPointerIndex(ptrID1));
@@ -68,11 +74,22 @@ public class RotationGestureDetector {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                int id = event.getPointerId(event.getActionIndex());
                 ptrID1 = INVALID_POINTER_ID;
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
                 ptrID2 = INVALID_POINTER_ID;
                 break;
+
+            case MotionEvent.ACTION_POINTER_2_UP:
+            case MotionEvent.ACTION_POINTER_3_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                int pointerId = event.getPointerId(event.getActionIndex());
+                if (ptrID1 == pointerId) {
+                    ptrID1 = ptrID2;
+                    ptrID2 = INVALID_POINTER_ID;
+                }
+                if (ptrID2 == pointerId)
+                    ptrID2 = INVALID_POINTER_ID;
+                    break;
         }
         return true;
     }
