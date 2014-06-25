@@ -28,7 +28,7 @@ public class CanvasDraggableItem {
     private String mName;
     private float centerX, centerY;
 
-    private static final float DEFAULT_SIZE = 150;
+    private static final float DEFAULT_SIZE = 300;
 
     public void rotate(float deltaAngle) {
         mAngle += deltaAngle;
