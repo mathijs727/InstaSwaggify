@@ -34,7 +34,6 @@ public class RSFilterHelper {
 
     private CanvasView mCanvasView;
     private RenderScript mRS;
-    private ScriptGroup mScriptGroup;
     private RenderScriptTask mRenderTask;
 
     private static final int BITMAP_MAX_WIDTH = 600;
@@ -88,6 +87,10 @@ public class RSFilterHelper {
     }
 
     public void generateBitmap(List<IFilter> filters, Context context) {
+        generateBitmap(filters, context, false);
+    }
+
+    public void generateBitmap(List<IFilter> filters, Context context, boolean forceUpdate) {
         if (mBitmapIn == null)
             return;
 
@@ -98,7 +101,14 @@ public class RSFilterHelper {
         }
 
         if (mRenderTask != null)
-            mRenderTask.cancel(false);
+            if (forceUpdate) {
+                mRenderTask.cancel(true);
+            } else {
+                if (mRenderTask.getStatus() == AsyncTask.Status.RUNNING)
+                    return;
+                else if (mRenderTask.getStatus() == AsyncTask.Status.PENDING)
+                    mRenderTask.cancel(false);
+            }
 
         IFilter[] filtersArray = new IFilter[filters.size()];
         filters.toArray(filtersArray);
@@ -143,18 +153,18 @@ public class RSFilterHelper {
                                 filters[i + 1].getKernelId());
                     }
                 }
-                mScriptGroup = builder.create();
+                ScriptGroup scriptGroup = builder.create();
 
                 if (filters[0].getFieldId() != null) {
                     filters[0].setInput(mInAllocation);
                 } else {
-                    mScriptGroup.setInput(filters[0].getKernelId(),
+                    scriptGroup.setInput(filters[0].getKernelId(),
                             mInAllocation);
                 }
 
-                mScriptGroup.setOutput(filters[filters.length-1].getKernelId(),
+                scriptGroup.setOutput(filters[filters.length-1].getKernelId(),
                         mOutAllocations[index]);
-                mScriptGroup.execute();
+                scriptGroup.execute();
 
                 mOutAllocations[index].copyTo(mBitmapsOut[index]);
                 mCurrentBitmap = (mCurrentBitmap + 1) % NUM_BITMAPS;

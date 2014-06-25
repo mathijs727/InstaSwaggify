@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
 import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
 import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
 import zwaggerboyz.instaswaggify.filters.IFilter;
@@ -278,7 +277,12 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void updateImage(List<IFilter> filters) {
-        mRSFilterHelper.generateBitmap(filters, this);
+        updateImage(filters, false);
+    }
+
+    @Override
+    public void updateImage(List<IFilter> filters, boolean forceUpdate) {
+        mRSFilterHelper.generateBitmap(filters, this, forceUpdate);
     }
 
     @Override
