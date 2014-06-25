@@ -90,7 +90,7 @@ public class ExportHelper {
             return null;
 
         if (!Environment.MEDIA_MOUNTED.equals(state))
-            return null;
+            externalIsAvailable = false;
 
         /* Try to open a file to export the picture. */
         try {
@@ -98,12 +98,10 @@ public class ExportHelper {
             SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
             String date = s.format(new Date());
 
-            if (!externalIsAvailable) {
+            if (!externalIsAvailable)
                 folder = new File("InstasSwaggify");
-            }
-            else {
+            else
                 folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify");
-            }
 
             if (!folder.exists()) {
                 if (!folder.mkdirs()) {
