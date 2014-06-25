@@ -10,9 +10,9 @@ import android.view.MotionEvent;
  *
  * FILE:    RotationGestureDetector.java
  * This file performs the rotation of overlays
+ * (thanks to Jorge Garcia:
+ *          http://stackoverflow.com/questions/10682019/android-two-finger-rotation)
  */
-
-// TODO meer uitleg in comments
 
 public class RotationGestureDetector {
     private static final int INVALID_POINTER_ID = -1;

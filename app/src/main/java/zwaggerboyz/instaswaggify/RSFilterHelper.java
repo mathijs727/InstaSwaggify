@@ -21,8 +21,6 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
  * This file contains a helper-class to apply the selected filter on the image.
  */
 
- // TODO meer comments nodig?
-
 public class RSFilterHelper {
     private final int NUM_BITMAPS = 3;
     private int mCurrentBitmap = 0;
@@ -30,7 +28,6 @@ public class RSFilterHelper {
     private Bitmap[] mBitmapsOut;
     private Allocation mInAllocation;
     private Allocation[] mOutAllocations;
-
     private CanvasView mCanvasView;
     private RenderScript mRS;
     private RenderScriptTask mRenderTask;
