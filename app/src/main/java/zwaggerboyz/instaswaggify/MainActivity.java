@@ -216,12 +216,12 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_save_picture: {
-                mExportHelper.exportPicture(false, this.getApplicationContext(), this);
+                mExportHelper.exportPicture(false, this);
                 return true;
             }
 
             case R.id.action_share: {
-                mExportHelper.exportPicture(true, this.getApplicationContext(), this);
+                mExportHelper.exportPicture(true, this);
                 return true;
             }
 
