@@ -199,11 +199,6 @@ public class CanvasView extends View  {
         mSelected = null;
     }
 
-    public void onPointerUp(int x, int y) {
-        if (mSelected != null)
-            mSelected.calcOffsets((int)mScaleDetector.getFocusX(), (int)mScaleDetector.getFocusY());
-    }
-
     public void switchPointer(int x, int y) {
         if (mSelected != null) {
             mSelected.calcOffsets(x, y);
