@@ -1,6 +1,7 @@
 package zwaggerboyz.instaswaggify;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 
@@ -14,8 +15,7 @@ import android.graphics.RectF;
  * This file contains an overlay with its bitmap and position on the canvas.
  */
 
-
-public class CanvasDraggableItem {
+public class CanvasDraggableItem implements Cloneable {
     private RectF mRect;
     private RectF originalRectF;
     private float mHalfWidth, mHalfHeight;
@@ -149,5 +149,18 @@ public class CanvasDraggableItem {
 
     public String getName() {
         return mName;
+    }
+
+    @Override
+    public CanvasDraggableItem clone() {
+        try {
+            CanvasDraggableItem temp = (CanvasDraggableItem) super.clone();
+            temp.mRect = new RectF(mRect);
+            return temp;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

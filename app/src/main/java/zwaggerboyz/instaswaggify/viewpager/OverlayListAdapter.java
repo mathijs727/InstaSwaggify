@@ -1,6 +1,7 @@
 package zwaggerboyz.instaswaggify.viewpager;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
  * This file contains the adapter to change the list of currently selected overlays.
  */
 
-public class OverlayListAdapter extends BaseAdapter {
+public class OverlayListAdapter extends BaseAdapter implements CanvasView.onOverlayChangeListener {
     private LayoutInflater mInflater;
     private CanvasView mCanvasView;
     private OverlayListInterface mListener;
@@ -43,6 +44,7 @@ public class OverlayListAdapter extends BaseAdapter {
         mCanvasView = canvasView;
         mItems = items;
         mHistoryBuffer = historyBuffer;
+        mCanvasView.setOnOverlayChangeListener(this);
     }
 
     @Override
@@ -129,6 +131,11 @@ public class OverlayListAdapter extends BaseAdapter {
         mItems.addAll(items);
         mCanvasView.invalidate();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateBuffer() {
+        mHistoryBuffer.updateBuffer(null, mItems);
     }
 
     public interface OverlayListInterface {

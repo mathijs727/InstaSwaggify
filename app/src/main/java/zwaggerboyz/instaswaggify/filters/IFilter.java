@@ -40,4 +40,8 @@ public interface IFilter {
     public Script.KernelID getKernelId();
 
     public Script.FieldID getFieldId();
+
+    public IFilter clone();
+
+    public void setArray(int[] array);
 }
