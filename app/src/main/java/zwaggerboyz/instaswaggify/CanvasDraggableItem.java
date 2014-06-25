@@ -17,6 +17,7 @@ public class CanvasDraggableItem {
     public float xOffset, yOffset;
     public float mAngle;
     private Matrix matrix = new Matrix();
+    private boolean flipped;
 
     private float centerX, centerY;
 
@@ -25,14 +26,26 @@ public class CanvasDraggableItem {
     }
 
     public void resetOffset() {
+        centerX -= xOffset;
+        centerY -= yOffset;
         xOffset = yOffset = 0;
+    }
+
+    public void flip() {
+        flipped ^= true;
     }
 
     public Matrix getMatrix() {
         matrix.reset();
         matrix.postTranslate(-mHalfWidth, -mHalfHeight);
-        matrix.postRotate(-mAngle, 0, 0);
-        matrix.postScale(mScaleFactor, mScaleFactor, 0, 0);
+        if (flipped) {
+            matrix.postRotate(mAngle, 0, 0);
+            matrix.postScale(-mScaleFactor, mScaleFactor, 0, 0);
+        }
+        else {
+            matrix.postRotate(-mAngle, 0, 0);
+            matrix.postScale(mScaleFactor, mScaleFactor, 0, 0);
+        }
         matrix.postTranslate(centerX - xOffset, centerY - yOffset);
 
         return matrix;

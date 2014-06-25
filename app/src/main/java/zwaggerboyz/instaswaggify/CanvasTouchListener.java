@@ -25,7 +25,7 @@ public class CanvasTouchListener implements View.OnTouchListener {
         mCanvasView.mScaleDetector.onTouchEvent(event);
         mCanvasView.mRotationGesture.onTouchEvent(event);
 
-
+        //Log.i("Pevid", "" + event);
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 firstFingerID = event.getPointerId(0);
@@ -40,13 +40,14 @@ public class CanvasTouchListener implements View.OnTouchListener {
                     pointerIndex = event.findPointerIndex(firstFingerID);
                 else
                     pointerIndex = event.getActionIndex();
-                mCanvasView.onTouchMove((int) event.getX(pointerIndex), (int) event.getY(pointerIndex));
 
+                mCanvasView.onTouchMove((int) event.getX(pointerIndex), (int) event.getY(pointerIndex));
                 return true;
             }
 
             case MotionEvent.ACTION_UP:
                 firstFingerID = secondFingerID = INVALID_POINTER_ID;
+                mCanvasView.onTouchUp(0, 0);
                 return true;
 
             case MotionEvent.ACTION_POINTER_2_UP:
@@ -70,13 +71,10 @@ public class CanvasTouchListener implements View.OnTouchListener {
 
                 return true;
 
-            /* tijdelijke uitgeschakeld*/
-
             case MotionEvent.ACTION_POINTER_2_DOWN:
             case MotionEvent.ACTION_POINTER_3_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
-                if (event.getPointerCount() <= 2)
-                    secondFingerID = event.getPointerId(event.getActionIndex());
+                secondFingerID = event.getPointerId(event.getActionIndex());
                 return true;
 
             default:

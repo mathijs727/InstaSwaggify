@@ -64,25 +64,12 @@ public class CanvasView extends View  {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint paint = new Paint();
-        paint.setColor(Color.argb(100, 255, 0, 0));
-        Paint red = new Paint();
-        red.setColor(Color.RED);
-        Paint green = new Paint();
-        green.setColor(Color.GREEN);
 
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
         for (CanvasDraggableItem overlay : mOverlays) {
             canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
-            canvas.drawRect(overlay.getRect(), paint);
-            canvas.drawRect(overlay.getRect().left - 5, overlay.getRect().top -5, overlay.getRect().left + 5, overlay.getRect().top + 5, red);
-            canvas.drawRect(overlay.getRect().left + overlay.xOffset- 5,
-                            overlay.getRect().top + overlay.yOffset-5,
-                            overlay.getRect().left + overlay.xOffset + 5,
-                            overlay.getRect().top +overlay.yOffset+ 5,
-                            green);
         }
     }
 
@@ -175,11 +162,13 @@ public class CanvasView extends View  {
         /* Loop through the items backwards because the last item in the list is the top most item */
         int length = mOverlays.size();
         CanvasDraggableItem overlay;
+
         for (int i = length - 1; i >= 0; i--) {
             overlay = mOverlays.get(i);
             if (overlay.isWithinBounds(x, y)) {
                 overlay.calcOffsets(x, y);
                 mSelected = overlay;
+
                 return;
             }
         }
@@ -204,8 +193,8 @@ public class CanvasView extends View  {
     public void onTouchUp (int x, int y) {
         if (mSelected != null) {
             mSelected.resetOffset();
-            mSelected = null;
         }
+        mSelected = null;
     }
 
     public void onPointerUp(int x, int y) {
@@ -225,7 +214,6 @@ public class CanvasView extends View  {
         if (getWidth() != 0) {
             recalculateSize(getWidth(), getHeight(), true);
         }
-        Log.v("CanvasView", "Canvas width: " + getWidth());
     }
 
     public Bitmap getBitmap () {
@@ -260,9 +248,10 @@ public class CanvasView extends View  {
         mRotationGesture = new RotationGestureDetector(new RotationGestureDetector.OnRotationGestureListener() {
             @Override
             public boolean OnRotation(RotationGestureDetector rotationDetector) {
-                if (mSelected != null)
-                    mSelected.rotate(rotationDetector.getAngle());
+                if (mSelected == null)
+                    return true;
 
+                mSelected.rotate(rotationDetector.getAngle());
                 mRotation += (Math.toRadians(rotationDetector.getAngle()) * 100);
                 return false;
             }
