@@ -30,10 +30,9 @@ public class CanvasView extends View  {
     private List<CanvasDraggableItem> mOverlays;
     private CanvasDraggableItem mSelected = null;
     private int mXOffset, mYOffset;
-    private double mImgScale = 1.0;
-
     public RotationGestureDetector mRotationGesture;
     public ScaleGestureDetector mScaleDetector;
+    private double mImgScale = 1.0;
 
     public CanvasView(Context context) {
         super(context);
