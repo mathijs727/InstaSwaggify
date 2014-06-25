@@ -21,7 +21,6 @@ import zwaggerboyz.instaswaggify.R;
  */
 
 public class OverlayListFragment extends Fragment {
-    private DragSortListView mListView;
     private OverlayListAdapter mAdapter;
 
     public void setAdapter(OverlayListAdapter adapter) {
@@ -47,23 +46,9 @@ public class OverlayListFragment extends Fragment {
             @Override
             public void drop(int from, int to) {
                 mAdapter.reorder(from, to);
+                mAdapter.notifyDataSetChanged();
             }
         });
-
-        mListView.setRemoveListener(new DragSortListView.RemoveListener() {
-            @Override
-            public void remove(int which) {
-                mAdapter.remove(which);
-            }
-        });
-
-        mListView.setDropListener(new DragSortListView.DropListener() {
-            @Override
-            public void drop(int from, int to) {
-                mAdapter.reorder(from, to);
-            }
-        });
-
         return view;
     }
 }

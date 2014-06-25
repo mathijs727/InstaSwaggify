@@ -111,7 +111,7 @@ public class OverlayListAdapter extends BaseAdapter implements CanvasView.onOver
 
     public void addItem(CanvasDraggableItem overlay) {
         mHistoryBuffer.updateBuffer(null, mItems);
-        mItems.add(overlay);
+        mItems.add(0, overlay);
         mCanvasView.invalidate();
         mListener.overlaysNotEmpty();
         notifyDataSetChanged();
@@ -126,7 +126,6 @@ public class OverlayListAdapter extends BaseAdapter implements CanvasView.onOver
     }
 
     public void setItems(List<CanvasDraggableItem> items) {
-        Log.v("SETTING", "ITEMS");
         mItems.clear();
         mItems.addAll(items);
         mCanvasView.invalidate();

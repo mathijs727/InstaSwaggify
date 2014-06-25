@@ -15,9 +15,9 @@ import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
 public class HistoryBuffer {
 
     private List<BufferItem> mBufferItems;
-    private undoInterface mListener;
+    private UndoInterface mListener;
 
-    public HistoryBuffer(undoInterface listener) {
+    public HistoryBuffer(UndoInterface listener) {
         mBufferItems = new ArrayList<BufferItem>();
         mListener = listener;
     }
@@ -53,7 +53,6 @@ public class HistoryBuffer {
     }
 
     private class BufferItem {
-
         ArrayList<IFilter> mIFilterList;
         ArrayList<CanvasDraggableItem> mCanvasDraggableItemList;
         int type;
@@ -77,7 +76,7 @@ public class HistoryBuffer {
         }
     }
 
-    public interface undoInterface {
+    public interface UndoInterface {
         public void setUndoState(boolean state);
     }
 }

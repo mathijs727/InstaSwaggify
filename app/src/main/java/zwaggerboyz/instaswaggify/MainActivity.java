@@ -48,7 +48,7 @@ public class MainActivity extends FragmentActivity
                    ViewPager.OnPageChangeListener,
                    FilterDialog.OnAddFilterListener,
                    OverlayDialog.OnAddOverlayListener,
-                   HistoryBuffer.undoInterface,
+                   HistoryBuffer.UndoInterface,
                    PresetsHelper.PresetsHelperListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
@@ -168,8 +168,8 @@ public class MainActivity extends FragmentActivity
 
                 /* Create a folder to store the pictures if it does not exist yet. */
                 File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
-                if (imagesFolder.exists() == false) {
-                    if (imagesFolder.mkdirs() == false) {
+                if (!imagesFolder.exists()) {
+                    if (!imagesFolder.mkdirs()) {
                         return true;
                     }
                 }
@@ -216,12 +216,12 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_save_picture: {
-                mExportHelper.exportPicture(false, this.getApplicationContext(), this);
+                mExportHelper.exportPicture(false, this);
                 return true;
             }
 
             case R.id.action_share: {
-                mExportHelper.exportPicture(true, this.getApplicationContext(), this);
+                mExportHelper.exportPicture(true, this);
                 return true;
             }
 
@@ -244,6 +244,9 @@ public class MainActivity extends FragmentActivity
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+
+                    /* Set it on canvas already so we can force recalculateSize */
+                    mCanvasView.setBitmap(bitmap, true);
                     mRSFilterHelper.setBitmap(bitmap, true);
                 }
                 catch (Exception e) {
@@ -264,6 +267,9 @@ public class MainActivity extends FragmentActivity
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+
+                    /* Set it on canvas already so we can force recalculateSize */
+                    mCanvasView.setBitmap(bitmap, true);
                     mRSFilterHelper.setBitmap(bitmap, true);
                 }
                 catch (Exception e) {
