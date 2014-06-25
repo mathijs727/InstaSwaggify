@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -19,9 +18,6 @@ import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,17 +25,9 @@ import java.util.Date;
 import java.util.List;
 
 import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
-import zwaggerboyz.instaswaggify.dialogs.LoadPresetDialog;
 import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
 import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
-import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
 import zwaggerboyz.instaswaggify.filters.IFilter;
-import zwaggerboyz.instaswaggify.filters.InvertColorsFilter;
-import zwaggerboyz.instaswaggify.filters.NoiseFilter;
-import zwaggerboyz.instaswaggify.filters.RotationFilter;
-import zwaggerboyz.instaswaggify.filters.SaturationFilter;
-import zwaggerboyz.instaswaggify.filters.SepiaFilter;
-import zwaggerboyz.instaswaggify.filters.ThresholdBlurFilter;
 import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
 import zwaggerboyz.instaswaggify.viewpager.ListViewPagerAdapter;
 import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
@@ -58,7 +46,8 @@ import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
 public class MainActivity extends FragmentActivity
         implements FilterListAdapter.FilterListInterface,
                    FilterDialog.OnAddFilterListener,
-                   OverlayDialog.OnAddOverlayListener {
+                   OverlayDialog.OnAddOverlayListener,
+                   PresetsHelper.PresetsHelperListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
@@ -92,6 +81,7 @@ public class MainActivity extends FragmentActivity
         mExportDialog.setCanvasView(mCanvasView);
 
         mPresetsHelper = new PresetsHelper(this);
+        mPresetsHelper.setPresetsHelperListener(this);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
@@ -127,6 +117,11 @@ public class MainActivity extends FragmentActivity
         /* Inflate the menu: add items to the action bar. */
         getMenuInflater().inflate(R.menu.main, menu);
         mMenu = menu;
+
+        if (mPresetsHelper.getPresets().size() > 0)
+            mMenu.findItem(R.id.action_preset_load).setEnabled(true);
+        else
+            mMenu.findItem(R.id.action_preset_load).setEnabled(false);
         return true;
     }
 
@@ -198,13 +193,13 @@ public class MainActivity extends FragmentActivity
                 return true;
             }
 
-            case R.id.action_favorites: {
-                mPresetsHelper.loadPreset(this, mFilterAdapter);
+            case R.id.action_preset_load: {
+                mPresetsHelper.showLoadPresetDialog(this, mFilterAdapter);
                 return true;
             }
 
-            case R.id.action_add_favorite: {
-                mPresetsHelper.savePreset(this, mFilterAdapter.getItems());
+            case R.id.action_preset_save: {
+                mPresetsHelper.showSavePresetDialog(this, mFilterAdapter.getItems());
                 return true;
             }
 
@@ -288,6 +283,16 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(filters, this);
     }
 
+    @Override
+    public void filtersEmpty() {
+        mMenu.findItem(R.id.action_preset_save).setEnabled(false);
+    }
+
+    @Override
+    public void filtersNotEmpty() {
+        mMenu.findItem(R.id.action_preset_save).setEnabled(true);
+    }
+
     void handleSendImage(Intent intent) {
         Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
@@ -327,7 +332,13 @@ public class MainActivity extends FragmentActivity
         mFilterAdapter.addItem(filter);
     }
 
-    public List<IFilter> getAdapterItems () {
-        return mFilterAdapter.getItems();
+    @Override
+    public void OnAllPresetsRemoved() {
+        mMenu.findItem(R.id.action_preset_load).setEnabled(false);
+    }
+
+    @Override
+    public void OnPresetSaved() {
+        mMenu.findItem(R.id.action_preset_load).setEnabled(true);
     }
 }
