@@ -5,18 +5,24 @@
     <item android:id="@+id/action_take_photo"
         android:title="@string/action_take_photo"
         android:icon="@drawable/ic_action_camera"
-        android:orderInCategory="91"
+        android:orderInCategory="90"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_select_photo"
         android:title="@string/action_select_photo"
         android:icon="@drawable/ic_action_picture"
-        android:orderInCategory="92"
+        android:orderInCategory="91"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_add"
         android:title="@string/action_add_filter"
         android:icon="@drawable/ic_action_new"
+        android:orderInCategory="92"
+        android:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_share"
+        android:title="@string/action_share"
+        android:icon="@drawable/ic_action_share"
         android:orderInCategory="93"
         android:showAsAction="ifRoom" />
 
@@ -50,14 +56,6 @@
         android:icon="@drawable/ic_action_save"
         android:orderInCategory="98"
         android:showAsAction="ifRoom" />
-
-    <item android:id="@+id/action_share"
-        android:title="@string/action_share"
-        android:icon="@drawable/ic_action_share"
-        android:orderInCategory="99"
-        android:actionProviderClass=
-            "android.widget.ShareActionProvider"
-        android:showAsAction="never" />
 
 />
 
