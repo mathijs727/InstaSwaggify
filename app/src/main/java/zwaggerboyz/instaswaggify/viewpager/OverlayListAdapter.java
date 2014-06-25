@@ -102,7 +102,7 @@ public class OverlayListAdapter extends BaseAdapter {
     }
 
     public void addItem(CanvasDraggableItem overlay) {
-        mItems.add(overlay);
+        mItems.add(0, overlay);
         mCanvasView.invalidate();
         mListener.overlaysNotEmpty();
         notifyDataSetChanged();
