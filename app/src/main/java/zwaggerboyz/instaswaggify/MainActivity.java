@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -19,27 +18,15 @@ import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import zwaggerboyz.instaswaggify.dialogs.ExportHelper;
-import zwaggerboyz.instaswaggify.dialogs.LoadPresetDialog;
 import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
 import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
-import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
 import zwaggerboyz.instaswaggify.filters.IFilter;
-import zwaggerboyz.instaswaggify.filters.InvertColorsFilter;
-import zwaggerboyz.instaswaggify.filters.NoiseFilter;
-import zwaggerboyz.instaswaggify.filters.RotationFilter;
-import zwaggerboyz.instaswaggify.filters.SaturationFilter;
-import zwaggerboyz.instaswaggify.filters.SepiaFilter;
-import zwaggerboyz.instaswaggify.filters.ThresholdBlurFilter;
 import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
 import zwaggerboyz.instaswaggify.viewpager.ListViewPagerAdapter;
 import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;

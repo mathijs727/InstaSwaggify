@@ -1,4 +1,4 @@
-package zwaggerboyz.instaswaggify.dialogs;
+package zwaggerboyz.instaswaggify;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
