@@ -33,7 +33,6 @@ public class CanvasView extends View  {
     private CanvasDraggableItem mSelected = null;
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
-    private int xOffSet, yOffset;
 
     public RotationGestureDetector mRotationGesture;
     public ScaleGestureDetector mScaleDetector;
@@ -70,8 +69,9 @@ public class CanvasView extends View  {
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
-        for (CanvasDraggableItem overlay : mOverlays) {
-            canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
+        for (int i = mOverlays.size() - 1; i >= 0; i--) {
+            CanvasDraggableItem overlay = mOverlays.get(i);
+            canvas.drawBitmap(overlay.getBitmap(), null, overlay.getRect(), null);
         }
     }
 

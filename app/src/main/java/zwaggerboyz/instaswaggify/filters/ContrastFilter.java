@@ -25,11 +25,14 @@ public class ContrastFilter extends AbstractFilterClass {
         mName = "Contrast";
         mNumValues = 1;
 
+        /* slider label */
         mLabels = new String[] {
                 "intensity"
         };
+
+        /* slider default value */
         mValues = new int[] {
-                11
+                50
         };
     }
 

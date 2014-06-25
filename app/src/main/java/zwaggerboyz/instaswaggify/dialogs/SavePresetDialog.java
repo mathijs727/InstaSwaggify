@@ -30,9 +30,8 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
  *          Arne Zismer
  *
  * FILE:    SavePresetDialog.java
- * This file contains the dialog that is shown when saving a preset.
+ * This file manages the saving of presets.
  */
-
 
 public class SavePresetDialog extends DialogFragment {
     private OnSavePresetListener mListener;

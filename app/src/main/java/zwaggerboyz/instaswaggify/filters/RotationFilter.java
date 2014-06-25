@@ -25,9 +25,12 @@ public class RotationFilter extends AbstractFilterClass {
         mName = "Rotation";
         mNumValues = 1;
 
+        /* slider label */
         mLabels = new String[] {
                 "angle"
         };
+
+        /* slider default value */
         mValues = new int[] {
                 0
         };
