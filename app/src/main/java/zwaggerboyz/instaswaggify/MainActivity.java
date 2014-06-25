@@ -48,6 +48,7 @@ public class MainActivity extends FragmentActivity
                    ViewPager.OnPageChangeListener,
                    FilterDialog.OnAddFilterListener,
                    OverlayDialog.OnAddOverlayListener,
+                   HistoryBuffer.UndoInterface,
                    PresetsHelper.PresetsHelperListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
@@ -59,6 +60,7 @@ public class MainActivity extends FragmentActivity
     private DialogFragment mDialog;
     private Menu mMenu;
     private ExportHelper mExportHelper;
+    private HistoryBuffer mHistoryBuffer;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
@@ -72,6 +74,8 @@ public class MainActivity extends FragmentActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mHistoryBuffer = new HistoryBuffer(this);
 
         mExportHelper = new ExportHelper();
 
@@ -91,8 +95,8 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
 
         List<CanvasDraggableItem> overlays = new ArrayList<CanvasDraggableItem>();
-        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mOverlayAdapter = new OverlayListAdapter(this, this, mCanvasView, overlays);
+        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>(), mHistoryBuffer);
+        mOverlayAdapter = new OverlayListAdapter(this, this, mCanvasView, overlays, mHistoryBuffer);
         mCanvasView.setOverlays(overlays);
         FragmentStatePagerAdapter pagerAdapter = new ListViewPagerAdapter(
                 getSupportFragmentManager(),
@@ -164,8 +168,8 @@ public class MainActivity extends FragmentActivity
 
                 /* Create a folder to store the pictures if it does not exist yet. */
                 File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
-                if (imagesFolder.exists() == false) {
-                    if (imagesFolder.mkdirs() == false) {
+                if (!imagesFolder.exists()) {
+                    if (!imagesFolder.mkdirs()) {
                         return true;
                     }
                 }
@@ -207,7 +211,7 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_undo: {
-                mFilterAdapter.undo();
+                mHistoryBuffer.undo(mFilterAdapter, mOverlayAdapter);
                 return true;
             }
 
@@ -240,6 +244,9 @@ public class MainActivity extends FragmentActivity
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+
+                    /* Set it on canvas already so we can force recalculateSize */
+                    mCanvasView.setBitmap(bitmap, true);
                     mRSFilterHelper.setBitmap(bitmap, true);
                 }
                 catch (Exception e) {
@@ -260,6 +267,9 @@ public class MainActivity extends FragmentActivity
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+
+                    /* Set it on canvas already so we can force recalculateSize */
+                    mCanvasView.setBitmap(bitmap, true);
                     mRSFilterHelper.setBitmap(bitmap, true);
                 }
                 catch (Exception e) {
@@ -272,6 +282,11 @@ public class MainActivity extends FragmentActivity
                 Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void setUndoState(boolean state) {
+        mMenu.findItem(R.id.action_undo).setEnabled(state);
     }
 
     void handleSendImage(Intent intent) {
@@ -293,11 +308,6 @@ public class MainActivity extends FragmentActivity
                     "Error occurred while opening picture",
                     Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public void setUndoState(boolean state) {
-        mMenu.findItem(R.id.action_undo).setEnabled(state);
     }
 
     @Override
