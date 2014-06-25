@@ -21,11 +21,11 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
  * This file contains a helper-class to apply the selected filter on the image.
  */
 
+ // TODO meer comments nodig?
+
 public class RSFilterHelper {
     private final int NUM_BITMAPS = 3;
-    private int mTimesProcessed = 0;
     private int mCurrentBitmap = 0;
-    private Context mContext;
     private Bitmap mBitmapIn;
     private Bitmap[] mBitmapsOut;
     private Allocation mInAllocation;
@@ -33,14 +33,12 @@ public class RSFilterHelper {
 
     private CanvasView mCanvasView;
     private RenderScript mRS;
-    private ScriptGroup mScriptGroup;
     private RenderScriptTask mRenderTask;
 
     private static final int BITMAP_MAX_WIDTH = 600;
     private static final int BITMAP_MAX_HEIGHT = 600;
 
     public void createRS(Context context) {
-        mContext = context;
         mRS = RenderScript.create(context);
     }
 
@@ -87,6 +85,10 @@ public class RSFilterHelper {
     }
 
     public void generateBitmap(List<IFilter> filters, Context context) {
+        generateBitmap(filters, context, false);
+    }
+
+    public void generateBitmap(List<IFilter> filters, Context context, boolean forceUpdate) {
         if (mBitmapIn == null)
             return;
 
@@ -96,39 +98,15 @@ public class RSFilterHelper {
             return;
         }
 
-        mTimesProcessed++;
-        if (mTimesProcessed == 30) {
-            mTimesProcessed = 0;
-            mRS.destroy();
-            mRS = null;
-            mRS = RenderScript.create(context);
-            setBitmap(mBitmapIn, false);
-        }
-
-        ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
-        for (IFilter filter : filters) {
-            filter.setRS(mRS);
-            filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
-            filter.updateInternalValues();
-            builder.addKernel(filter.getKernelId());
-        }
-
-        for (int i = 0; i < filters.size()-1; i++) {
-            if (filters.get(i+1).getFieldId() != null) {
-                builder.addConnection(
-                        mInAllocation.getType(),
-                        filters.get(i).getKernelId(),
-                        filters.get(i + 1).getFieldId());
-            } else {
-                builder.addConnection(
-                        mInAllocation.getType(),
-                        filters.get(i).getKernelId(),
-                        filters.get(i + 1).getKernelId());
-            }
-        }
-        mScriptGroup = builder.create();
         if (mRenderTask != null)
-            mRenderTask.cancel(false);
+            if (forceUpdate) {
+                mRenderTask.cancel(true);
+            } else {
+                if (mRenderTask.getStatus() == AsyncTask.Status.RUNNING)
+                    return;
+                else if (mRenderTask.getStatus() == AsyncTask.Status.PENDING)
+                    mRenderTask.cancel(false);
+            }
 
         IFilter[] filtersArray = new IFilter[filters.size()];
         filters.toArray(filtersArray);
@@ -150,16 +128,41 @@ public class RSFilterHelper {
                 issued = true;
                 index = mCurrentBitmap;
 
+                int length = filters.length;
+
+                ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
+                for (IFilter filter : filters) {
+                    filter.setRS(mRS);
+                    filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
+                    filter.updateInternalValues();
+                    builder.addKernel(filter.getKernelId());
+                }
+
+                for (int i = 0; i < length - 1; i++) {
+                    if (filters[i+1].getFieldId() != null) {
+                        builder.addConnection(
+                                mInAllocation.getType(),
+                                filters[i].getKernelId(),
+                                filters[i + 1].getFieldId());
+                    } else {
+                        builder.addConnection(
+                                mInAllocation.getType(),
+                                filters[i].getKernelId(),
+                                filters[i + 1].getKernelId());
+                    }
+                }
+                ScriptGroup scriptGroup = builder.create();
+
                 if (filters[0].getFieldId() != null) {
-                    filters[0].setInput(mInAllocation);;
+                    filters[0].setInput(mInAllocation);
                 } else {
-                    mScriptGroup.setInput(filters[0].getKernelId(),
+                    scriptGroup.setInput(filters[0].getKernelId(),
                             mInAllocation);
                 }
 
-                mScriptGroup.setOutput(filters[filters.length-1].getKernelId(),
+                scriptGroup.setOutput(filters[filters.length-1].getKernelId(),
                         mOutAllocations[index]);
-                mScriptGroup.execute();
+                scriptGroup.execute();
 
                 mOutAllocations[index].copyTo(mBitmapsOut[index]);
                 mCurrentBitmap = (mCurrentBitmap + 1) % NUM_BITMAPS;

@@ -3,18 +3,13 @@ package zwaggerboyz.instaswaggify;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
 
 /*
  * APP:     InstaSwaggify
@@ -25,6 +20,8 @@ import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
  * FILE:    CanvasView.java
  * This file contains the canvas-view that draw the bitmap and overlays.
  */
+
+// TODO meer uitleg in comments
 
 public class CanvasView extends View  {
     private Bitmap mBitmap;
@@ -165,16 +162,14 @@ public class CanvasView extends View  {
         int length = mOverlays.size();
         CanvasDraggableItem overlay;
 
-        for (int i = length - 1; i >= 0; i--) {
+        for (int i = 0; i < length; i++) {
             overlay = mOverlays.get(i);
             if (overlay.isWithinBounds(x, y)) {
                 overlay.calcOffsets(x, y);
                 mSelected = overlay;
-
                 return;
             }
         }
-
         this.invalidate();
     }
 
@@ -197,11 +192,6 @@ public class CanvasView extends View  {
             mSelected.resetOffset();
         }
         mSelected = null;
-    }
-
-    public void onPointerUp(int x, int y) {
-        if (mSelected != null)
-            mSelected.calcOffsets((int)mScaleDetector.getFocusX(), (int)mScaleDetector.getFocusY());
     }
 
     public void switchPointer(int x, int y) {
@@ -236,14 +226,13 @@ public class CanvasView extends View  {
             if(mSelected == null) {
                 return true;
             }
-
             mSelected.setScaleFactor(mSelected.getScaleFactor() * detector.getScaleFactor());
 
             /* Don't let the object get too small or too large. */
             mSelected.setScaleFactor(Math.max(0.1f, Math.min(mSelected.getScaleFactor(), 10.0f)));
             mSelected.setScaleFactor(mSelected.getScaleFactor());
-
             invalidate();
+
             return true;
         }
     }
@@ -261,5 +250,3 @@ public class CanvasView extends View  {
         });
     }
 }
-
-

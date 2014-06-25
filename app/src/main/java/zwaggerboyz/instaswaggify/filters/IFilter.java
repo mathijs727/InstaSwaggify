@@ -17,7 +17,6 @@ import android.renderscript.Script;
 
 public interface IFilter {
 
-
     public String getName();
 
     public AbstractFilterClass.FilterID getID();

@@ -33,8 +33,8 @@ public class SepiaFilter extends AbstractFilterClass {
 
         /* slider default values */
         mValues = new int[] {
-                50,
-                50
+                10,
+                20
         };
     }
 

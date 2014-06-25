@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,11 +32,12 @@ import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
 /**
  * Created by Mathijs on 24/06/14.
  */
-public class PresetsHelper implements LoadPresetDialog.OnLoadPresetListener, SavePresetDialog.OnSavePresetListener {
+public class PresetsHelper {
     private Context mContext;
     private FilterListAdapter mAdapter;
     private List<IFilter> mFilters;
     private DialogFragment mDialog;
+    private PresetsHelperListener mListener = null;
 
     public static final String PRESET_KEY = "presets";
     public static final String FILTERS_KEY = "filters";
@@ -49,41 +49,37 @@ public class PresetsHelper implements LoadPresetDialog.OnLoadPresetListener, Sav
         mContext = context;
     }
 
-    public void loadPreset(Activity activity, FilterListAdapter adapter) {
+    public void showLoadPresetDialog(Activity activity, FilterListAdapter adapter) {
         FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
         Fragment prev = activity.getFragmentManager().findFragmentByTag("dialog");
         if (prev != null)
             fragmentTransaction.remove(prev);
         fragmentTransaction.addToBackStack(null);
 
-        mDialog = new LoadPresetDialog();
-        ((LoadPresetDialog)mDialog).setOnLoadPresetListener(this);
+        mDialog = new LoadPresetDialog(this);
         mDialog.show(fragmentTransaction, "dialog");
 
         mAdapter = adapter;
     }
 
-    public void savePreset(Activity activity, List<IFilter> filters) {
+    public void showSavePresetDialog(Activity activity, List<IFilter> filters) {
         FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
         Fragment prev = activity.getFragmentManager().findFragmentByTag("dialog");
         if (prev != null)
             fragmentTransaction.remove(prev);
         fragmentTransaction.addToBackStack(null);
 
-        mDialog = new SavePresetDialog();
-        ((SavePresetDialog)mDialog).setOnSavePresetListener(this);
+        mDialog = new SavePresetDialog(this);
         mDialog.show(fragmentTransaction, "dialog");
 
         mFilters = filters;
     }
 
-    @Override
-    public void OnSavePresetListener(String title) {
+    public void savePreset(String title) {
         savePresetToSharedPrefs(mFilters, title);
     }
 
-    @Override
-    public void OnLoadPresetListener(int index) {
+    public void loadPresets(int index) {
         mAdapter.setItems(loadPresetFromSharedPrefs(index));
     }
 
@@ -124,9 +120,13 @@ public class PresetsHelper implements LoadPresetDialog.OnLoadPresetListener, Sav
                 if (i != index)
                     newPresetsJSONArray.put(presetsJSONArray.getJSONObject(i));
             }
+
             sharedPreferences.edit()
                              .putString(PRESET_KEY, newPresetsJSONArray.toString())
                              .commit();
+
+            if (length == 1 && mListener != null)
+                mListener.OnAllPresetsRemoved();
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -162,6 +162,8 @@ public class PresetsHelper implements LoadPresetDialog.OnLoadPresetListener, Sav
             sharedPreferences.edit()
                     .putString(PRESET_KEY, presetsJSONArray.toString())
                     .commit();
+
+            mListener.OnPresetSaved();
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -225,5 +227,13 @@ public class PresetsHelper implements LoadPresetDialog.OnLoadPresetListener, Sav
         mDialog.dismiss();
 
         return filters;
+    }
+
+    public void setPresetsHelperListener(PresetsHelperListener listener) {
+        mListener = listener;
+    }
+    public interface PresetsHelperListener {
+        public void OnAllPresetsRemoved();
+        public void OnPresetSaved();
     }
 }

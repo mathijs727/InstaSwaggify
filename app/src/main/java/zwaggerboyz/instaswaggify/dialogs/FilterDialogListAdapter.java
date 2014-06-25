@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.widget.ArrayAdapter;
 
-/**
+/*
  * APP:     InstaSwaggify
  * DATE:    June 2014
  * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
  *          Arne Zismer
  *
  * FILE: FilterDialogListAdapter.java
- * //TODO wat doet deze klasse
+ * This file manages the filter list and removes added filter from the list,
+ *      so that filters cannot be added multiple times
  */
 
 public class FilterDialogListAdapter extends ArrayAdapter<CharSequence> {
@@ -27,12 +28,9 @@ public class FilterDialogListAdapter extends ArrayAdapter<CharSequence> {
 
     public static FilterDialogListAdapter createFromResource(
         Context context, int textArrayResId, int textViewResId) {
-
         Resources resources = context.getResources();
         CharSequence[] strings = resources.getTextArray(textArrayResId);
 
         return new FilterDialogListAdapter(context, textViewResId, strings);
     }
-
-
 }

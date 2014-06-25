@@ -32,7 +32,7 @@ public class GaussianBlurFilter extends AbstractFilterClass {
 
         /* slider default value */
         mValues = new int[] {
-                50
+                0
         };
     }
 
