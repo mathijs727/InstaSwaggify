@@ -82,16 +82,19 @@ public abstract class AbstractFilterClass implements IFilter, Cloneable {
     }
 
     public void setArray(int[] array) {
-        System.arraycopy(mValues, 0, array, 0, mNumValues);
-        mValues = array;
+        if (array.length > 0) {
+            System.arraycopy(mValues, 0, array, 0, mNumValues);
+            mValues = array;
+        } else {
+            mValues = new int[0];
+        }
     }
 
     public IFilter clone() {
         try {
             IFilter clone = (IFilter) super.clone();
-            clone.setArray(new int[mNumValues]);
+            clone.setArray(new int[getNumValues()]);
             return clone;
-
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;
