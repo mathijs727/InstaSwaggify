@@ -40,7 +40,7 @@ public class HistoryBuffer {
     public void undo(FilterListAdapter filters, OverlayListAdapter overlays) {
         BufferItem temp = mBufferItems.remove(mBufferItems.size() - 1);
         if (temp.type == 0) {
-            filters.setItems(temp.mIFilterList);
+            filters.setItems(temp.mIFilterList, false);
             filters.updateList();
         } else {
             overlays.setItems(temp.mCanvasDraggableItemList);

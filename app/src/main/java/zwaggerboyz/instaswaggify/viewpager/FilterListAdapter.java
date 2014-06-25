@@ -54,6 +54,13 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void setItems(List<IFilter> items) {
+        setItems(items, true);
+    }
+
+    public void setItems(List<IFilter> items, boolean isUndoable) {
+        if (isUndoable)
+            mHistoryBuffer.updateBuffer(mItems, null);
+
         mItems = items;
         notifyDataSetChanged();
         mListener.updateImage(mItems);
