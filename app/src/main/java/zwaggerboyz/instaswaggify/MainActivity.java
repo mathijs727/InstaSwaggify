@@ -240,6 +240,9 @@ public class MainActivity extends FragmentActivity
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+
+                    /* Set it on canvas already so we can force recalculateSize */
+                    mCanvasView.setBitmap(bitmap, true);
                     mRSFilterHelper.setBitmap(bitmap, true);
                 }
                 catch (Exception e) {
@@ -260,6 +263,9 @@ public class MainActivity extends FragmentActivity
                 try {
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+
+                    /* Set it on canvas already so we can force recalculateSize */
+                    mCanvasView.setBitmap(bitmap, true);
                     mRSFilterHelper.setBitmap(bitmap, true);
                 }
                 catch (Exception e) {

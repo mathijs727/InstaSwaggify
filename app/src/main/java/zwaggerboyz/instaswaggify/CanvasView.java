@@ -205,10 +205,10 @@ public class CanvasView extends View  {
         mOverlays = overlays;
     }
 
-    public void setBitmap (Bitmap bitmap) {
+    public void setBitmap (Bitmap bitmap, boolean newImage) {
         mBitmap = bitmap;
 
-        if (getWidth() != 0) {
+        if (newImage && getWidth() != 0) {
             recalculateSize(getWidth(), getHeight(), true);
         }
     }

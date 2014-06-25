@@ -93,7 +93,7 @@ public class RSFilterHelper {
             return;
 
         if (filters.size() == 0) {
-            mCanvasView.setBitmap(mBitmapIn);
+            mCanvasView.setBitmap(mBitmapIn, false);
             mCanvasView.invalidate();
             return;
         }
@@ -173,7 +173,7 @@ public class RSFilterHelper {
         void updateView(Integer result) {
             if (result != -1) {
                 /* Request UI update */
-                mCanvasView.setBitmap(mBitmapsOut[result]);
+                mCanvasView.setBitmap(mBitmapsOut[result], false);
                 mCanvasView.invalidate();
             }
         }
