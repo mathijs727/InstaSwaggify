@@ -53,9 +53,14 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void setItems(List<IFilter> items) {
+        updateBuffer();
         mItems = items;
         notifyDataSetChanged();
         mListener.updateImage(mItems);
+        if (mItems.size() > 0)
+            mListener.filtersNotEmpty();
+        else
+            mListener.filtersEmpty();
     }
 
     @Override
@@ -188,7 +193,7 @@ public class FilterListAdapter extends BaseAdapter {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     /*if (fromUser) {
-                        item.setValue(1, progress);
+                        item.setValue(2, progress);
                         mListener.updateImage(mItems);
                     }*/
                 }
@@ -223,6 +228,8 @@ public class FilterListAdapter extends BaseAdapter {
         mItems.remove(mItems.get(index));
 
         mListener.updateImage(mItems);
+        if (mItems.size() == 0)
+            mListener.filtersEmpty();
         notifyDataSetChanged();
     }
 
@@ -239,7 +246,9 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void addItem(IFilter filter) {
+        updateBuffer();
         mItems.add(filter);
+        mListener.filtersNotEmpty();
         updateList();
     }
 
@@ -250,14 +259,12 @@ public class FilterListAdapter extends BaseAdapter {
 
     private void updateBuffer() {
         if (bufferLevel < 25) {
-            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
             bufferLevel++;
-            mListener.setUndoState(true);
         } else {
             mItemsPreviousBuffer.remove(0);
-            mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-            mListener.setUndoState(true);
         }
+        mListener.setUndoState(true);
+        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
     }
 
     /**
@@ -269,19 +276,28 @@ public class FilterListAdapter extends BaseAdapter {
         if(bufferLevel == 0) {
             mListener.setUndoState(false);
         }
+
         mListener.updateImage(mItems);
+        if (mItems.size() > 0)
+            mListener.filtersNotEmpty();
+        else
+            mListener.filtersEmpty();
+
         notifyDataSetChanged();
     }
 
     public void clearFilters() {
-        mItems.clear();
         updateBuffer();
+        mItems.clear();
         notifyDataSetChanged();
         mListener.updateImage(mItems);
+        mListener.filtersEmpty();
     }
 
     public interface FilterListInterface {
         public void updateImage(List<IFilter> filters);
+        public void filtersEmpty();
+        public void filtersNotEmpty();
         public void setUndoState(boolean undoState);
     }
 }
