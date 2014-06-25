@@ -34,10 +34,10 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
 
         /* slider default values */
         mValues = new int[] {
+            5,
             50,
-            50,
-            50,
-            50,
+            5,
+            5,
         };
     }
 

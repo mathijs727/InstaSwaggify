@@ -34,9 +34,9 @@ public class ColorizeFilter extends AbstractFilterClass {
 
         /* slider default values */
         mValues = new int[] {
-                50,
-                50,
-                50
+                0,
+                0,
+                0
         };
     }
 
