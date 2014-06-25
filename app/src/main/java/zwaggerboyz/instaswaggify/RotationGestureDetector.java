@@ -33,7 +33,6 @@ public class RotationGestureDetector {
         ptrID2 = INVALID_POINTER_ID;
     }
 
-
     public boolean onTouchEvent(MotionEvent event){
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:

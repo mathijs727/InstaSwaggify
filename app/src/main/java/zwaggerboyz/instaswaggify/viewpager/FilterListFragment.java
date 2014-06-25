@@ -17,7 +17,7 @@ import zwaggerboyz.instaswaggify.R;
  *          Arne Zismer
  *
  * FILE:    FilterListFragment.java
- * TODO:    ik weet niet wat dit doet
+ * This file manages the tab containing active filters
  */
 
 public class FilterListFragment extends android.support.v4.app.Fragment {

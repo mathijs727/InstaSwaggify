@@ -168,11 +168,9 @@ public class CanvasView extends View  {
             if (overlay.isWithinBounds(x, y)) {
                 overlay.calcOffsets(x, y);
                 mSelected = overlay;
-
                 return;
             }
         }
-
         this.invalidate();
     }
 
@@ -195,11 +193,6 @@ public class CanvasView extends View  {
             mSelected.resetOffset();
         }
         mSelected = null;
-    }
-
-    public void onPointerUp(int x, int y) {
-        if (mSelected != null)
-            mSelected.calcOffsets((int)mScaleDetector.getFocusX(), (int)mScaleDetector.getFocusY());
     }
 
     public void switchPointer(int x, int y) {
@@ -238,14 +231,13 @@ public class CanvasView extends View  {
             if(mSelected == null) {
                 return true;
             }
-
             mSelected.setScaleFactor(mSelected.getScaleFactor() * detector.getScaleFactor());
 
             /* Don't let the object get too small or too large. */
             mSelected.setScaleFactor(Math.max(0.1f, Math.min(mSelected.getScaleFactor(), 10.0f)));
             mSelected.setScaleFactor(mSelected.getScaleFactor());
-
             invalidate();
+
             return true;
         }
     }

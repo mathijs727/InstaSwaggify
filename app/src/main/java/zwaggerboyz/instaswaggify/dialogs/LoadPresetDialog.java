@@ -14,9 +14,6 @@ import android.widget.ListView;
 import zwaggerboyz.instaswaggify.PresetsHelper;
 import zwaggerboyz.instaswaggify.R;
 
-// TODO don't show "Load preset" button if there are no presets, also update this, when last
-// TODO         preset is deleted from list
-
 /*
  * APP:     InstaSwaggify
  * DATE:    June 2014
@@ -38,7 +35,7 @@ public class LoadPresetDialog extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         getDialog().setTitle(R.string.filter_dialog_title);
 
-        /* Setting up ListView and the adapter. */
+        /* set up ListView and the adapter. */
         final View view = inflater.inflate(R.layout.dialog_list, container, false);
         final ListView listView = (ListView) view.findViewById(R.id.dialog_list_listview);
 
@@ -48,7 +45,7 @@ public class LoadPresetDialog extends DialogFragment {
                 mPresetsHelper.getPresets());
         listView.setAdapter(adapter);
 
-        /* Set the onClickListener for the dialog. */
+        /* load preset on click */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int id, long l) {
@@ -56,6 +53,7 @@ public class LoadPresetDialog extends DialogFragment {
             }
         });
 
+        /* show delete dialog on long click */
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int presetId, long l) {
