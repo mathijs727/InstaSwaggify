@@ -43,7 +43,6 @@ public class CanvasView extends View  {
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         setRotationGesture();
-        finishConstructor();
         this.setDrawingCacheEnabled(true);
     }
 
@@ -52,7 +51,6 @@ public class CanvasView extends View  {
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         setRotationGesture();
-        finishConstructor();
         this.setDrawingCacheEnabled(true);
     }
 
@@ -61,7 +59,6 @@ public class CanvasView extends View  {
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         setRotationGesture();
-        finishConstructor();
         this.setDrawingCacheEnabled(true);
     }
 
@@ -71,7 +68,6 @@ public class CanvasView extends View  {
         this.setDrawingCacheEnabled(true);
 
         super.onDraw(canvas);
-
 
         canvas.save();
         canvas.drawColor(R.color.background);
@@ -260,7 +256,6 @@ public class CanvasView extends View  {
                     return true;
 
                 mSelected.rotate(rotationDetector.getAngle());
-                mRotation += (Math.toRadians(rotationDetector.getAngle()) * 100);
                 return false;
             }
         });

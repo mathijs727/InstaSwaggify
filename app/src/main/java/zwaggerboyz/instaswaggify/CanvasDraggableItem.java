@@ -63,9 +63,8 @@ public class CanvasDraggableItem {
     private static final int DEFAULT_SIZE = 150;
 
     public void calcOffsets(int x, int y) {
-        this.xOffset = mRect.left + mHalfWidth - x;
-        this.yOffset = mRect.top + mHalfHeight - y;
-        Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
+        this.xOffset = x - mRect.centerX();
+        this.yOffset = y - mRect.centerY();
     }
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y, String name) {
@@ -114,7 +113,7 @@ public class CanvasDraggableItem {
     }
 
     public float getScaleFactor() {
-        return mScaleFactor
+        return mScaleFactor;
     }
 
     public String getName() {
