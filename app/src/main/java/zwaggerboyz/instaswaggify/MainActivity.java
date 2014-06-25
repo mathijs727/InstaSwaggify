@@ -363,9 +363,6 @@ public class MainActivity extends FragmentActivity
     public void OnPresetSaved() {
         mMenu.findItem(R.id.action_preset_load).setEnabled(true);
     }
-<<<<<<< Updated upstream
-}
-=======
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
@@ -388,4 +385,3 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onPageScrollStateChanged(int state) { }
 }
->>>>>>> Stashed changes
