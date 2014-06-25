@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.util.Log;
 
 /*
  * APP:     InstaSwaggify
@@ -48,6 +49,9 @@ public class CanvasDraggableItem implements Cloneable {
             mScaleFactor = DEFAULT_SIZE / bitmap.getHeight();
         }
 
+        if (mScaleFactor > 1)
+            mScaleFactor = 1.f;
+
         move(x, y);
     }
 
@@ -55,6 +59,7 @@ public class CanvasDraggableItem implements Cloneable {
      */
     public void rotate(float deltaAngle) {
         mAngle += deltaAngle;
+        getMatrix().mapRect(mRect, originalRectF);
     }
 
     public void resetOffset() {
@@ -67,6 +72,7 @@ public class CanvasDraggableItem implements Cloneable {
      */
     public void flip() {
         flipped ^= true;
+        getMatrix().mapRect(mRect, originalRectF);
     }
 
     /* Returns the transformation matrix, that is needed to draw the bitmap.
@@ -109,6 +115,10 @@ public class CanvasDraggableItem implements Cloneable {
         centerX = x;
         centerY = y;
         getMatrix().mapRect(mRect, originalRectF);
+    }
+
+    public void wiggle() {
+        move((int)centerX + 1, (int)centerY+1);
     }
 
     /* Returns true if the given coordinates lies within the boundingbox of the bitmap.

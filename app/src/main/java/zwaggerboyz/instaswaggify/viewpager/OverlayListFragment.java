@@ -56,8 +56,8 @@ public class OverlayListFragment extends Fragment {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((CanvasDraggableItem)adapterView.getItemAtPosition(i)).flip();
                 mAdapter.updateBuffer();
+                ((CanvasDraggableItem)adapterView.getItemAtPosition(i)).flip();
                 mAdapter.invalidateCanvas();
                 return false;
             }
