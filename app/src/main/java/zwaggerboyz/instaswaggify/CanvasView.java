@@ -37,28 +37,22 @@ public class CanvasView extends View  {
         super(context);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        this.setDrawingCacheEnabled(true);
     }
 
     public CanvasView(Context context, AttributeSet attributes) {
         super(context, attributes);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        this.setDrawingCacheEnabled(true);
     }
 
     public CanvasView(Context context, AttributeSet attributes, int style) {
         super(context, attributes, style);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        this.setDrawingCacheEnabled(true);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        this.setDrawingCacheEnabled(false);
-        this.setDrawingCacheEnabled(true);
-
         super.onDraw(canvas);
 
         canvas.save();
@@ -214,7 +208,10 @@ public class CanvasView extends View  {
     }
 
     public Bitmap getBitmap () {
-        return this.getDrawingCache();
+        this.buildDrawingCache();
+        Bitmap bitmap = this.getDrawingCache().copy(Bitmap.Config.ARGB_8888, true);
+        this.destroyDrawingCache();
+        return bitmap;
     }
 
     private class ScaleListener
