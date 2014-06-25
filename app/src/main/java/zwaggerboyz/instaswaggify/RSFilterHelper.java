@@ -7,6 +7,7 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import zwaggerboyz.instaswaggify.filters.IFilter;
@@ -96,37 +97,6 @@ public class RSFilterHelper {
             return;
         }
 
-        mTimesProcessed++;
-        if (mTimesProcessed == 50) {
-            mTimesProcessed = 0;
-            mRS.destroy();
-            mRS = null;
-            mRS = RenderScript.create(context);
-            setBitmap(mBitmapIn, false);
-        }
-
-        ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
-        for (IFilter filter : filters) {
-            filter.setRS(mRS);
-            filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
-            filter.updateInternalValues();
-            builder.addKernel(filter.getKernelId());
-        }
-
-        for (int i = 0; i < filters.size()-1; i++) {
-            if (filters.get(i+1).getFieldId() != null) {
-                builder.addConnection(
-                        mInAllocation.getType(),
-                        filters.get(i).getKernelId(),
-                        filters.get(i + 1).getFieldId());
-            } else {
-                builder.addConnection(
-                        mInAllocation.getType(),
-                        filters.get(i).getKernelId(),
-                        filters.get(i + 1).getKernelId());
-            }
-        }
-        mScriptGroup = builder.create();
         if (mRenderTask != null)
             mRenderTask.cancel(false);
 
@@ -150,8 +120,33 @@ public class RSFilterHelper {
                 issued = true;
                 index = mCurrentBitmap;
 
+                int length = filters.length;
+
+                ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
+                for (IFilter filter : filters) {
+                    filter.setRS(mRS);
+                    filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
+                    filter.updateInternalValues();
+                    builder.addKernel(filter.getKernelId());
+                }
+
+                for (int i = 0; i < length - 1; i++) {
+                    if (filters[i+1].getFieldId() != null) {
+                        builder.addConnection(
+                                mInAllocation.getType(),
+                                filters[i].getKernelId(),
+                                filters[i + 1].getFieldId());
+                    } else {
+                        builder.addConnection(
+                                mInAllocation.getType(),
+                                filters[i].getKernelId(),
+                                filters[i + 1].getKernelId());
+                    }
+                }
+                mScriptGroup = builder.create();
+
                 if (filters[0].getFieldId() != null) {
-                    filters[0].setInput(mInAllocation);;
+                    filters[0].setInput(mInAllocation);
                 } else {
                     mScriptGroup.setInput(filters[0].getKernelId(),
                             mInAllocation);
