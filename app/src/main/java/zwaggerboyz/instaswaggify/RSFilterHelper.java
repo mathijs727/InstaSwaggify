@@ -2,22 +2,25 @@ package zwaggerboyz.instaswaggify;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptGroup;
-import android.util.Log;
-import android.widget.ImageView;
 
 import java.util.List;
 
-import static java.lang.Thread.sleep;
+import zwaggerboyz.instaswaggify.filters.IFilter;
 
-/**
- * Created by Mathijs on 17/06/14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    RSFilterHelper.java
+ * This file contains a helper-class to apply the selected filter on the image.
  */
+
 public class RSFilterHelper {
     private final int NUM_BITMAPS = 3;
     private int mTimesProcessed = 0;
@@ -71,7 +74,7 @@ public class RSFilterHelper {
                     mBitmapIn.getHeight(), mBitmapIn.getConfig());
         }
 
-        //Allocate buffers
+        /* Allocate buffers */
         mInAllocation = Allocation.createFromBitmap(mRS, mBitmapIn);
         mOutAllocations = new Allocation[NUM_BITMAPS];
         for (int i = 0; i < NUM_BITMAPS; ++i) {
@@ -166,7 +169,7 @@ public class RSFilterHelper {
 
         void updateView(Integer result) {
             if (result != -1) {
-                // Request UI update
+                /* Request UI update */
                 mCanvasView.setBitmap(mBitmapsOut[result]);
                 mCanvasView.invalidate();
             }

@@ -16,13 +16,16 @@
 
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
-    <string name="preset_hint">Preset Name</string>
-    <string name="preset_not_found">No presets found</string>
+
+    <string name="preset_hint">Preset name</string>
+    <string name="preset_select">Select preset</string>
+    <string name="preset_empty">No presets found</string>
     <string name="preset_dialog_title">Save Preset</string>
-    <string name="export_dialog_title">Export Picture</string>
-    <string name="export_dialog_text">Export Quality</string>
-    <string name="share_dialog_title">Share Picture</string>
+    <string name="export_dialog_title">Save Photo</string>
+    <string name="export_dialog_text">Select quality</string>
+    <string name="share_dialog_title">Share Photo</string>
     <string name="filter_dialog_title">Select Filter</string>
+    <string name="overlay_dialog_title">Select Overlay</string>
 
     <string name="compression_prompt">Choose a compression</string>
 
@@ -31,7 +34,4 @@
         <item>PNG</item>
     </string-array>
 
-    <string-array name="share_options">
-        <item>Email</item>
-    </string-array>
 </resources>

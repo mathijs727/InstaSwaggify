@@ -14,7 +14,7 @@
         android:orderInCategory="92"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/action_add_filter"
+    <item android:id="@+id/action_add"
         android:title="@string/action_add_filter"
         android:icon="@drawable/ic_action_new"
         android:orderInCategory="93"
@@ -57,12 +57,6 @@
         android:orderInCategory="99"
         android:actionProviderClass=
             "android.widget.ShareActionProvider"
-        android:showAsAction="never" />
-
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:icon="@drawable/ic_action_settings"
-        android:orderInCategory="100"
         android:showAsAction="never" />
 
 />

@@ -1,6 +1,5 @@
 package zwaggerboyz.instaswaggify;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -15,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
@@ -30,13 +28,44 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
+import zwaggerboyz.instaswaggify.dialogs.LoadPresetDialog;
+import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
+import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
+import zwaggerboyz.instaswaggify.dialogs.SavePresetDialog;
+import zwaggerboyz.instaswaggify.filters.IFilter;
+import zwaggerboyz.instaswaggify.filters.InvertColorsFilter;
+import zwaggerboyz.instaswaggify.filters.NoiseFilter;
+import zwaggerboyz.instaswaggify.filters.RotationFilter;
+import zwaggerboyz.instaswaggify.filters.SaturationFilter;
+import zwaggerboyz.instaswaggify.filters.SepiaFilter;
+import zwaggerboyz.instaswaggify.filters.ThresholdBlurFilter;
+import zwaggerboyz.instaswaggify.viewpager.FilterListAdapter;
+import zwaggerboyz.instaswaggify.viewpager.ListViewPagerAdapter;
+import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
+import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
+
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    MainActivity.java
+ * This file contains the main-activity for the app.
+ */
+
 public class MainActivity extends FragmentActivity
-        implements FilterListAdapter.FilterListInterface, OverlayListAdapter.OverlayListInterface, FilterDialog.OnAddFilterListener {
+        implements FilterListAdapter.FilterListInterface,
+                   FilterDialog.OnAddFilterListener,
+                   OverlayDialog.OnAddOverlayListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
     private CanvasView mCanvasView;
+    private ViewPager mViewPager;
     private RSFilterHelper mRSFilterHelper;
+    private PresetsHelper mPresetsHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
     private ExportDialog mExportDialog;
@@ -57,10 +86,12 @@ public class MainActivity extends FragmentActivity
         mExportDialog = new ExportDialog();
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout)findViewById(R.id.activity_main_tabs);
-        ViewPager viewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
+        mViewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
         mExportDialog.setCanvasView(mCanvasView);
+
+        mPresetsHelper = new PresetsHelper(this);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
@@ -68,15 +99,17 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data), true);
         mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
 
+        List<CanvasDraggableItem> overlays = new ArrayList<CanvasDraggableItem>();
         mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mOverlayAdapter = new OverlayListAdapter(this, this, new ArrayList<CanvasDraggableItem>());
+        mOverlayAdapter = new OverlayListAdapter(this, mCanvasView, overlays);
+        mCanvasView.setOverlays(overlays);
         FragmentStatePagerAdapter pagerAdapter = new ListViewPagerAdapter(
                 getSupportFragmentManager(),
                 mFilterAdapter,
                 mOverlayAdapter);
-        viewPager.setOffscreenPageLimit(1);
-        viewPager.setAdapter(pagerAdapter);
-        slidingTabLayout.setViewPager(viewPager);
+        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setAdapter(pagerAdapter);
+        slidingTabLayout.setViewPager(mViewPager);
 
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
@@ -102,24 +135,8 @@ public class MainActivity extends FragmentActivity
         int id = item.getItemId();
 
         switch(id) {
-            // TODO: hebben we settings wel nodig?
-            case R.id.action_settings: {
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
-                CanvasDraggableItem a  = new CanvasDraggableItem(bitmap, 100, 100);
-                CanvasDraggableItem b  = new CanvasDraggableItem(bitmap, 100, 100);
-
-                a.setScaleFactor(2);
-                a.setScaleFactor(4);
-
-                mCanvasView.addDraggable(a);
-                mCanvasView.addDraggable(b);
-
-                mCanvasView.invalidate();
-                return true;
-            }
-
             /* Adds a filter to the list. */
-            case R.id.action_add_filter: {
+            case R.id.action_add: {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
@@ -129,11 +146,17 @@ public class MainActivity extends FragmentActivity
                 fragmentTransaction.addToBackStack(null);
 
                 /* Show the filter-dialog. */
-                FilterDialog dialog = new FilterDialog(this, mFilterAdapter.getItems());
-                dialog.setOnAddFilterListener(this);
+                DialogFragment dialog = null;
+                int curItem = mViewPager.getCurrentItem();
+                if (curItem == ListViewPagerAdapter.PAGE_FILTERS) {
+                    dialog = new FilterDialog(this, mFilterAdapter.getItems());
+                    ((FilterDialog)dialog).setOnAddFilterListener(this);
+                } else if (curItem == ListViewPagerAdapter.PAGE_OVERLAYS) {
+                    dialog = new OverlayDialog(this);
+                    ((OverlayDialog)dialog).setOnAddOverlayListener(this);
+                }
                 mDialog = dialog;
                 mDialog.show(fragmentTransaction, "dialog");
-
                 return true;
             }
 
@@ -145,7 +168,6 @@ public class MainActivity extends FragmentActivity
                 File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify/Original Pictures");
                 if (imagesFolder.exists() == false) {
                     if (imagesFolder.mkdirs() == false) {
-                        Log.i("Take Photo", "no directory created");
                         return true;
                     }
                 }
@@ -155,7 +177,6 @@ public class MainActivity extends FragmentActivity
                 SimpleDateFormat simpleFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
                 String date = simpleFormat.format(now);
-                Log.i("FILENAME", date + ".jpg");
 
                 File image = new File(imagesFolder, date + ".jpg");
                 mImageUri = Uri.fromFile(image);
@@ -178,22 +199,12 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_favorites: {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-                if (prev != null)
-                    fragmentTransaction.remove(prev);
-                fragmentTransaction.addToBackStack(null);
-
-                mDialog = new FavoritesDialog();
-                mDialog.show(fragmentTransaction, "dialog");
-
+                mPresetsHelper.loadPreset(this, mFilterAdapter);
                 return true;
             }
 
             case R.id.action_add_favorite: {
-                SavePresetDialog dialog = new SavePresetDialog();
-                dialog.setAdapter(mFilterAdapter);
-                dialog.show(getFragmentManager(), "Save Preset");
+                mPresetsHelper.savePreset(this, mFilterAdapter.getItems());
                 return true;
             }
 
@@ -203,8 +214,6 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_save_picture: {
-                //ExportDialog exportDialog = new ExportDialog();
-                //exportDialog.setCanvasView(mCanvasView);
                 mExportDialog.setShare(false);
                 mExportDialog.show(getFragmentManager(), "Export Dialog");
                 return true;
@@ -214,12 +223,6 @@ public class MainActivity extends FragmentActivity
             case R.id.action_share: {
                 mExportDialog.setShare(true);
                 mExportDialog.show(getFragmentManager(), "Share Dialog");
-/*               ShareDialog dialog = new ShareDialog();
-                dialog.setCanvasView(mCanvasView);
-                dialog.setNotifySucces(false);
-
-                dialog.show(getFragmentManager(), "Share Dialog");*/
-
                 return true;
             }
 
@@ -243,8 +246,10 @@ public class MainActivity extends FragmentActivity
                     updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
-                    Log.e("onActivityResult", "create bitmap failed: " + e);
+                    e.printStackTrace();
                 }
+                mOverlayAdapter.clearOverlays();
+                mFilterAdapter.clearFilters();
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not capture image", Toast.LENGTH_SHORT).show();
@@ -262,96 +267,14 @@ public class MainActivity extends FragmentActivity
                     updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
-                    Log.e("onActivityResult", "create bitmap failed: " + e);
+                    e.printStackTrace();
                 }
+                mOverlayAdapter.clearOverlays();
+                mFilterAdapter.clearFilters();
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    /* Sets the filter list as this preset. */
-    public void setFilter(String fav_key) {
-        //mFilterAdapter.clearFilters();
-        SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
-        String favoritesString = prefs.getString("Favorites", "");
-        JSONObject favoritesObject = null;
-        JSONObject jsonFilter = null;
-        JSONArray favortiesArray = null;
-        int numValues, value0, value1, value2;
-        String filterId = "";
-        List<IFilter> filterArray = new ArrayList<IFilter>();
-        AbstractFilterClass.FilterID id;
-
-        IFilter filter = null;
-
-        try {
-            favoritesObject = new JSONObject(favoritesString);
-            favortiesArray = favoritesObject.getJSONArray(fav_key);
-
-            for (int i = 0; i < favortiesArray.length(); i++) {
-                jsonFilter = new JSONObject(favortiesArray.get(i).toString());
-                filterId = jsonFilter.getString("id");
-                id = AbstractFilterClass.FilterID.valueOf(filterId);
-
-                /* create according filter and add to filter list */
-                switch (id) {
-                    case BRIGHTNESS:
-                        filter = new BrightnessFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case CONTRAST:
-                        filter = new ContrastFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case GAUSSIAN:
-                        filter = new GaussianBlurFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case ROTATION:
-                        filter = new RotationFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case SATURATION:
-                        filter = new SaturationFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case SEPIA:
-                        filter = new SepiaFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filter.setValue(1, jsonFilter.getInt("value1"));
-                        filterArray.add(filter);
-                        break;
-                    case NOISE:
-                        filter = new NoiseFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filterArray.add(filter);
-                        break;
-                    case INVERT:
-                        filter = new InvertColorsFilter();
-                        filterArray.add(filter);
-                        break;
-                    case COLORIZE:
-                        filter = new ColorizeFilter();
-                        filter.setValue(0, jsonFilter.getInt("value0"));
-                        filter.setValue(1, jsonFilter.getInt("value1"));
-                        filter.setValue(2, jsonFilter.getInt("value2"));
-                        filterArray.add(filter);
-                        break;
-                }
-            }
-            mFilterAdapter.setItems(filterArray);
-            mFilterAdapter.updateList();
-            mDialog.dismiss();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -365,20 +288,8 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(filters, this);
     }
 
-    @Override
-    public void updateOverlays(List<CanvasDraggableItem> overlays) {
-        //TODO: update the overlays on the canvas
-    }
-
-    // TODO: is dit nog nodig?
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
-    }
-
     void handleSendImage(Intent intent) {
-        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
         if (imageUri == null)
             return;
@@ -395,8 +306,19 @@ public class MainActivity extends FragmentActivity
             Toast.makeText(this,
                     "Error occurred while opening picture",
                     Toast.LENGTH_SHORT).show();
-            Log.e("handleSendImage", "create bitmap failed: " + e);
         }
+    }
+
+    @Override
+    public void OnAddOverlayListener(String resourceName) {
+        mDialog.dismiss();
+        int resourceId = getResources().getIdentifier(resourceName.toLowerCase().replaceAll(" ", ""), "drawable", getPackageName());
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+        CanvasDraggableItem overlay = new CanvasDraggableItem(bitmap,
+                mCanvasView.getWidth() / 2,
+                mCanvasView.getHeight() / 2,
+                resourceName);
+        mOverlayAdapter.addItem(overlay);
     }
 
     @Override
@@ -409,4 +331,3 @@ public class MainActivity extends FragmentActivity
         return mFilterAdapter.getItems();
     }
 }
-

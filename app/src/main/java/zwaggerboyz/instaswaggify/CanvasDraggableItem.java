@@ -5,9 +5,16 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.util.Log;
 
-/**
- * Created by Peter on 19-6-2014.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    CanvasDraggableItem.java
+ * This file contains an overlay with its bitmap and position on the canvas.
  */
+
 public class CanvasDraggableItem {
     private RectF mRect;
     private RectF originalRectF;
@@ -18,6 +25,7 @@ public class CanvasDraggableItem {
     public float mAngle;
     private Matrix matrix = new Matrix();
     private boolean flipped;
+    private String mName;
 
     private float centerX, centerY;
 
@@ -52,12 +60,15 @@ public class CanvasDraggableItem {
     }
 
 
+    private static final int DEFAULT_SIZE = 150;
+
     public void calcOffsets(int x, int y) {
-        this.xOffset = x - mRect.centerX();
-        this.yOffset = y - mRect.centerY();
+        this.xOffset = mRect.left + mHalfWidth - x;
+        this.yOffset = mRect.top + mHalfHeight - y;
+        Log.i("Pevid", "xoffset " + xOffset + " yoffset " + yOffset);
     }
 
-    public CanvasDraggableItem (Bitmap bitmap, int x, int y) {
+    public CanvasDraggableItem (Bitmap bitmap, int x, int y, String name) {
         mBitmap = bitmap;
         mHalfWidth = bitmap.getWidth() / 2;
         mHalfHeight = bitmap.getHeight() / 2;
@@ -67,7 +78,8 @@ public class CanvasDraggableItem {
         centerX = 0;
         centerY = 0;
         mAngle = 0;
-
+        mName = name;
+        //TODO: resize
         move(x, y);
     }
 
@@ -102,6 +114,11 @@ public class CanvasDraggableItem {
     }
 
     public float getScaleFactor() {
-        return mScaleFactor;
-     }
+        return mScaleFactor
+    }
+
+    public String getName() {
+        return mName;
+    }
+        
 }

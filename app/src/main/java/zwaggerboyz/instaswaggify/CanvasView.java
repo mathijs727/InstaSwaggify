@@ -8,34 +8,35 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Created by Swaggenegger on 19-6-2014.
+import zwaggerboyz.instaswaggify.viewpager.OverlayListAdapter;
+
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    CanvasView.java
+ * This file contains the canvas-view that draw the bitmap and overlays.
  */
 
 public class CanvasView extends View  {
     private Bitmap mBitmap;
     private Rect mBackgroundRect = new Rect();
-    private ArrayList<CanvasDraggableItem> mOverlays = new ArrayList<CanvasDraggableItem>();
+    private List<CanvasDraggableItem> mOverlays;
     private CanvasDraggableItem mSelected = null;
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
     private int xOffSet, yOffset;
-    private float mRotation = 1.F;
 
     public RotationGestureDetector mRotationGesture;
     public ScaleGestureDetector mScaleDetector;
-
-    private void finishConstructor() {
-        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.blazeit);
-        //mOverlays.add(new CanvasDraggableItem(bitmap, 100, 100));
-        //mOverlays.add(new CanvasDraggableItem(bitmap, 200, 100));
-    }
 
     public CanvasView(Context context) {
         super(context);
@@ -43,6 +44,7 @@ public class CanvasView extends View  {
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         setRotationGesture();
         finishConstructor();
+        this.setDrawingCacheEnabled(true);
     }
 
     public CanvasView(Context context, AttributeSet attributes) {
@@ -51,6 +53,7 @@ public class CanvasView extends View  {
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         setRotationGesture();
         finishConstructor();
+        this.setDrawingCacheEnabled(true);
     }
 
     public CanvasView(Context context, AttributeSet attributes, int style) {
@@ -59,12 +62,18 @@ public class CanvasView extends View  {
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         setRotationGesture();
         finishConstructor();
+        this.setDrawingCacheEnabled(true);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        this.setDrawingCacheEnabled(false);
+        this.setDrawingCacheEnabled(true);
+
         super.onDraw(canvas);
 
+
+        canvas.save();
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
@@ -208,6 +217,10 @@ public class CanvasView extends View  {
         }
     }
 
+    public void setOverlays(List<CanvasDraggableItem> overlays) {
+        mOverlays = overlays;
+    }
+
     public void setBitmap (Bitmap bitmap) {
         mBitmap = bitmap;
 
@@ -217,11 +230,7 @@ public class CanvasView extends View  {
     }
 
     public Bitmap getBitmap () {
-        return mBitmap;
-    }
-
-    public void addDraggable (CanvasDraggableItem item) {
-        mOverlays.add(item);
+        return this.getDrawingCache();
     }
 
     private class ScaleListener
@@ -234,13 +243,12 @@ public class CanvasView extends View  {
 
             mSelected.setScaleFactor(mSelected.getScaleFactor() * detector.getScaleFactor());
 
-            // Don't let the object get too small or too large.
+            /* Don't let the object get too small or too large. */
             mSelected.setScaleFactor(Math.max(0.1f, Math.min(mSelected.getScaleFactor(), 10.0f)));
             mSelected.setScaleFactor(mSelected.getScaleFactor());
 
             invalidate();
             return true;
-
         }
     }
 
