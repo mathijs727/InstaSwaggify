@@ -20,7 +20,6 @@
     <item android:id="@+id/action_share"
         android:title="@string/action_share"
         android:icon="@drawable/ic_action_share"
-        android:orderInCategory="99"
         android:actionProviderClass=
             "android.widget.ShareActionProvider"
         android:showAsAction="ifRoom" />
@@ -28,7 +27,6 @@
     <item android:id="@+id/action_save_picture"
         android:title="@string/action_save_picture"
         android:icon="@drawable/ic_action_save"
-        android:enabled="false"
         android:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_clear"
@@ -45,6 +43,7 @@
     <item android:id="@+id/action_preset_save"
         android:title="@string/action_add_favorite"
         android:icon="@drawable/ic_action_important"
+        android:enabled="false"
         android:showAsAction="never"/>
 
     <item android:id="@+id/action_preset_load"
