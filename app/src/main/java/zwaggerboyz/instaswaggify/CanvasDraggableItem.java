@@ -26,8 +26,9 @@ public class CanvasDraggableItem {
     private Matrix matrix = new Matrix();
     private boolean flipped;
     private String mName;
-
     private float centerX, centerY;
+
+    private static final float DEFAULT_SIZE = 150;
 
     public void rotate(float deltaAngle) {
         mAngle += deltaAngle;
@@ -60,7 +61,6 @@ public class CanvasDraggableItem {
     }
 
 
-    private static final int DEFAULT_SIZE = 150;
 
     public void calcOffsets(int x, int y) {
         this.xOffset = x - mRect.centerX();
@@ -78,7 +78,14 @@ public class CanvasDraggableItem {
         centerY = 0;
         mAngle = 0;
         mName = name;
-        //TODO: resize
+
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            mScaleFactor = DEFAULT_SIZE / bitmap.getWidth();
+        }
+        else {
+            mScaleFactor = DEFAULT_SIZE / bitmap.getHeight();
+        }
+
         move(x, y);
     }
 
