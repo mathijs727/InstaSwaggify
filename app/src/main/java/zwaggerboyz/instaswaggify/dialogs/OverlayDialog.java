@@ -18,6 +18,7 @@ import zwaggerboyz.instaswaggify.R;
  *          Arne Zismer
  *
  * FILE: OverlayDialog.java
+ * This file manages the selection and application of overlays
  */
 
 public class OverlayDialog extends DialogFragment {

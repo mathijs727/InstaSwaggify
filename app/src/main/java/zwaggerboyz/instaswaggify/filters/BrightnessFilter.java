@@ -25,11 +25,14 @@ public class BrightnessFilter extends AbstractFilterClass {
         mName = "Brightness";
         mNumValues = 1;
 
+        /* slider label */
         mLabels = new String[] {
                 "intensity"
         };
+
+        /* slider default value */
         mValues = new int[] {
-                33
+                50
         };
     }
 
