@@ -2,12 +2,15 @@ package zwaggerboyz.instaswaggify.viewpager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.mobeta.android.dslv.DragSortListView;
 
+import zwaggerboyz.instaswaggify.CanvasDraggableItem;
 import zwaggerboyz.instaswaggify.R;
 
 /*
@@ -49,6 +52,17 @@ public class OverlayListFragment extends Fragment {
                 mAdapter.notifyDataSetChanged();
             }
         });
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ((CanvasDraggableItem)adapterView.getItemAtPosition(i)).flip();
+                mAdapter.updateBuffer();
+                mAdapter.invalidateCanvas();
+                return false;
+            }
+        });
+
         return view;
     }
 }

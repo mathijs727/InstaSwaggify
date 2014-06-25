@@ -137,6 +137,10 @@ public class OverlayListAdapter extends BaseAdapter implements CanvasView.onOver
         mHistoryBuffer.updateBuffer(null, mItems);
     }
 
+    public void invalidateCanvas() {
+        mCanvasView.invalidate();
+    }
+
     public interface OverlayListInterface {
         public void overlaysEmpty();
         public void overlaysNotEmpty();
