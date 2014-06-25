@@ -25,15 +25,18 @@ public class ColorizeFilter extends AbstractFilterClass {
         mName = "Colorize";
         mNumValues = 3;
 
+        /* slider labels */
         mLabels = new String[] {
                 "red",
                 "green",
                 "blue"
         };
+
+        /* slider default values */
         mValues = new int[] {
-                20,
-                20,
-                20
+                0,
+                0,
+                0
         };
     }
 

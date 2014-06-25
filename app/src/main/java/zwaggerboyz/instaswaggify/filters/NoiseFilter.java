@@ -25,11 +25,14 @@ public class NoiseFilter extends AbstractFilterClass {
         mNumValues = 1;
         mID = FilterID.NOISE;
 
+        /* slider label */
         mLabels = new String[] {
                 "intensity"
         };
+
+        /* slider default value */
         mValues = new int[] {
-                20
+                0
         };
     }
 

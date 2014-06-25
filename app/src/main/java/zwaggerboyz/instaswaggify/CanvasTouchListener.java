@@ -15,8 +15,11 @@ import android.view.View;
 
 public class CanvasTouchListener implements View.OnTouchListener {
     private CanvasView mCanvasView;
-    private int currentPointer;
-    private boolean switchPrimaryPointer;
+    private int firstFingerID = INVALID_POINTER_ID;
+    private int secondFingerID = INVALID_POINTER_ID;
+    private boolean switchFinger = false;
+
+    private static final int INVALID_POINTER_ID = -1;
 
     public CanvasTouchListener(CanvasView creator) {
         mCanvasView = creator;
@@ -25,43 +28,58 @@ public class CanvasTouchListener implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         mCanvasView.mScaleDetector.onTouchEvent(event);
+        mCanvasView.mRotationGesture.onTouchEvent(event);
+
+        //Log.i("Pevid", "" + event);
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                currentPointer = event.getPointerId(0);
+                firstFingerID = event.getPointerId(0);
                 mCanvasView.onTouchDown((int)event.getX(), (int)event.getY());
+
                 return true;
 
             case MotionEvent.ACTION_MOVE: {
-                mCanvasView.onTouchMove((int) event.getX(), (int) event.getY());
+                int pointerIndex;
 
+                if (firstFingerID != INVALID_POINTER_ID)
+                    pointerIndex = event.findPointerIndex(firstFingerID);
+                else
+                    pointerIndex = event.getActionIndex();
+
+                mCanvasView.onTouchMove((int) event.getX(pointerIndex), (int) event.getY(pointerIndex));
                 return true;
             }
 
             case MotionEvent.ACTION_UP:
-                mCanvasView.onTouchUp((int)event.getX(), (int)event.getY());
+                firstFingerID = secondFingerID = INVALID_POINTER_ID;
+                mCanvasView.onTouchUp(0, 0);
                 return true;
 
             case MotionEvent.ACTION_POINTER_2_UP:
+            case MotionEvent.ACTION_POINTER_3_UP:
             case MotionEvent.ACTION_POINTER_UP:
-                if (currentPointer == event.getPointerId(event.getActionIndex())) {
-                    switchPrimaryPointer = true;
-                }
-                else {
-                    switchPrimaryPointer = false;
-                }
+                int pointerId = event.getPointerId(event.getActionIndex());
+                if (firstFingerID == pointerId) {
+                    firstFingerID  = secondFingerID;
 
-                if (event.getPointerCount() == 2) {
-                    mCanvasView.onPointerUp((int)event.getX(), (int)event.getY());
+                    if (secondFingerID != INVALID_POINTER_ID) {
+                        int index = event.findPointerIndex(secondFingerID);
+
+                        switchFinger = true;
+                        mCanvasView.switchPointer((int)event.getX(index), (int)event.getY(index));
+                    }
+                    secondFingerID = INVALID_POINTER_ID;
+                }
+                else if (secondFingerID == pointerId) {
+                    secondFingerID = INVALID_POINTER_ID;
                 }
 
                 return true;
 
             case MotionEvent.ACTION_POINTER_2_DOWN:
+            case MotionEvent.ACTION_POINTER_3_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
-                if (switchPrimaryPointer && event.getPointerCount() == 2) {
-                    int secondPointer = event.getPointerId(event.getActionIndex());
-                    mCanvasView.switchPointer((int)event.getX(secondPointer), (int)event.getY(secondPointer));
-                }
+                secondFingerID = event.getPointerId(event.getActionIndex());
                 return true;
 
             default:

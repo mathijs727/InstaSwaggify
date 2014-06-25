@@ -24,14 +24,17 @@ public class ThresholdBlurFilter extends AbstractFilterClass {
         mName = "Threshold Blur";
         mNumValues = 3;
 
+        /* slider values */
         mLabels = new String[] {
                 "radius",
                 "threshold",
                 "strength",
                 "drop"
         };
+
+        /* slider default values */
         mValues = new int[] {
-            4,
+            5,
             50,
             5,
             5,

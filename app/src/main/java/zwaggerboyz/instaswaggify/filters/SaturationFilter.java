@@ -25,6 +25,7 @@ public class SaturationFilter extends AbstractFilterClass {
         mName = "Saturation";
         mNumValues = 1;
 
+
         mLabels = new String[] {
                 "intensity"
         };

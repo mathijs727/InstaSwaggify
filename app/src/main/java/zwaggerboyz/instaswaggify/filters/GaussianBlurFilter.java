@@ -25,11 +25,14 @@ public class GaussianBlurFilter extends AbstractFilterClass {
         mName = "Gaussian Blur";
         mNumValues = 1;
 
+        /* slider label */
         mLabels = new String[] {
                 "radius"
         };
+
+        /* slider default value */
         mValues = new int[] {
-                20
+                0
         };
     }
 

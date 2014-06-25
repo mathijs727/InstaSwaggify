@@ -75,6 +75,7 @@ public abstract class AbstractFilterClass implements IFilter {
         this.imageWidth = imageWidth;
     }
 
+    /* set input value to the according value between the min and max value */
     public float normalizeValue(int value, float min, float max) {
         return (float) ((max - min) * (value / 100.0) + min);
     }

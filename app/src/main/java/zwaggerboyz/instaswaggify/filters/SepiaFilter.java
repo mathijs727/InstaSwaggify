@@ -25,10 +25,13 @@ public class SepiaFilter extends AbstractFilterClass {
         mName = "Sepia";
         mNumValues = 2;
 
+        /* slider labels */
         mLabels = new String[] {
                 "intensity",
                 "depth"
         };
+
+        /* slider default values */
         mValues = new int[] {
                 10,
                 20

@@ -3,7 +3,10 @@ package zwaggerboyz.instaswaggify;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -31,24 +34,31 @@ public class CanvasView extends View  {
     private int mXOffset, mYOffset;
     private double mImgScale = 1.0;
 
+    public RotationGestureDetector mRotationGesture;
     public ScaleGestureDetector mScaleDetector;
 
     public CanvasView(Context context) {
         super(context);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        setRotationGesture();
+        this.setDrawingCacheEnabled(true);
     }
 
     public CanvasView(Context context, AttributeSet attributes) {
         super(context, attributes);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        setRotationGesture();
+        this.setDrawingCacheEnabled(true);
     }
 
     public CanvasView(Context context, AttributeSet attributes, int style) {
         super(context, attributes, style);
         setOnTouchListener(new CanvasTouchListener(this));
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        setRotationGesture();
+        this.setDrawingCacheEnabled(true);
     }
 
     @Override
@@ -57,11 +67,11 @@ public class CanvasView extends View  {
 
         canvas.save();
         canvas.drawColor(R.color.background);
-
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
-        for (CanvasDraggableItem overlay : mOverlays) {
-            canvas.drawBitmap(overlay.getBitmap(), null, overlay.getRect(), null);
+        for (int i = mOverlays.size() - 1; i >= 0; i--) {
+            CanvasDraggableItem overlay = mOverlays.get(i);
+            canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
         }
     }
 
@@ -88,12 +98,12 @@ public class CanvasView extends View  {
             right = width - left;
 
             if (!newImage) {
-                Rect rect;
+                RectF rect;
                 int cX, cY, nX, nY;
                 for (CanvasDraggableItem overlay : mOverlays) {
                     rect = overlay.getRect();
-                    cX = rect.centerX() - mXOffset;
-                    cY = rect.centerY() - mYOffset;
+                    cX = (int)(rect.centerX() - mXOffset);
+                    cY = (int)(rect.centerY() - mYOffset);
 
                     nX = (int) (cX / mImgScale * imgYScale) + left;
                     nY = (int) (cY / mImgScale * imgYScale) + top;
@@ -110,12 +120,12 @@ public class CanvasView extends View  {
             bot = height - top;
 
             if (!newImage) {
-                Rect rect;
+                RectF rect;
                 int cX, cY, nX, nY;
                 for (CanvasDraggableItem overlay : mOverlays) {
                     rect = overlay.getRect();
-                    cX = rect.centerX() - mXOffset;
-                    cY = rect.centerY() - mYOffset;
+                    cX = (int)(rect.centerX() - mXOffset);
+                    cY = (int)(rect.centerY() - mYOffset);
 
                     nX = (int) (cX / mImgScale * imgXScale) + left;
                     nY = (int) (cY / mImgScale * imgXScale) + top;
@@ -129,8 +139,8 @@ public class CanvasView extends View  {
         if (newImage) {
             int x, y;
             for (CanvasDraggableItem overlay : mOverlays) {
-                x = overlay.getRect().centerX();
-                y = overlay.getRect().centerY();
+                x = (int)overlay.getRect().centerX();
+                y = (int)overlay.getRect().centerY();
 
                 if (x < left)
                     x = left;
@@ -154,11 +164,13 @@ public class CanvasView extends View  {
         /* Loop through the items backwards because the last item in the list is the top most item */
         int length = mOverlays.size();
         CanvasDraggableItem overlay;
+
         for (int i = length - 1; i >= 0; i--) {
             overlay = mOverlays.get(i);
             if (overlay.isWithinBounds(x, y)) {
                 overlay.calcOffsets(x, y);
                 mSelected = overlay;
+
                 return;
             }
         }
@@ -181,6 +193,9 @@ public class CanvasView extends View  {
     }
 
     public void onTouchUp (int x, int y) {
+        if (mSelected != null) {
+            mSelected.resetOffset();
+        }
         mSelected = null;
     }
 
@@ -226,12 +241,24 @@ public class CanvasView extends View  {
 
             /* Don't let the object get too small or too large. */
             mSelected.setScaleFactor(Math.max(0.1f, Math.min(mSelected.getScaleFactor(), 10.0f)));
-
-            mSelected.resizeImage(mSelected.getScaleFactor());
+            mSelected.setScaleFactor(mSelected.getScaleFactor());
 
             invalidate();
             return true;
         }
+    }
+
+    private void setRotationGesture() {
+        mRotationGesture = new RotationGestureDetector(new RotationGestureDetector.OnRotationGestureListener() {
+            @Override
+            public boolean OnRotation(RotationGestureDetector rotationDetector) {
+                if (mSelected == null)
+                    return true;
+
+                mSelected.rotate(rotationDetector.getAngle());
+                return false;
+            }
+        });
     }
 }
 
