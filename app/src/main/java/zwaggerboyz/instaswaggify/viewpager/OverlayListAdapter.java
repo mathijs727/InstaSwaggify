@@ -1,16 +1,19 @@
 package zwaggerboyz.instaswaggify.viewpager;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import zwaggerboyz.instaswaggify.CanvasDraggableItem;
 import zwaggerboyz.instaswaggify.CanvasView;
+import zwaggerboyz.instaswaggify.HistoryBuffer;
 import zwaggerboyz.instaswaggify.R;
 
 /*
@@ -27,15 +30,17 @@ public class OverlayListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private CanvasView mCanvasView;
     private List<CanvasDraggableItem> mItems;
+    private HistoryBuffer mHistoryBuffer;
 
     private class ViewHolder {
         TextView titleTextView;
     }
 
-    public OverlayListAdapter(Activity activity, CanvasView canvasView, List<CanvasDraggableItem> items) {
+    public OverlayListAdapter(Activity activity, CanvasView canvasView, List<CanvasDraggableItem> items, HistoryBuffer historyBuffer) {
         mInflater = activity.getLayoutInflater();
         mCanvasView = canvasView;
         mItems = items;
+        mHistoryBuffer = historyBuffer;
     }
 
     @Override
@@ -81,6 +86,7 @@ public class OverlayListAdapter extends BaseAdapter {
 
     /* Removes item at index from filter list */
     public void remove(int index) {
+        mHistoryBuffer.updateBuffer(null, mItems);
         mItems.remove(mItems.get(index));
         mCanvasView.invalidate();
         notifyDataSetChanged();
@@ -88,6 +94,7 @@ public class OverlayListAdapter extends BaseAdapter {
 
     public void reorder(int from, int to) {
         if (from != to) {
+            mHistoryBuffer.updateBuffer(null, mItems);
             CanvasDraggableItem element = mItems.remove(from);
             mItems.add(to, element);
 
@@ -97,13 +104,23 @@ public class OverlayListAdapter extends BaseAdapter {
     }
 
     public void addItem(CanvasDraggableItem overlay) {
+        mHistoryBuffer.updateBuffer(null, mItems);
         mItems.add(overlay);
         mCanvasView.invalidate();
         notifyDataSetChanged();
     }
 
     public void clearOverlays() {
+        mHistoryBuffer.updateBuffer(null, mItems);
         mItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setItems(List<CanvasDraggableItem> items) {
+        Log.v("SETTING", "ITEMS");
+        mItems.clear();
+        mItems.addAll(items);
+        mCanvasView.invalidate();
         notifyDataSetChanged();
     }
 }

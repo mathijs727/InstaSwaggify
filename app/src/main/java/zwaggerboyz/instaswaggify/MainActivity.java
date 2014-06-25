@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
@@ -45,7 +46,8 @@ import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
 public class MainActivity extends FragmentActivity
         implements FilterListAdapter.FilterListInterface,
                    FilterDialog.OnAddFilterListener,
-                   OverlayDialog.OnAddOverlayListener {
+                   OverlayDialog.OnAddOverlayListener,
+                   HistoryBuffer.undoInterface {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
@@ -56,6 +58,7 @@ public class MainActivity extends FragmentActivity
     private DialogFragment mDialog;
     private Menu mMenu;
     private ExportHelper mExportHelper;
+    private HistoryBuffer mHistoryBuffer;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
@@ -69,6 +72,8 @@ public class MainActivity extends FragmentActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mHistoryBuffer = new HistoryBuffer(this);
 
         mExportHelper = new ExportHelper();
 
@@ -87,8 +92,8 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
 
         List<CanvasDraggableItem> overlays = new ArrayList<CanvasDraggableItem>();
-        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mOverlayAdapter = new OverlayListAdapter(this, mCanvasView, overlays);
+        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>(), mHistoryBuffer);
+        mOverlayAdapter = new OverlayListAdapter(this, mCanvasView, overlays, mHistoryBuffer);
         mCanvasView.setOverlays(overlays);
         FragmentStatePagerAdapter pagerAdapter = new ListViewPagerAdapter(
                 getSupportFragmentManager(),
@@ -196,7 +201,7 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_undo: {
-                mFilterAdapter.undo();
+                mHistoryBuffer.undo(mFilterAdapter, mOverlayAdapter);
                 return true;
             }
 
@@ -264,6 +269,7 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void setUndoState(boolean state) {
+        Log.v("UNDO", "IN UNDO");
         mMenu.findItem(R.id.action_undo).setEnabled(state);
     }
 
