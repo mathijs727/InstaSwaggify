@@ -1,7 +1,9 @@
 package zwaggerboyz.instaswaggify;
 
 import android.graphics.Bitmap;
-import android.graphics.Rect;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+import android.util.Log;
 
 /*
  * APP:     InstaSwaggify
@@ -14,44 +16,83 @@ import android.graphics.Rect;
  */
 
 public class CanvasDraggableItem {
-    private Rect mRect;
-    private int mHalfWidth, mHalfHeight;
+    private RectF mRect;
+    private RectF originalRectF;
+    private float mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
-    private int xOffset, yOffset;
+    public float xOffset, yOffset;
+    public float mAngle;
+    private Matrix matrix = new Matrix();
+    private boolean flipped;
     private String mName;
+
+    private float centerX, centerY;
+
+    public void rotate(float deltaAngle) {
+        mAngle += deltaAngle;
+    }
+
+    public void resetOffset() {
+        centerX -= xOffset;
+        centerY -= yOffset;
+        xOffset = yOffset = 0;
+    }
+
+    public void flip() {
+        flipped ^= true;
+    }
+
+    public Matrix getMatrix() {
+        matrix.reset();
+        matrix.postTranslate(-mHalfWidth, -mHalfHeight);
+        if (flipped) {
+            matrix.postRotate(mAngle, 0, 0);
+            matrix.postScale(-mScaleFactor, mScaleFactor, 0, 0);
+        }
+        else {
+            matrix.postRotate(-mAngle, 0, 0);
+            matrix.postScale(mScaleFactor, mScaleFactor, 0, 0);
+        }
+        matrix.postTranslate(centerX - xOffset, centerY - yOffset);
+
+        return matrix;
+    }
+
 
     private static final int DEFAULT_SIZE = 150;
 
     public void calcOffsets(int x, int y) {
-        this.xOffset = mRect.left + mHalfWidth - x;
-        this.yOffset = mRect.top + mHalfHeight - y;
+        this.xOffset = x - mRect.centerX();
+        this.yOffset = y - mRect.centerY();
     }
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y, String name) {
         mBitmap = bitmap;
+        mHalfWidth = bitmap.getWidth() / 2;
+        mHalfHeight = bitmap.getHeight() / 2;
+        originalRectF = new RectF(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        mRect = new RectF(originalRectF);
 
-        if (bitmap.getWidth() > bitmap.getHeight()) {
-            mHalfWidth = DEFAULT_SIZE;
-            mHalfHeight = (int)((bitmap.getHeight() / (double)bitmap.getWidth()) * DEFAULT_SIZE);
-        } else {
-            mHalfHeight = DEFAULT_SIZE;
-            mHalfWidth = (int)((bitmap.getWidth() / (double)bitmap.getHeight()) * DEFAULT_SIZE);
-        }
-
-        mRect = new Rect(x - mHalfWidth, y - mHalfHeight, x + mHalfWidth, y + mHalfHeight);
+        centerX = 0;
+        centerY = 0;
+        mAngle = 0;
         mName = name;
+        //TODO: resize
+        move(x, y);
     }
 
     public void move (int x, int y) {
-        mRect.set(x - mHalfWidth + xOffset, y - mHalfHeight + yOffset, x + mHalfWidth + xOffset, y + mHalfHeight + yOffset);
+        centerX = x;
+        centerY = y;
+        getMatrix().mapRect(mRect, originalRectF);
     }
 
     public boolean isWithinBounds (int x, int y) {
         return mRect.contains(x,  y);
     }
 
-    public Rect getRect() {
+    public RectF getRect() {
         return mRect;
     }
 
@@ -60,23 +101,23 @@ public class CanvasDraggableItem {
     }
 
     public void resizeImage(double scale) {
-        mHalfWidth = (int) ((mBitmap.getWidth() * scale) / 2);
-        mHalfHeight = (int) ((mBitmap.getHeight() * scale) / 2);
+        mScaleFactor *= (float)scale;
+        getMatrix().mapRect(mRect, originalRectF);
+        calcOffsets((int) centerX, (int) centerY);
+    }
 
-        /* Make sure the rectangle gets resized */
-        move(mRect.centerX(), mRect.centerY());
-
+    public void setScaleFactor(double scale) {
+        mScaleFactor = (float)scale;
+        getMatrix().mapRect(mRect, originalRectF);
+        calcOffsets((int) centerX, (int) centerY);
     }
 
     public float getScaleFactor() {
         return mScaleFactor;
     }
 
-    public void setScaleFactor(float scale) {
-        mScaleFactor = scale;
-    }
-
     public String getName() {
         return mName;
     }
+        
 }
