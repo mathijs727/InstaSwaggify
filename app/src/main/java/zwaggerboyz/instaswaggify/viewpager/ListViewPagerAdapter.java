@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  *          Arne Zismer
  *
  * FILE:    ListViewPager.java
- * TODO:    ik weet niet wat dit doet
+ * This file manages the items in the filter and overlay tab
  */
 
 public class ListViewPagerAdapter extends FragmentStatePagerAdapter {

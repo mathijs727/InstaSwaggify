@@ -17,7 +17,7 @@ import zwaggerboyz.instaswaggify.R;
  *          Arne Zismer
  *
  * FILE:    OverlayListFragment.java
- * TODO:    ik weet niet wat dit doet
+ * This file manages the tab containing active overlays
  */
 
 public class OverlayListFragment extends Fragment {
