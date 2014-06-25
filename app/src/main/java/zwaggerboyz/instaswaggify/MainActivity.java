@@ -48,6 +48,7 @@ public class MainActivity extends FragmentActivity
                    ViewPager.OnPageChangeListener,
                    FilterDialog.OnAddFilterListener,
                    OverlayDialog.OnAddOverlayListener,
+                   HistoryBuffer.undoInterface,
                    PresetsHelper.PresetsHelperListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
@@ -59,6 +60,7 @@ public class MainActivity extends FragmentActivity
     private DialogFragment mDialog;
     private Menu mMenu;
     private ExportHelper mExportHelper;
+    private HistoryBuffer mHistoryBuffer;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
@@ -72,6 +74,8 @@ public class MainActivity extends FragmentActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mHistoryBuffer = new HistoryBuffer(this);
 
         mExportHelper = new ExportHelper();
 
@@ -91,8 +95,8 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
 
         List<CanvasDraggableItem> overlays = new ArrayList<CanvasDraggableItem>();
-        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mOverlayAdapter = new OverlayListAdapter(this, this, mCanvasView, overlays);
+        mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>(), mHistoryBuffer);
+        mOverlayAdapter = new OverlayListAdapter(this, this, mCanvasView, overlays, mHistoryBuffer);
         mCanvasView.setOverlays(overlays);
         FragmentStatePagerAdapter pagerAdapter = new ListViewPagerAdapter(
                 getSupportFragmentManager(),
@@ -207,7 +211,7 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_undo: {
-                mFilterAdapter.undo();
+                mHistoryBuffer.undo(mFilterAdapter, mOverlayAdapter);
                 return true;
             }
 
@@ -280,6 +284,11 @@ public class MainActivity extends FragmentActivity
         }
     }
 
+    @Override
+    public void setUndoState(boolean state) {
+        mMenu.findItem(R.id.action_undo).setEnabled(state);
+    }
+
     void handleSendImage(Intent intent) {
         Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
@@ -299,11 +308,6 @@ public class MainActivity extends FragmentActivity
                     "Error occurred while opening picture",
                     Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public void setUndoState(boolean state) {
-        mMenu.findItem(R.id.action_undo).setEnabled(state);
     }
 
     @Override

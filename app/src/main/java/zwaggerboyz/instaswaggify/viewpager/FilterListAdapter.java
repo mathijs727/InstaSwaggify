@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import zwaggerboyz.instaswaggify.HistoryBuffer;
 import zwaggerboyz.instaswaggify.R;
 import zwaggerboyz.instaswaggify.filters.IFilter;
 
@@ -27,19 +28,19 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
 public class FilterListAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     private List<IFilter> mItems;
-    private List<List<IFilter>> mItemsPreviousBuffer = new ArrayList<List<IFilter>>();
-    private int bufferLevel = 0;
     private FilterListInterface mListener;
+    private HistoryBuffer mHistoryBuffer;
 
     private class ViewHolder {
         public TextView titleTextView, label1TextView, label2TextView, label3TextView;
         public SeekBar slider1Seekbar, slider2Seekbar, slider3Seekbar;
     }
 
-    public FilterListAdapter(Activity activity, FilterListInterface listener, List<IFilter> items) {
+    public FilterListAdapter(Activity activity, FilterListInterface listener, List<IFilter> items, HistoryBuffer historyBuffer) {
         mInflater = activity.getLayoutInflater();
         mItems = items;
         mListener = listener;
+        mHistoryBuffer = historyBuffer;
     }
 
     @Override
@@ -228,7 +229,7 @@ public class FilterListAdapter extends BaseAdapter {
 
     /* Removes item at index from filter list */
     public void remove(int index) {
-        updateBuffer();
+        mHistoryBuffer.updateBuffer(mItems, null);
 
         mItems.remove(mItems.get(index));
 
@@ -240,7 +241,7 @@ public class FilterListAdapter extends BaseAdapter {
 
     public void reorder(int from, int to) {
         if (from != to) {
-            updateBuffer();
+            mHistoryBuffer.updateBuffer(mItems, null);
 
             IFilter element = mItems.remove(from);
             mItems.add(to, element);
@@ -251,7 +252,7 @@ public class FilterListAdapter extends BaseAdapter {
     }
 
     public void addItem(IFilter filter) {
-        updateBuffer();
+        mHistoryBuffer.updateBuffer(mItems, null);
         mItems.add(filter);
         mListener.filtersNotEmpty();
         updateList();
@@ -262,37 +263,8 @@ public class FilterListAdapter extends BaseAdapter {
         mListener.updateImage(mItems);
     }
 
-    private void updateBuffer() {
-        if (bufferLevel < 25) {
-            bufferLevel++;
-        } else {
-            mItemsPreviousBuffer.remove(0);
-        }
-        mListener.setUndoState(true);
-        mItemsPreviousBuffer.add(new ArrayList<IFilter>(mItems));
-    }
-
-    /**
-     * Undo last change. Only remembers last change.
-     */
-    public void undo() {
-        mItems.clear();
-        mItems.addAll(mItemsPreviousBuffer.remove(--bufferLevel));
-        if(bufferLevel == 0) {
-            mListener.setUndoState(false);
-        }
-
-        mListener.updateImage(mItems);
-        if (mItems.size() > 0)
-            mListener.filtersNotEmpty();
-        else
-            mListener.filtersEmpty();
-
-        notifyDataSetChanged();
-    }
-
     public void clearFilters() {
-        updateBuffer();
+        mHistoryBuffer.updateBuffer(mItems, null);
         mItems.clear();
         notifyDataSetChanged();
         mListener.updateImage(mItems);
@@ -304,7 +276,6 @@ public class FilterListAdapter extends BaseAdapter {
         public void updateImage(List<IFilter> filters, boolean forceUpdate);
         public void filtersEmpty();
         public void filtersNotEmpty();
-        public void setUndoState(boolean undoState);
     }
 }
 
