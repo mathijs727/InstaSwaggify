@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import zwaggerboyz.instaswaggify.dialogs.ExportDialog;
+import zwaggerboyz.instaswaggify.dialogs.ExportHelper;
 import zwaggerboyz.instaswaggify.dialogs.LoadPresetDialog;
 import zwaggerboyz.instaswaggify.dialogs.FilterDialog;
 import zwaggerboyz.instaswaggify.dialogs.OverlayDialog;
@@ -68,7 +68,7 @@ public class MainActivity extends FragmentActivity
     private PresetsHelper mPresetsHelper;
     private DialogFragment mDialog;
     private Menu mMenu;
-    private ExportDialog mExportDialog;
+    private ExportHelper mExportHelper;
 
     private Uri mImageUri;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
@@ -83,13 +83,13 @@ public class MainActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mExportDialog = new ExportDialog();
+        mExportHelper = new ExportHelper();
 
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout)findViewById(R.id.activity_main_tabs);
         mViewPager = (ViewPager) findViewById(R.id.activity_main_viewPager);
         mCanvasView = (CanvasView) findViewById(R.id.activity_main_canvasview);
 
-        mExportDialog.setCanvasView(mCanvasView);
+        mExportHelper.setCanvasView(mCanvasView);
 
         mPresetsHelper = new PresetsHelper(this);
 
@@ -214,15 +214,12 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_save_picture: {
-                mExportDialog.setShare(false);
-                mExportDialog.show(getFragmentManager(), "Export Dialog");
+                mExportHelper.exportPicture(false, this.getApplicationContext(), this);
                 return true;
-
             }
 
             case R.id.action_share: {
-                mExportDialog.setShare(true);
-                mExportDialog.show(getFragmentManager(), "Share Dialog");
+                mExportHelper.exportPicture(true, this.getApplicationContext(), this);
                 return true;
             }
 
