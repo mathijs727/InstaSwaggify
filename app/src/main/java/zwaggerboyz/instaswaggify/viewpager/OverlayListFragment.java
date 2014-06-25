@@ -21,7 +21,6 @@ import zwaggerboyz.instaswaggify.R;
  */
 
 public class OverlayListFragment extends Fragment {
-    private DragSortListView mListView;
     private OverlayListAdapter mAdapter;
 
     public void setAdapter(OverlayListAdapter adapter) {

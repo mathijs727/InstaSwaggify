@@ -21,9 +21,7 @@ import zwaggerboyz.instaswaggify.R;
  */
 
 public class FilterListFragment extends android.support.v4.app.Fragment {
-    private DragSortListView mListView;
     private FilterListAdapter mAdapter;
-    private Activity mActivity;
 
     public void setAdapter(FilterListAdapter adapter) {
         mAdapter = adapter;
