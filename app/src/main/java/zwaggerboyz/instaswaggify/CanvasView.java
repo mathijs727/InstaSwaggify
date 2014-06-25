@@ -71,7 +71,7 @@ public class CanvasView extends View  {
 
         for (int i = mOverlays.size() - 1; i >= 0; i--) {
             CanvasDraggableItem overlay = mOverlays.get(i);
-            canvas.drawBitmap(overlay.getBitmap(), null, overlay.getRect(), null);
+            canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
         }
     }
 
