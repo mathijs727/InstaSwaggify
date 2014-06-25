@@ -30,7 +30,8 @@
     <item android:id="@+id/action_clear"
         android:title="@string/action_clear"
         android:icon="@drawable/ic_action_discard"
-        android:showAsAction="never" />
+        android:enabled="false"
+        android:showAsAction="never"/>
 
     <item android:id="@+id/action_undo"
         android:title="@string/action_undo"

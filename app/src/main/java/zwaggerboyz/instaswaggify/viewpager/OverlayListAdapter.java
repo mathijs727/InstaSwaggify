@@ -12,6 +12,7 @@ import java.util.List;
 import zwaggerboyz.instaswaggify.CanvasDraggableItem;
 import zwaggerboyz.instaswaggify.CanvasView;
 import zwaggerboyz.instaswaggify.R;
+import zwaggerboyz.instaswaggify.filters.IFilter;
 
 /*
  * APP:     InstaSwaggify
@@ -26,14 +27,16 @@ import zwaggerboyz.instaswaggify.R;
 public class OverlayListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private CanvasView mCanvasView;
+    private OverlayListInterface mListener;
     private List<CanvasDraggableItem> mItems;
 
     private class ViewHolder {
         TextView titleTextView;
     }
 
-    public OverlayListAdapter(Activity activity, CanvasView canvasView, List<CanvasDraggableItem> items) {
+    public OverlayListAdapter(Activity activity, OverlayListInterface listener, CanvasView canvasView, List<CanvasDraggableItem> items) {
         mInflater = activity.getLayoutInflater();
+        mListener = listener;
         mCanvasView = canvasView;
         mItems = items;
     }
@@ -83,6 +86,8 @@ public class OverlayListAdapter extends BaseAdapter {
     public void remove(int index) {
         mItems.remove(mItems.get(index));
         mCanvasView.invalidate();
+        if (mItems.size() == 0)
+            mListener.overlaysEmpty();
         notifyDataSetChanged();
     }
 
@@ -99,12 +104,19 @@ public class OverlayListAdapter extends BaseAdapter {
     public void addItem(CanvasDraggableItem overlay) {
         mItems.add(overlay);
         mCanvasView.invalidate();
+        mListener.overlaysNotEmpty();
         notifyDataSetChanged();
     }
 
     public void clearOverlays() {
         mItems.clear();
         mCanvasView.invalidate();
+        mListener.overlaysEmpty();
         notifyDataSetChanged();
+    }
+
+    public interface OverlayListInterface {
+        public void overlaysEmpty();
+        public void overlaysNotEmpty();
     }
 }
