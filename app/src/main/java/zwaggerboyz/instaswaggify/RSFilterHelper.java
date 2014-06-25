@@ -97,7 +97,7 @@ public class RSFilterHelper {
         }
 
         mTimesProcessed++;
-        if (mTimesProcessed == 30) {
+        if (mTimesProcessed == 50) {
             mTimesProcessed = 0;
             mRS.destroy();
             mRS = null;

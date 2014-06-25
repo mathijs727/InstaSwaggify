@@ -82,6 +82,11 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.slider1Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar1);
             viewHolder.slider2Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar2);
             viewHolder.slider3Seekbar = (SeekBar)convertView.findViewById(R.id.list_item_filter_seekbar3);
+
+            viewHolder.slider1Seekbar.setMax(100);
+            viewHolder.slider2Seekbar.setMax(100);
+            viewHolder.slider3Seekbar.setMax(100);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
@@ -150,10 +155,10 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.slider1Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    /*if (fromUser) {
+                    if (fromUser) {
                         item.setValue(0, progress);
                         mListener.updateImage(mItems);
-                    }*/
+                    }
                 }
 
                 @Override
@@ -161,8 +166,8 @@ public class FilterListAdapter extends BaseAdapter {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-                    item.setValue(0, seekBar.getProgress());
-                    mListener.updateImage(mItems);
+                    //item.setValue(0, seekBar.getProgress());
+                    //mListener.updateImage(mItems);
                 }
             });
         }
@@ -171,10 +176,10 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.slider2Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    /*if (fromUser) {
+                    if (fromUser) {
                         item.setValue(1, progress);
                         mListener.updateImage(mItems);
-                    }*/
+                    }
                 }
 
                 @Override
@@ -182,8 +187,8 @@ public class FilterListAdapter extends BaseAdapter {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-                    item.setValue(1, seekBar.getProgress());
-                    mListener.updateImage(mItems);
+                    //item.setValue(1, seekBar.getProgress());
+                    //mListener.updateImage(mItems);
                 }
             });
         }
@@ -192,10 +197,10 @@ public class FilterListAdapter extends BaseAdapter {
             viewHolder.slider3Seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    /*if (fromUser) {
+                    if (fromUser) {
                         item.setValue(2, progress);
                         mListener.updateImage(mItems);
-                    }*/
+                    }
                 }
 
                 @Override
@@ -203,8 +208,8 @@ public class FilterListAdapter extends BaseAdapter {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-                    item.setValue(2, seekBar.getProgress());
-                    mListener.updateImage(mItems);
+                    //item.setValue(2, seekBar.getProgress());
+                    //mListener.updateImage(mItems);
                 }
             });
         }

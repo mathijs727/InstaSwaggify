@@ -104,6 +104,7 @@ public class OverlayListAdapter extends BaseAdapter {
 
     public void clearOverlays() {
         mItems.clear();
+        mCanvasView.invalidate();
         notifyDataSetChanged();
     }
 }

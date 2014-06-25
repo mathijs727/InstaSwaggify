@@ -222,7 +222,10 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_clear: {
-                mFilterAdapter.clearFilters();
+                if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_FILTERS)
+                    mFilterAdapter.clearFilters();
+                else if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_OVERLAYS)
+                    mOverlayAdapter.clearOverlays();
                 return true;
             }
         }
@@ -238,7 +241,6 @@ public class MainActivity extends FragmentActivity
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap, true);
-                    updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -259,13 +261,12 @@ public class MainActivity extends FragmentActivity
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap, true);
-                    updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
-                mOverlayAdapter.clearOverlays();
                 mFilterAdapter.clearFilters();
+                mOverlayAdapter.clearOverlays();
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
