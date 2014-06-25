@@ -22,8 +22,6 @@ import java.util.List;
  * This file contains the canvas-view that draw the bitmap and overlays.
  */
 
-// TODO meer uitleg in comments
-
 public class CanvasView extends View  {
     private Bitmap mBitmap;
     private Rect mBackgroundRect = new Rect();
@@ -66,6 +64,7 @@ public class CanvasView extends View  {
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
+        /* draw overlays on canvas */
         for (int i = mOverlays.size() - 1; i >= 0; i--) {
             CanvasDraggableItem overlay = mOverlays.get(i);
             canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
@@ -75,10 +74,10 @@ public class CanvasView extends View  {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-
         recalculateSize(w, h, false);
     }
 
+    /* defines position of manipulated picture */
     public void recalculateSize(int width, int height, boolean newImage) {
         int centreX = width / 2;
         int centreY = height / 2;
@@ -88,6 +87,7 @@ public class CanvasView extends View  {
         double imgXScale = (double)width / mBitmap.getWidth();
         double imgYScale = (double)height / mBitmap.getHeight();
 
+        /* manage scaling for pictures in portrait format */
         if (imgXScale > imgYScale) {
             top = 0;
             bot = height;
@@ -110,7 +110,9 @@ public class CanvasView extends View  {
                 }
             }
             mImgScale = imgYScale;
-        } else {
+        }
+        /* manage scaling for pictures in landscape format */
+        else {
             left = 0;
             right = width;
             top = centreY - (int)(mBitmap.getHeight() * imgXScale / 2.0);
