@@ -18,7 +18,6 @@ public class CanvasTouchListener implements View.OnTouchListener {
     private int firstFingerID = INVALID_POINTER_ID;
     private int secondFingerID = INVALID_POINTER_ID;
     private boolean switchFinger = false;
-
     private static final int INVALID_POINTER_ID = -1;
 
     public CanvasTouchListener(CanvasView creator) {

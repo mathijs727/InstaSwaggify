@@ -1,11 +1,19 @@
 package zwaggerboyz.instaswaggify;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
-/**
- * Created by scoud on 24-6-14.
+/*
+ * APP:     InstaSwaggify
+ * DATE:    June 2014
+ * NAMES:   Mathijs Molenaar, Tristan van Vaalen, David Veenstra, Peter Verkade, Matthijs de Wit,
+ *          Arne Zismer
+ *
+ * FILE:    RotationGestureDetector.java
+ * This file performs the rotation of overlays
  */
+
+// TODO meer uitleg in comments
+
 public class RotationGestureDetector {
     private static final int INVALID_POINTER_ID = -1;
     private float fX, fY, sX, sY, focalX, focalY;

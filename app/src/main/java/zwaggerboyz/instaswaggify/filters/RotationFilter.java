@@ -66,5 +66,4 @@ public class RotationFilter extends AbstractFilterClass {
     public Script.FieldID getFieldId() {
         return mScript.getFieldID_input();
     }
-
 }

@@ -125,6 +125,7 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
+    /* perform action from menu bar */
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 

@@ -1,23 +1,11 @@
 package zwaggerboyz.instaswaggify;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -25,10 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import zwaggerboyz.instaswaggify.CanvasView;
-import zwaggerboyz.instaswaggify.MainActivity;
-import zwaggerboyz.instaswaggify.R;
 
 /*
  * APP:     InstaSwaggify
@@ -68,8 +52,6 @@ public class ExportHelper {
     }
 
     protected Uri savePicture() {
-        Log.e("ExportFilter", "enter savePicture");
-
         File folder, file;
         FileOutputStream output;
         String state = Environment.getExternalStorageState();
@@ -80,12 +62,10 @@ public class ExportHelper {
         boolean externalIsAvailable = true;
 
         if(bitmap == null) {
-            Log.e("ExportFilter", "bitmap == null");
             return null;
         }
 
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            Log.e("ExportFilter", "no sd-card");
             Toast.makeText(mContext,
                 "No SD-card available",
                 Toast.LENGTH_SHORT).show();
@@ -94,8 +74,6 @@ public class ExportHelper {
 
         /* Try to open a file to export the picture. */
         try {
-            Log.e("ExportFilter", "enter try");
-
             /* filename is made with a timestamp */
             SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
             String date = s.format(new Date());
@@ -106,8 +84,6 @@ public class ExportHelper {
             else {
                 folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify");
             }
-
-            Log.e("ExportFilter", "folder = " + folder);
 
             if (folder.exists() == false) {
                 if (folder.mkdirs() == false) {
@@ -126,7 +102,6 @@ public class ExportHelper {
             if (!file.exists()) {
                 file.createNewFile();
             }
-
             else {
                 Toast.makeText(mContext,
                 "File Already exists",
@@ -137,21 +112,16 @@ public class ExportHelper {
             fileUri = Uri.fromFile(file);
             output = new FileOutputStream(file);
         }
-
         catch (Exception e) {
             e.printStackTrace();
             return null;
-
         }
-
         try {
             /* The media scanner has to scan the newly made image, for it to be visible
              * in the pictures folder.
              */
 
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, output);
-
-            Log.e("ExportFilter", "compress bitmap");
             MediaScannerConnection.scanFile(mContext,
                     new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
@@ -160,28 +130,21 @@ public class ExportHelper {
                         }
                     }
             );
-
             if(!mShare)
                 Toast.makeText(mContext, "Picture successfully exported", Toast.LENGTH_SHORT).show();
-
         }
-
         catch (Exception e) {
-
             Toast.makeText(mContext,
                     "An error occurred while exporting",
                     Toast.LENGTH_SHORT).show();
 
             e.printStackTrace();
         }
-
         finally {
-
             try {
                 output.flush();
                 output.close();
             }
-
             catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(mContext,
@@ -189,9 +152,6 @@ public class ExportHelper {
                         Toast.LENGTH_SHORT).show();
             }
         }
-
         return fileUri;
     }
-
-
 }

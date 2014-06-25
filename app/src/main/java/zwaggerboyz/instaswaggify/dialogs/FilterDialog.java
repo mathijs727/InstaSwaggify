@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zwaggerboyz.instaswaggify.R;
-import zwaggerboyz.instaswaggify.filters.AbstractFilterClass;
 import zwaggerboyz.instaswaggify.filters.BrightnessFilter;
 import zwaggerboyz.instaswaggify.filters.ColorizeFilter;
 import zwaggerboyz.instaswaggify.filters.ContrastFilter;

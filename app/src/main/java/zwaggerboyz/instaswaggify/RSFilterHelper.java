@@ -7,7 +7,6 @@ import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import zwaggerboyz.instaswaggify.filters.IFilter;
@@ -22,11 +21,11 @@ import zwaggerboyz.instaswaggify.filters.IFilter;
  * This file contains a helper-class to apply the selected filter on the image.
  */
 
+ // TODO meer comments nodig?
+
 public class RSFilterHelper {
     private final int NUM_BITMAPS = 3;
-    private int mTimesProcessed = 0;
     private int mCurrentBitmap = 0;
-    private Context mContext;
     private Bitmap mBitmapIn;
     private Bitmap[] mBitmapsOut;
     private Allocation mInAllocation;
@@ -40,7 +39,6 @@ public class RSFilterHelper {
     private static final int BITMAP_MAX_HEIGHT = 600;
 
     public void createRS(Context context) {
-        mContext = context;
         mRS = RenderScript.create(context);
     }
 
