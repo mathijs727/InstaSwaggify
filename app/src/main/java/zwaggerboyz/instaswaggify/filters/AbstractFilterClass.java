@@ -4,6 +4,7 @@ package zwaggerboyz.instaswaggify.filters;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+import android.util.Log;
 
 /*
  * APP:     InstaSwaggify
@@ -16,7 +17,7 @@ import android.renderscript.Script;
  * number of variables with getter- and setter-functions.
  */
 
-public abstract class AbstractFilterClass implements IFilter {
+public abstract class AbstractFilterClass implements IFilter, Cloneable {
 
     public enum FilterID {
         BRIGHTNESS,
@@ -78,6 +79,23 @@ public abstract class AbstractFilterClass implements IFilter {
     /* set input value to the according value between the min and max value */
     public float normalizeValue(int value, float min, float max) {
         return (float) ((max - min) * (value / 100.0) + min);
+    }
+
+    public void setArray(int[] array) {
+        System.arraycopy(mValues, 0, array, 0, mNumValues);
+        mValues = array;
+    }
+
+    public IFilter clone() {
+        try {
+            IFilter clone = (IFilter) super.clone();
+            clone.setArray(new int[mNumValues]);
+            return clone;
+
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public int getNumValues() {

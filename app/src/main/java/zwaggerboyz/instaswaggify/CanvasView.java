@@ -28,6 +28,7 @@ public class CanvasView extends View  {
     private List<CanvasDraggableItem> mOverlays;
     private CanvasDraggableItem mSelected = null;
     private int mXOffset, mYOffset;
+    private onOverlayChangeListener mListener;
     public RotationGestureDetector mRotationGesture;
     public ScaleGestureDetector mScaleDetector;
     private double mImgScale = 1.0;
@@ -169,10 +170,13 @@ public class CanvasView extends View  {
             if (overlay.isWithinBounds(x, y)) {
                 overlay.calcOffsets(x, y);
                 mSelected = overlay;
+                mListener.updateBuffer();
                 return;
             }
         }
         this.invalidate();
+
+
     }
 
     public void onTouchMove (int x, int y) {
@@ -254,5 +258,13 @@ public class CanvasView extends View  {
                 return false;
             }
         });
+    }
+
+    public void setOnOverlayChangeListener(onOverlayChangeListener listener) {
+        mListener = listener;
+    }
+
+    public interface onOverlayChangeListener {
+        public void updateBuffer();
     }
 }

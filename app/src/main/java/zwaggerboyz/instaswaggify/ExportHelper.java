@@ -1,10 +1,11 @@
 package zwaggerboyz.instaswaggify;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -26,28 +27,53 @@ import java.util.Date;
 
 public class ExportHelper {
     private boolean mShare = true;
-    private Context mContext;
+    private Bitmap mBitmap = null;
+    private Activity mActivity;
+    private AsyncTask mAsyncTask = null;
 
     CanvasView mCanvasView;
     public void setCanvasView(CanvasView canvas){
         mCanvasView = canvas;
     }
 
-    public void exportPicture (boolean mustShare, Context context, MainActivity activity) {
-        this.mShare = mustShare;
-        this.mContext = context;
+    public void exportPicture (boolean share, Activity activity) {
+        mShare = share;
+        mActivity = activity;
 
-        Uri fileUri = savePicture();
+        if (mAsyncTask != null && mAsyncTask.getStatus() != AsyncTask.Status.FINISHED)
+            return;
 
-        if (mShare) {
-            Intent share = new Intent(Intent.ACTION_SEND);
+        mBitmap = mCanvasView.getBitmap();
+        mAsyncTask = new SavePictureTask();
+        mAsyncTask.execute(new String[0]);
+    }
 
-            if (fileUri == null)
+    private class SavePictureTask extends AsyncTask<String, Void, Uri> {
+        @Override
+        protected Uri doInBackground(String... integers) {
+            return savePicture();
+        }
+
+        @Override
+        protected void onPostExecute(Uri uri) {
+            if (isCancelled())
                 return;
 
-            share.setType("image/png");
-            share.putExtra(Intent.EXTRA_STREAM, fileUri);
-            activity.startActivity(Intent.createChooser(share, "Share Image"));
+            if (uri == null)
+                Toast.makeText(mActivity, "Something went wrong, trying again ain't gonna fix it...", Toast.LENGTH_SHORT).show();
+
+            if (mShare) {
+                Intent share = new Intent(Intent.ACTION_SEND);
+
+                if (uri == null)
+                    return;
+
+                share.setType("image/png");
+                share.putExtra(Intent.EXTRA_STREAM, uri);
+                mActivity.startActivity(Intent.createChooser(share, "Share Image"));
+            } else {
+                Toast.makeText(mActivity, "Picture successfully exported", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -58,19 +84,13 @@ public class ExportHelper {
         String extension = ".png";
         Uri fileUri;
 
-        Bitmap bitmap = mCanvasView.getBitmap();
         boolean externalIsAvailable = true;
 
-        if(bitmap == null) {
+        if(mBitmap == null)
             return null;
-        }
 
-        if (!Environment.MEDIA_MOUNTED.equals(state)) {
-            Toast.makeText(mContext,
-                "No SD-card available",
-                Toast.LENGTH_SHORT).show();
-            return null;
-        }
+        if (!Environment.MEDIA_MOUNTED.equals(state))
+            externalIsAvailable = false;
 
         /* Try to open a file to export the picture. */
         try {
@@ -78,22 +98,20 @@ public class ExportHelper {
             SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
             String date = s.format(new Date());
 
-            if (!externalIsAvailable) {
+            if (!externalIsAvailable)
                 folder = new File("InstasSwaggify");
-            }
-            else {
+            else
                 folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "InstaSwaggify");
-            }
 
-            if (folder.exists() == false) {
-                if (folder.mkdirs() == false) {
+            if (!folder.exists()) {
+                if (!folder.mkdirs()) {
                     return null;
                 }
             }
 
             folder = new File(folder, "Swaggified pictures");
-            if (folder.exists() == false) {
-                if (folder.mkdirs() == false) {
+            if (!folder.exists()) {
+                if (!folder.mkdirs()) {
                     return null;
                 }
             }
@@ -103,9 +121,6 @@ public class ExportHelper {
                 file.createNewFile();
             }
             else {
-                Toast.makeText(mContext,
-                "File Already exists",
-                Toast.LENGTH_SHORT).show();
                 return null;
             }
 
@@ -121,8 +136,8 @@ public class ExportHelper {
              * in the pictures folder.
              */
 
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, output);
-            MediaScannerConnection.scanFile(mContext,
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, output);
+            MediaScannerConnection.scanFile(mActivity,
                     new String[]{file.toString()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
 
@@ -130,15 +145,10 @@ public class ExportHelper {
                         }
                     }
             );
-            if(!mShare)
-                Toast.makeText(mContext, "Picture successfully exported", Toast.LENGTH_SHORT).show();
         }
         catch (Exception e) {
-            Toast.makeText(mContext,
-                    "An error occurred while exporting",
-                    Toast.LENGTH_SHORT).show();
-
             e.printStackTrace();
+            return null;
         }
         finally {
             try {
@@ -147,9 +157,7 @@ public class ExportHelper {
             }
             catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(mContext,
-                        "An error occurred while exporting",
-                        Toast.LENGTH_SHORT).show();
+                return null;
             }
         }
         return fileUri;

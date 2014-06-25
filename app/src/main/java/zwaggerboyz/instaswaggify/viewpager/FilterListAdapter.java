@@ -162,7 +162,9 @@ public class FilterListAdapter extends BaseAdapter {
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    mHistoryBuffer.updateBuffer(mItems, null);
+                }
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
@@ -183,7 +185,9 @@ public class FilterListAdapter extends BaseAdapter {
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar seekBar) { }
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    mHistoryBuffer.updateBuffer(mItems, null);
+                }
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {

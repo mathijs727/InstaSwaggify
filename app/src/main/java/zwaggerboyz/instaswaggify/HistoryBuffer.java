@@ -59,12 +59,18 @@ public class HistoryBuffer {
 
         public BufferItem(List<IFilter> filterList, List<CanvasDraggableItem> overlayList) {
             if (filterList != null && overlayList == null) {
-                mIFilterList = new ArrayList<IFilter>(filterList);
+                mIFilterList = new ArrayList<IFilter>();
+                for(IFilter f : filterList) {
+                    mIFilterList.add(f.clone());
+                }
                 mCanvasDraggableItemList = null;
                 type = 0;
             } else {
                 mIFilterList = null;
-                mCanvasDraggableItemList = new ArrayList<CanvasDraggableItem>(overlayList);
+                mCanvasDraggableItemList = new ArrayList<CanvasDraggableItem>();
+                for(CanvasDraggableItem c : overlayList) {
+                    mCanvasDraggableItemList.add(c.clone());
+                }
                 type = 1;
             }
         }

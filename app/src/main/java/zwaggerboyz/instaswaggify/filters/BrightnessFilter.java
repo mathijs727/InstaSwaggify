@@ -3,6 +3,7 @@ package zwaggerboyz.instaswaggify.filters;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.Script;
+import android.util.Log;
 
 import zwaggerboyz.instaswaggify.ScriptC_brightness;
 
