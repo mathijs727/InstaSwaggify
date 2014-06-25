@@ -59,5 +59,4 @@ public class SaturationFilter extends AbstractFilterClass {
     public Script.FieldID getFieldId() {
         return null;
     }
-
 }

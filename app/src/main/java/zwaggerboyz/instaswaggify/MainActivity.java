@@ -44,8 +44,11 @@ import zwaggerboyz.instaswaggify.viewpager.SlidingTabLayout;
 
 public class MainActivity extends FragmentActivity
         implements FilterListAdapter.FilterListInterface,
+                   OverlayListAdapter.OverlayListInterface,
+                   ViewPager.OnPageChangeListener,
                    FilterDialog.OnAddFilterListener,
-                   OverlayDialog.OnAddOverlayListener {
+                   OverlayDialog.OnAddOverlayListener,
+                   PresetsHelper.PresetsHelperListener {
     private ShareActionProvider mShareActionProvider;
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
@@ -79,6 +82,7 @@ public class MainActivity extends FragmentActivity
         mExportHelper.setCanvasView(mCanvasView);
 
         mPresetsHelper = new PresetsHelper(this);
+        mPresetsHelper.setPresetsHelperListener(this);
 
         mRSFilterHelper = new RSFilterHelper();
         mRSFilterHelper.createRS(this);
@@ -88,7 +92,7 @@ public class MainActivity extends FragmentActivity
 
         List<CanvasDraggableItem> overlays = new ArrayList<CanvasDraggableItem>();
         mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>());
-        mOverlayAdapter = new OverlayListAdapter(this, mCanvasView, overlays);
+        mOverlayAdapter = new OverlayListAdapter(this, this, mCanvasView, overlays);
         mCanvasView.setOverlays(overlays);
         FragmentStatePagerAdapter pagerAdapter = new ListViewPagerAdapter(
                 getSupportFragmentManager(),
@@ -97,6 +101,7 @@ public class MainActivity extends FragmentActivity
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(pagerAdapter);
         slidingTabLayout.setViewPager(mViewPager);
+        slidingTabLayout.setOnPageChangeListener(this);
 
         /* plays a sound without blocking the app's execution */
         SoundThread soundThread = new SoundThread(this, R.raw.instafrenchecho);
@@ -114,10 +119,16 @@ public class MainActivity extends FragmentActivity
         /* Inflate the menu: add items to the action bar. */
         getMenuInflater().inflate(R.menu.main, menu);
         mMenu = menu;
+
+        if (mPresetsHelper.getPresets().size() > 0)
+            mMenu.findItem(R.id.action_preset_load).setEnabled(true);
+        else
+            mMenu.findItem(R.id.action_preset_load).setEnabled(false);
         return true;
     }
 
     @Override
+    /* perform action from menu bar */
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -185,13 +196,13 @@ public class MainActivity extends FragmentActivity
                 return true;
             }
 
-            case R.id.action_favorites: {
-                mPresetsHelper.loadPreset(this, mFilterAdapter);
+            case R.id.action_preset_load: {
+                mPresetsHelper.showLoadPresetDialog(this, mFilterAdapter);
                 return true;
             }
 
-            case R.id.action_add_favorite: {
-                mPresetsHelper.savePreset(this, mFilterAdapter.getItems());
+            case R.id.action_preset_save: {
+                mPresetsHelper.showSavePresetDialog(this, mFilterAdapter.getItems());
                 return true;
             }
 
@@ -211,7 +222,10 @@ public class MainActivity extends FragmentActivity
             }
 
             case R.id.action_clear: {
-                mFilterAdapter.clearFilters();
+                if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_FILTERS)
+                    mFilterAdapter.clearFilters();
+                else if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_OVERLAYS)
+                    mOverlayAdapter.clearOverlays();
                 return true;
             }
         }
@@ -227,7 +241,6 @@ public class MainActivity extends FragmentActivity
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap, true);
-                    updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -248,28 +261,17 @@ public class MainActivity extends FragmentActivity
                     /* The image is converted to a bitmap and send to the FilterHelper object. */
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     mRSFilterHelper.setBitmap(bitmap, true);
-                    updateImage(mFilterAdapter.getItems());
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
-                mOverlayAdapter.clearOverlays();
                 mFilterAdapter.clearFilters();
+                mOverlayAdapter.clearOverlays();
             }
             else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, "Could not select image", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    @Override
-    public void setUndoState(boolean state) {
-        mMenu.findItem(R.id.action_undo).setEnabled(state);
-    }
-
-    @Override
-    public void updateImage(List<IFilter> filters) {
-        mRSFilterHelper.generateBitmap(filters, this);
     }
 
     void handleSendImage(Intent intent) {
@@ -294,6 +296,47 @@ public class MainActivity extends FragmentActivity
     }
 
     @Override
+    public void setUndoState(boolean state) {
+        mMenu.findItem(R.id.action_undo).setEnabled(state);
+    }
+
+    @Override
+    public void updateImage(List<IFilter> filters) {
+        updateImage(filters, false);
+    }
+
+    @Override
+    public void updateImage(List<IFilter> filters, boolean forceUpdate) {
+        mRSFilterHelper.generateBitmap(filters, this, forceUpdate);
+    }
+
+    @Override
+    public void filtersEmpty() {
+        mMenu.findItem(R.id.action_preset_save).setEnabled(false);
+        if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_FILTERS)
+            mMenu.findItem(R.id.action_clear).setEnabled(false);
+    }
+
+    @Override
+    public void filtersNotEmpty() {
+        mMenu.findItem(R.id.action_preset_save).setEnabled(true);
+        if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_FILTERS)
+            mMenu.findItem(R.id.action_clear).setEnabled(true);
+    }
+
+    @Override
+    public void overlaysEmpty() {
+        if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_OVERLAYS)
+            mMenu.findItem(R.id.action_clear).setEnabled(false);
+    }
+
+    @Override
+    public void overlaysNotEmpty() {
+        if (mViewPager.getCurrentItem() == ListViewPagerAdapter.PAGE_OVERLAYS)
+            mMenu.findItem(R.id.action_clear).setEnabled(true);
+    }
+
+    @Override
     public void OnAddOverlayListener(String resourceName) {
         mDialog.dismiss();
         int resourceId = getResources().getIdentifier(resourceName.toLowerCase().replaceAll(" ", ""), "drawable", getPackageName());
@@ -311,7 +354,34 @@ public class MainActivity extends FragmentActivity
         mFilterAdapter.addItem(filter);
     }
 
-    public List<IFilter> getAdapterItems () {
-        return mFilterAdapter.getItems();
+    @Override
+    public void OnAllPresetsRemoved() {
+        mMenu.findItem(R.id.action_preset_load).setEnabled(false);
     }
+
+    @Override
+    public void OnPresetSaved() {
+        mMenu.findItem(R.id.action_preset_load).setEnabled(true);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position == ListViewPagerAdapter.PAGE_FILTERS) {
+            if (mFilterAdapter.isEmpty())
+                mMenu.findItem(R.id.action_clear).setEnabled(false);
+            else
+                mMenu.findItem(R.id.action_clear).setEnabled(true);
+        } else if (position == ListViewPagerAdapter.PAGE_OVERLAYS) {
+            if (mOverlayAdapter.isEmpty())
+                mMenu.findItem(R.id.action_clear).setEnabled(false);
+            else
+                mMenu.findItem(R.id.action_clear).setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) { }
 }

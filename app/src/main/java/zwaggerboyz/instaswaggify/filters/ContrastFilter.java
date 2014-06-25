@@ -32,7 +32,7 @@ public class ContrastFilter extends AbstractFilterClass {
 
         /* slider default value */
         mValues = new int[] {
-                50
+                11
         };
     }
 

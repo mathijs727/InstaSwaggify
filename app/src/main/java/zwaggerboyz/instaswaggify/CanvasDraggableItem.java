@@ -3,7 +3,6 @@ package zwaggerboyz.instaswaggify;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
-import android.util.Log;
 
 /*
  * APP:     InstaSwaggify
@@ -14,6 +13,7 @@ import android.util.Log;
  * FILE:    CanvasDraggableItem.java
  * This file contains an overlay with its bitmap and position on the canvas.
  */
+
 
 public class CanvasDraggableItem {
     private RectF mRect;
@@ -27,7 +27,6 @@ public class CanvasDraggableItem {
     private boolean flipped;
     private String mName;
     private float centerX, centerY;
-
     private static final float DEFAULT_SIZE = 300;
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y, String name) {
@@ -151,5 +150,4 @@ public class CanvasDraggableItem {
     public String getName() {
         return mName;
     }
-        
 }

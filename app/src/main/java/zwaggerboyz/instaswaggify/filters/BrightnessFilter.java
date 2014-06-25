@@ -32,7 +32,7 @@ public class BrightnessFilter extends AbstractFilterClass {
 
         /* slider default value */
         mValues = new int[] {
-                50
+                33
         };
     }
 
