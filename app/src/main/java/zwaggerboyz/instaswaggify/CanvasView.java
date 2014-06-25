@@ -2,6 +2,7 @@ package zwaggerboyz.instaswaggify;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -220,9 +221,13 @@ public class CanvasView extends View  {
     }
 
     public Bitmap getBitmap () {
-        this.buildDrawingCache();
-        Bitmap bitmap = this.getDrawingCache().copy(Bitmap.Config.ARGB_8888, true);
-        this.destroyDrawingCache();
+        buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(getDrawingCache(),
+                                                   mXOffset,
+                                                   mYOffset,
+                                                   getWidth() - 2*mXOffset,
+                                                   getHeight() -  2*mYOffset);
+        destroyDrawingCache();
         return bitmap;
     }
 
