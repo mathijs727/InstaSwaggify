@@ -164,7 +164,7 @@ public class FilterListAdapter extends BaseAdapter {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (fromUser) {
                         item.setValue(0, progress);
-                        mListener.updateImage(mItems);
+                        mListener.updateImage(mItems, false, false);
                     }
                 }
 
@@ -176,7 +176,7 @@ public class FilterListAdapter extends BaseAdapter {
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     //item.setValue(0, seekBar.getProgress());
-                    mListener.updateImage(mItems, true);
+                    mListener.updateImage(mItems, false, true);
                 }
             });
         }
@@ -187,7 +187,7 @@ public class FilterListAdapter extends BaseAdapter {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (fromUser) {
                         item.setValue(1, progress);
-                        mListener.updateImage(mItems);
+                        mListener.updateImage(mItems, false, false);
                     }
                 }
 
@@ -199,7 +199,7 @@ public class FilterListAdapter extends BaseAdapter {
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     //item.setValue(1, seekBar.getProgress());
-                    mListener.updateImage(mItems, true);
+                    mListener.updateImage(mItems, false, true);
                 }
             });
         }
@@ -210,7 +210,7 @@ public class FilterListAdapter extends BaseAdapter {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (fromUser) {
                         item.setValue(2, progress);
-                        mListener.updateImage(mItems);
+                        mListener.updateImage(mItems, false, false);
                     }
                 }
 
@@ -220,7 +220,7 @@ public class FilterListAdapter extends BaseAdapter {
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     //item.setValue(2, seekBar.getProgress());
-                    mListener.updateImage(mItems, true);
+                    mListener.updateImage(mItems, false, true);
                 }
             });
         }
@@ -283,7 +283,7 @@ public class FilterListAdapter extends BaseAdapter {
 
     public interface FilterListInterface {
         public void updateImage(List<IFilter> filters);
-        public void updateImage(List<IFilter> filters, boolean forceUpdate);
+        public void updateImage(List<IFilter> filters, boolean listChanged, boolean forceUpdate);
         public void filtersEmpty();
         public void filtersNotEmpty();
     }

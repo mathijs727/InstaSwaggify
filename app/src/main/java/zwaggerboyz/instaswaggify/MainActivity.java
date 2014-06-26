@@ -92,7 +92,7 @@ public class MainActivity extends FragmentActivity
         mRSFilterHelper.createRS(this);
         mRSFilterHelper.setCanvasView(mCanvasView);
         mRSFilterHelper.setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.data), true);
-        mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), this);
+        mRSFilterHelper.generateBitmap(new ArrayList<IFilter>(), true, true);
 
         List<CanvasDraggableItem> overlays = new ArrayList<CanvasDraggableItem>();
         mFilterAdapter = new FilterListAdapter(this, this, new ArrayList<IFilter>(), mHistoryBuffer);
@@ -312,12 +312,12 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void updateImage(List<IFilter> filters) {
-        updateImage(filters, false);
+        updateImage(filters, true, false);
     }
 
     @Override
-    public void updateImage(List<IFilter> filters, boolean forceUpdate) {
-        mRSFilterHelper.generateBitmap(filters, this, forceUpdate);
+    public void updateImage(List<IFilter> filters, boolean listChanged, boolean forceUpdate) {
+        mRSFilterHelper.generateBitmap(filters, listChanged, forceUpdate);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.renderscript.Allocation;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptGroup;
+import android.util.Log;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class RSFilterHelper {
     private CanvasView mCanvasView;
     private RenderScript mRS;
     private RenderScriptTask mRenderTask;
+    private ScriptGroup mScriptGroup;
 
     private static final int BITMAP_MAX_WIDTH = 600;
     private static final int BITMAP_MAX_HEIGHT = 600;
@@ -81,11 +83,11 @@ public class RSFilterHelper {
         mCanvasView = canvasView;
     }
 
-    public void generateBitmap(List<IFilter> filters, Context context) {
-        generateBitmap(filters, context, false);
-    }
+    //public void generateBitmap(List<IFilter> filters, Context context) {
+    //    generateBitmap(filters, context, true, false);
+    //}
 
-    public void generateBitmap(List<IFilter> filters, Context context, boolean forceUpdate) {
+    public void generateBitmap(List<IFilter> filters, boolean listChanged, boolean forceUpdate) {
         if (mBitmapIn == null)
             return;
 
@@ -108,6 +110,7 @@ public class RSFilterHelper {
         IFilter[] filtersArray = new IFilter[filters.size()];
         filters.toArray(filtersArray);
         mRenderTask = new RenderScriptTask();
+        mRenderTask.setListChanged(listChanged);
         mRenderTask.execute(filtersArray);
     }
 
@@ -117,7 +120,12 @@ public class RSFilterHelper {
      * Once all operation is finished at onPostExecute() in UI thread, it can invalidate and update ImageView UI.
      */
     private class RenderScriptTask extends AsyncTask<IFilter, Integer, Integer> {
-        Boolean issued = false;
+        private boolean issued = false;
+        private boolean mListChanged;
+
+        public void setListChanged(boolean listChanged) {
+            mListChanged = listChanged;
+        }
 
         protected Integer doInBackground(IFilter... filters) {
             int index = -1;
@@ -125,41 +133,49 @@ public class RSFilterHelper {
                 issued = true;
                 index = mCurrentBitmap;
 
-                int length = filters.length;
+                if (mListChanged || mScriptGroup == null) {
+                    int length = filters.length;
 
-                ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
-                for (IFilter filter : filters) {
-                    filter.setRS(mRS);
-                    filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
-                    filter.updateInternalValues();
-                    builder.addKernel(filter.getKernelId());
-                }
+                    ScriptGroup.Builder builder = new ScriptGroup.Builder(mRS);
+                    for (IFilter filter : filters) {
+                        filter.setRS(mRS);
+                        filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
+                        filter.updateInternalValues();
+                        builder.addKernel(filter.getKernelId());
+                    }
 
-                for (int i = 0; i < length - 1; i++) {
-                    if (filters[i+1].getFieldId() != null) {
-                        builder.addConnection(
-                                mInAllocation.getType(),
-                                filters[i].getKernelId(),
-                                filters[i + 1].getFieldId());
+                    for (int i = 0; i < length - 1; i++) {
+                        if (filters[i + 1].getFieldId() != null) {
+                            builder.addConnection(
+                                    mInAllocation.getType(),
+                                    filters[i].getKernelId(),
+                                    filters[i + 1].getFieldId());
+                        } else {
+                            builder.addConnection(
+                                    mInAllocation.getType(),
+                                    filters[i].getKernelId(),
+                                    filters[i + 1].getKernelId());
+                        }
+                    }
+                    mScriptGroup = builder.create();
+
+                    if (filters[0].getFieldId() != null) {
+                        filters[0].setInput(mInAllocation);
                     } else {
-                        builder.addConnection(
-                                mInAllocation.getType(),
-                                filters[i].getKernelId(),
-                                filters[i + 1].getKernelId());
+                        mScriptGroup.setInput(filters[0].getKernelId(),
+                                mInAllocation);
+                    }
+                } else {
+                    for (IFilter filter : filters) {
+                        filter.setRS(mRS);
+                        filter.setDimensions(mBitmapIn.getHeight(), mBitmapIn.getWidth());
+                        filter.updateInternalValues();
                     }
                 }
-                ScriptGroup scriptGroup = builder.create();
 
-                if (filters[0].getFieldId() != null) {
-                    filters[0].setInput(mInAllocation);
-                } else {
-                    scriptGroup.setInput(filters[0].getKernelId(),
-                            mInAllocation);
-                }
-
-                scriptGroup.setOutput(filters[filters.length-1].getKernelId(),
+                mScriptGroup.setOutput(filters[filters.length - 1].getKernelId(),
                         mOutAllocations[index]);
-                scriptGroup.execute();
+                mScriptGroup.execute();
 
                 mOutAllocations[index].copyTo(mBitmapsOut[index]);
                 mCurrentBitmap = (mCurrentBitmap + 1) % NUM_BITMAPS;
