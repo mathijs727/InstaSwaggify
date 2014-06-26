@@ -66,10 +66,14 @@ public class CanvasView extends View  {
         canvas.drawColor(R.color.background);
         canvas.drawBitmap(mBitmap, null, mBackgroundRect, null);
 
+        Paint paint = new Paint();
+        paint.setColor(Color.argb(100, 255,0,0));
+
         /* draw overlays on canvas */
         for (int i = mOverlays.size() - 1; i >= 0; i--) {
             CanvasDraggableItem overlay = mOverlays.get(i);
             canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
+            canvas.drawRect(overlay.getRect(), paint);
         }
     }
 
@@ -169,7 +173,6 @@ public class CanvasView extends View  {
         for (int i = 0; i < length; i++) {
             overlay = mOverlays.get(i);
             if (overlay.isWithinBounds(x, y)) {
-                overlay.calcOffsets(x, y);
                 mSelected = overlay;
                 mListener.updateBuffer();
                 return;
@@ -180,7 +183,14 @@ public class CanvasView extends View  {
 
     }
 
-    public void onTouchMove (int x, int y) {
+    public void onTouchMove (float deltaX, float deltaY) {
+        if (mSelected == null)
+            return;
+
+        RectF boudingBox = mSelected.getRect();
+        float x = boudingBox.centerX() + deltaX;
+        float y = boudingBox.centerY() + deltaY;
+
         if (x < mXOffset ||
             x > (getWidth() - mXOffset) ||
             y < mYOffset ||
@@ -188,24 +198,10 @@ public class CanvasView extends View  {
             return;
 
         if (mSelected != null) {
-            mSelected.move(x, y);
+            mSelected.relativeMove(deltaX, deltaY);
         }
 
         this.invalidate();
-    }
-
-    public void onTouchUp (int x, int y) {
-        if (mSelected != null) {
-            mSelected.resetOffset();
-            mSelected.wiggle();
-        }
-        mSelected = null;
-    }
-
-    public void switchPointer(int x, int y) {
-        if (mSelected != null) {
-            mSelected.calcOffsets(x, y);
-        }
     }
 
     public void setOverlays(List<CanvasDraggableItem> overlays) {

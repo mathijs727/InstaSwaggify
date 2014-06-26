@@ -22,7 +22,6 @@ public class CanvasDraggableItem implements Cloneable {
     private float mHalfWidth, mHalfHeight;
     private Bitmap mBitmap;
     private float mScaleFactor = 1.F;
-    public float xOffset, yOffset;
     public float mAngle;
     private Matrix matrix = new Matrix();
     private boolean flipped;
@@ -55,26 +54,6 @@ public class CanvasDraggableItem implements Cloneable {
         move(x, y);
     }
 
-    /* Rotates the bitmap, with the given deltaAngle
-     */
-    public void rotate(float deltaAngle) {
-        mAngle += deltaAngle;
-        getMatrix().mapRect(mRect, originalRectF);
-    }
-
-    public void resetOffset() {
-        centerX -= xOffset;
-        centerY -= yOffset;
-        xOffset = yOffset = 0;
-    }
-
-    /* Flips the bitmap horizontal
-     */
-    public void flip() {
-        flipped ^= true;
-        getMatrix().mapRect(mRect, originalRectF);
-    }
-
     /* Returns the transformation matrix, that is needed to draw the bitmap.
      */
     public Matrix getMatrix() {
@@ -84,6 +63,7 @@ public class CanvasDraggableItem implements Cloneable {
          */
         matrix.reset();
         matrix.postTranslate(-mHalfWidth, -mHalfHeight);
+
         if (flipped) {
             matrix.postRotate(mAngle, 0, 0);
             matrix.postScale(-mScaleFactor, mScaleFactor, 0, 0);
@@ -92,33 +72,48 @@ public class CanvasDraggableItem implements Cloneable {
             matrix.postRotate(-mAngle, 0, 0);
             matrix.postScale(mScaleFactor, mScaleFactor, 0, 0);
         }
-        matrix.postTranslate(centerX - xOffset, centerY - yOffset);
+
+        matrix.postTranslate(centerX, centerY);
 
         return matrix;
-    }
-
-    /* This functions calculates the offset from the center of the bitmap.
-     *
-     * The offset is needed to prevent that the bitmap jumps when it's moved with
-     * a multitouch move event.
-     */
-    public void calcOffsets(int x, int y) {
-        this.xOffset = x - mRect.centerX();
-        this.yOffset = y - mRect.centerY();
     }
 
     /* This functions moves the bitmap
      *
      * x and y are the new location of the center.
      */
-    public void move (int x, int y) {
+    public void move (float x, float y) {
         centerX = x;
         centerY = y;
-        getMatrix().mapRect(mRect, originalRectF);
     }
 
-    public void wiggle() {
-        move((int)centerX + 1, (int)centerY+1);
+    public void relativeMove (float deltaX, float deltaY) {
+        centerX += deltaX;
+        centerY += deltaY;
+    }
+
+    /* Rotates the bitmap, with the given deltaAngle
+     */
+    public void rotate(float deltaAngle) {
+        mAngle += deltaAngle;
+    }
+
+    /* Flips the bitmap horizontal
+     */
+    public void flip() {
+        flipped ^= true;
+    }
+
+    /* This functions resizes the image.
+     */
+    public void resizeImage(double scale) {
+        mScaleFactor *= (float)scale;
+    }
+
+    /* This functions sets the scaling factor.
+     */
+    public void setScaleFactor(double scale) {
+        mScaleFactor = (float)scale;
     }
 
     /* Returns true if the given coordinates lies within the boundingbox of the bitmap.
@@ -130,27 +125,12 @@ public class CanvasDraggableItem implements Cloneable {
     /* Returns the boundingbox of the bitmap, as a RectF.
      */
     public RectF getRect() {
+        getMatrix().mapRect(mRect, originalRectF);
         return mRect;
     }
 
     public Bitmap getBitmap() {
         return mBitmap;
-    }
-
-    /* This functions resizes the image.
-     */
-    public void resizeImage(double scale) {
-        mScaleFactor *= (float)scale;
-        getMatrix().mapRect(mRect, originalRectF);
-        calcOffsets((int) centerX, (int) centerY);
-    }
-
-    /* This functions sets the scaling factor.
-     */
-    public void setScaleFactor(double scale) {
-        mScaleFactor = (float)scale;
-        getMatrix().mapRect(mRect, originalRectF);
-        calcOffsets((int) centerX, (int) centerY);
     }
 
     public float getScaleFactor() {

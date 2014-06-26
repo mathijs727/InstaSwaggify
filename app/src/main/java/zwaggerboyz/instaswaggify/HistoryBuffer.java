@@ -44,9 +44,6 @@ public class HistoryBuffer {
             filters.updateList();
         } else {
             overlays.setItems(temp.mCanvasDraggableItemList);
-            for (int i = 0; i < overlays.getItems().size(); i++) {
-                overlays.getItems().get(i).wiggle();
-            }
         }
 
         if(mBufferItems.size() == 0)
