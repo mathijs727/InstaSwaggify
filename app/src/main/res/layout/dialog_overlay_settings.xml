@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Switch
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Mirror"
+        android:id="@+id/dialog_overlay_settings_flip"
+        android:checked="false"
+        android:layout_centerHorizontal="true" />
+
+    <Switch
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Lock"
+        android:id="@+id/dialog_overlay_settings_lock"
+        android:checked="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/dialog_overlay_settings_flip"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:id="@+id/dialog_overlay_settings_reset"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/dialog_overlay_settings_lock"/>
+</RelativeLayout>

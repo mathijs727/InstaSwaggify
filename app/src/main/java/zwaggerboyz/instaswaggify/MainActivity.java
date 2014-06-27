@@ -1,8 +1,8 @@
 package zwaggerboyz.instaswaggify;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import java.io.File;
@@ -50,7 +49,7 @@ public class MainActivity extends FragmentActivity
                    OverlayDialog.OnAddOverlayListener,
                    HistoryBuffer.UndoInterface,
                    PresetsHelper.PresetsHelperListener {
-    private ShareActionProvider mShareActionProvider;
+
     private FilterListAdapter mFilterAdapter;
     private OverlayListAdapter mOverlayAdapter;
     private CanvasView mCanvasView;
@@ -139,8 +138,8 @@ public class MainActivity extends FragmentActivity
         switch(id) {
             /* Adds a filter to the list. */
             case R.id.action_add: {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
 
                 if (prev != null)
                     fragmentTransaction.remove(prev);

@@ -26,9 +26,12 @@ public class CanvasDraggableItem implements Cloneable {
     public float mAngle;
     private Matrix matrix = new Matrix();
     private boolean flipped;
+    private boolean locked = false;
     private String mName;
     private float centerX, centerY;
     private static final float DEFAULT_SIZE = 300;
+    private int canvasCenterX, canvasCenterY;
+
 
     public CanvasDraggableItem (Bitmap bitmap, int x, int y, String name) {
         mBitmap = bitmap;
@@ -41,6 +44,8 @@ public class CanvasDraggableItem implements Cloneable {
         centerY = 0;
         mAngle = 0;
         mName = name;
+        canvasCenterX = x;
+        canvasCenterY = y;
 
         if (bitmap.getWidth() > bitmap.getHeight()) {
             mScaleFactor = DEFAULT_SIZE / bitmap.getWidth();
@@ -70,8 +75,8 @@ public class CanvasDraggableItem implements Cloneable {
 
     /* Flips the bitmap horizontal
      */
-    public void flip() {
-        flipped ^= true;
+    public void flip(Boolean state) {
+        flipped = state;
         getMatrix().mapRect(mRect, originalRectF);
     }
 
@@ -172,5 +177,41 @@ public class CanvasDraggableItem implements Cloneable {
         }
 
         return null;
+    }
+
+    public void reset() {
+        originalRectF = new RectF(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
+        mRect = new RectF(originalRectF);
+
+        centerX = 0;
+        centerY = 0;
+        mAngle = 0;
+        mScaleFactor = 1.0F;
+        flipped = false;
+        locked = false;
+
+        if (mBitmap.getWidth() > mBitmap.getHeight()) {
+            mScaleFactor = DEFAULT_SIZE / mBitmap.getWidth();
+        }
+        else {
+            mScaleFactor = DEFAULT_SIZE / mBitmap.getHeight();
+        }
+
+        if (mScaleFactor > 1)
+            mScaleFactor = 1.f;
+
+        move(canvasCenterX, canvasCenterY);
+    }
+
+    public void lock(Boolean state) {
+        this.locked = state;
+    }
+
+    public boolean getLockedState() {
+        return locked;
+    }
+
+    public boolean getFlippedState() {
+        return flipped;
     }
 }

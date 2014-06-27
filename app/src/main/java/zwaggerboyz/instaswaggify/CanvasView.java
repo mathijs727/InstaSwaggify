@@ -13,6 +13,8 @@ import android.view.View;
 
 import java.util.List;
 
+import zwaggerboyz.instaswaggify.dialogs.OverlaySettingsDialog;
+
 /*
  * APP:     InstaSwaggify
  * DATE:    June 2014
@@ -23,7 +25,7 @@ import java.util.List;
  * This file contains the canvas-view that draw the bitmap and overlays.
  */
 
-public class CanvasView extends View  {
+public class CanvasView extends View {
     private Bitmap mBitmap;
     private Rect mBackgroundRect = new Rect();
     private List<CanvasDraggableItem> mOverlays;
@@ -33,28 +35,30 @@ public class CanvasView extends View  {
     public RotationGestureDetector mRotationGesture;
     public ScaleGestureDetector mScaleDetector;
     private double mImgScale = 1.0;
+    private Paint selectedPaint = new Paint();
 
     public CanvasView(Context context) {
         super(context);
-        setOnTouchListener(new CanvasTouchListener(this));
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        setRotationGesture();
-        this.setDrawingCacheEnabled(true);
+        setup(context);
     }
 
     public CanvasView(Context context, AttributeSet attributes) {
         super(context, attributes);
-        setOnTouchListener(new CanvasTouchListener(this));
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        setRotationGesture();
-        this.setDrawingCacheEnabled(true);
+        setup(context);
     }
 
     public CanvasView(Context context, AttributeSet attributes, int style) {
         super(context, attributes, style);
+        setup(context);
+    }
+
+    private void setup(Context context) {
         setOnTouchListener(new CanvasTouchListener(this));
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         setRotationGesture();
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        selectedPaint.setColor(Color.CYAN);
+        selectedPaint.setStyle(Paint.Style.STROKE);
+        selectedPaint.setStrokeWidth(3);
         this.setDrawingCacheEnabled(true);
     }
 
@@ -70,6 +74,8 @@ public class CanvasView extends View  {
         for (int i = mOverlays.size() - 1; i >= 0; i--) {
             CanvasDraggableItem overlay = mOverlays.get(i);
             canvas.drawBitmap(overlay.getBitmap(), overlay.getMatrix(), null);
+            if (overlay == mSelected)
+                canvas.drawRect(overlay.getRect().left, overlay.getRect().top, overlay.getRect().right, overlay.getRect().bottom, selectedPaint);
         }
     }
 
@@ -168,7 +174,7 @@ public class CanvasView extends View  {
 
         for (int i = 0; i < length; i++) {
             overlay = mOverlays.get(i);
-            if (overlay.isWithinBounds(x, y)) {
+            if (overlay.isWithinBounds(x, y) && !overlay.getLockedState()) {
                 overlay.calcOffsets(x, y);
                 mSelected = overlay;
                 mListener.updateBuffer();
@@ -264,6 +270,14 @@ public class CanvasView extends View  {
 
     public void setOnOverlayChangeListener(onOverlayChangeListener listener) {
         mListener = listener;
+    }
+
+    public void setSelectedOverlay(CanvasDraggableItem selected) {
+        mSelected = selected;
+    }
+
+    public CanvasDraggableItem getSelectedOverlay() {
+        return mSelected;
     }
 
     public interface onOverlayChangeListener {

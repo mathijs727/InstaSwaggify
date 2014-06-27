@@ -1,8 +1,9 @@
 package zwaggerboyz.instaswaggify.viewpager;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.mobeta.android.dslv.DragSortListView;
 
 import zwaggerboyz.instaswaggify.CanvasDraggableItem;
 import zwaggerboyz.instaswaggify.R;
+import zwaggerboyz.instaswaggify.dialogs.OverlaySettingsDialog;
 
 /*
  * APP:     InstaSwaggify
@@ -56,10 +58,39 @@ public class OverlayListFragment extends Fragment {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mAdapter.updateBuffer();
-                ((CanvasDraggableItem)adapterView.getItemAtPosition(i)).flip();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+                if (prev != null)
+                    fragmentTransaction.remove(prev);
+
+                fragmentTransaction.addToBackStack(null);
+
+                DialogFragment dialogFragment = new OverlaySettingsDialog((CanvasDraggableItem) adapterView.getItemAtPosition(i), new OverlaySettingsDialog.onSettingsChangedListener() {
+                    @Override
+                    public void onSettingsChanged() {
+                        mAdapter.invalidateCanvas();
+                    }
+                });
+                dialogFragment.show(getFragmentManager(), "Dialog");
+
+                mAdapter.setSelected((CanvasDraggableItem) adapterView.getItemAtPosition(i));
                 mAdapter.invalidateCanvas();
+
                 return false;
+            }
+        });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CanvasDraggableItem selected = (CanvasDraggableItem) adapterView.getItemAtPosition(i);
+                if (mAdapter.getSelected() != selected)
+                    mAdapter.setSelected(selected);
+                else
+                    mAdapter.setSelected(null);
+
+                mAdapter.invalidateCanvas();
             }
         });
 

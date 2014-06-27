@@ -28,6 +28,7 @@
     <string name="overlay_dialog_title">Select Overlay</string>
 
     <string name="compression_prompt">Choose a compression</string>
+    <string name="overlay_dialog_settings_title">Overlay Settings</string>
 
     <string-array name="compression">
         <item>JPEG</item>

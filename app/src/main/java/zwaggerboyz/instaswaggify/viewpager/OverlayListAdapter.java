@@ -81,6 +81,7 @@ public class OverlayListAdapter extends BaseAdapter implements CanvasView.onOver
 
         viewHolder.titleTextView.setText(getItem(position).getName());
 
+
         return convertView;
     }
 
@@ -130,6 +131,14 @@ public class OverlayListAdapter extends BaseAdapter implements CanvasView.onOver
         mItems.addAll(items);
         mCanvasView.invalidate();
         notifyDataSetChanged();
+    }
+
+    public void setSelected(CanvasDraggableItem selected) {
+        mCanvasView.setSelectedOverlay(selected);
+    }
+
+    public CanvasDraggableItem getSelected() {
+        return mCanvasView.getSelectedOverlay();
     }
 
     @Override
