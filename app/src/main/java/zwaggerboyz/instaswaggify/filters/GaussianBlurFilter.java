@@ -1,10 +1,10 @@
 package zwaggerboyz.instaswaggify.filters;
 
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.Script;
-import android.renderscript.ScriptIntrinsicBlur;
+import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.Element;
+import android.support.v8.renderscript.RenderScript;
+import android.support.v8.renderscript.Script;
+import android.support.v8.renderscript.ScriptIntrinsicBlur;
 
 /*
  * APP:     InstaSwaggify

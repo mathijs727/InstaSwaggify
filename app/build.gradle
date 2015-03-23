@@ -7,14 +7,14 @@ android {
         applicationId 'zwaggerboyz.instaswaggify'
         minSdkVersion 17
         targetSdkVersion 19
-        renderscriptTargetApi 17
-        renderscriptSupportMode false
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
         versionCode 1
         versionName '1.0'
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
